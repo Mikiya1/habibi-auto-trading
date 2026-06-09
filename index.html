@@ -5,342 +5,419 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Habibi Auto Trading — 日本から世界へ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --red:   #b22222;
-  --red-d: #8b1a1a;
-  --gold:  #c9a84c;
-  --dark:  #0e0e0e;
-  --ink:   #1c1c1c;
-  --mid:   #6b6b6b;
-  --rule:  rgba(255,255,255,0.1);
-  --rule-d:rgba(0,0,0,0.1);
-  --off:   #f8f6f3;
-  --white: #ffffff;
-  --serif: 'Cormorant Garamond', 'Times New Roman', serif;
-  --sans:  'Inter', 'Helvetica Neue', sans-serif;
+  --red:    #9e2b25;
+  --red-d:  #7a1f1a;
+  --red-br: #c0392b;
+  --gold:   #b8923f;
+  --ink:    #161412;
+  --ink-2:  #2b2724;
+  --mid:    #6f6862;
+  --faint:  #a39b94;
+  --line:   #e6e1da;
+  --line-d: rgba(255,255,255,0.09);
+  --cream:  #f6f3ee;
+  --paper:  #fbf9f5;
+  --white:  #ffffff;
+  --night:  #14110f;
+  --night-2:#1c1815;
+  --disp:   'Fraunces', 'Noto Serif JP', serif;
+  --sans:   'Manrope', 'Noto Sans JP', sans-serif;
+  --jp:     'Noto Sans JP', sans-serif;
 }
-html { scroll-behavior: smooth; }
-body { font-family: var(--sans); color: var(--ink); background: var(--white); font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { font-family: var(--sans); color: var(--ink); background: var(--white); font-size: 16px; line-height: 1.7; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
 a { text-decoration: none; color: inherit; }
+:lang(ja) { font-feature-settings: "palt"; }
+
+/* numeric tabular for stats */
+.num { font-family: var(--sans); font-feature-settings: "tnum", "lnum"; font-variant-numeric: tabular-nums lining-nums; }
 
 /* LANG */
 .en { display: none; }
 body.lang-en .ja { display: none; }
 body.lang-en .en { display: revert; }
+body.lang-en :lang(ja) { font-feature-settings: normal; }
+
+::selection { background: var(--red); color: #fff; }
 
 /* ===== HEADER ===== */
 .header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   display: flex; align-items: center;
-  padding: 0 48px; height: 68px;
-  border-bottom: 1px solid var(--rule);
-  transition: background 0.4s, border-color 0.4s;
+  padding: 0 clamp(20px, 4vw, 56px); height: 76px;
+  transition: background 0.5s cubic-bezier(.4,0,.2,1), height 0.4s, box-shadow 0.4s, border-color 0.5s;
+  border-bottom: 1px solid transparent;
 }
 .header.on-dark { background: transparent; }
-.header.on-light { background: var(--white); border-color: var(--rule-d); }
+.header.on-light { background: rgba(251,249,245,0.85); backdrop-filter: blur(16px) saturate(1.2); border-bottom-color: var(--line); height: 64px; }
 .h-logo {
-  font-family: var(--serif); font-size: 22px; font-weight: 600;
-  color: var(--white); letter-spacing: 0.02em; white-space: nowrap;
-  transition: color 0.3s;
+  font-family: var(--disp); font-size: 23px; font-weight: 600;
+  letter-spacing: -0.01em; white-space: nowrap; color: #fff;
+  transition: color 0.4s; display: flex; align-items: baseline; gap: 1px;
 }
 .header.on-light .h-logo { color: var(--ink); }
-.h-logo em { font-style: normal; color: var(--gold); }
-.h-nav { display: flex; gap: 32px; margin-left: 52px; }
+.h-logo .mark { color: var(--gold); font-style: italic; }
+.h-nav { display: flex; gap: 34px; margin-left: 56px; }
 .h-nav a {
-  font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
-  color: rgba(255,255,255,0.65); transition: color 0.2s;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.62); transition: color 0.2s; position: relative; padding: 4px 0;
 }
-.h-nav a:hover { color: var(--white); }
+.h-nav a::after { content:''; position:absolute; left:0; bottom:-2px; width:0; height:1px; background: var(--gold); transition: width 0.25s; }
+.h-nav a:hover { color: #fff; }
+.h-nav a:hover::after { width: 100%; }
 .header.on-light .h-nav a { color: var(--mid); }
 .header.on-light .h-nav a:hover { color: var(--ink); }
-.h-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
+.h-right { margin-left: auto; display: flex; align-items: center; gap: 18px; }
 .lang-btn {
-  font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.5); background: none; border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 2px; padding: 5px 10px; cursor: pointer; transition: all 0.2s;
+  font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.6); background: none; border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 100px; padding: 6px 13px; cursor: pointer; transition: all 0.25s;
 }
-.lang-btn:hover { color: var(--white); border-color: rgba(255,255,255,0.5); }
-.header.on-light .lang-btn { color: var(--mid); border-color: #ccc; }
-.header.on-light .lang-btn:hover { color: var(--ink); border-color: #999; }
+.lang-btn:hover { color: #fff; border-color: #fff; }
+.header.on-light .lang-btn { color: var(--mid); border-color: var(--line); }
+.header.on-light .lang-btn:hover { color: var(--ink); border-color: var(--ink); }
 .h-cta {
-  font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
-  background: var(--red); color: var(--white); padding: 9px 22px;
-  border-radius: 2px; transition: background 0.2s; white-space: nowrap;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.04em;
+  background: var(--red); color: #fff; padding: 11px 24px;
+  border-radius: 100px; transition: all 0.25s; white-space: nowrap;
 }
-.h-cta:hover { background: var(--red-d); }
+.h-cta:hover { background: var(--red-d); transform: translateY(-1px); }
 
 /* ===== HERO ===== */
 .hero {
-  min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end;
-  background: var(--dark); position: relative; overflow: hidden;
-  padding: 0 48px 80px;
+  min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+  background: var(--night); position: relative; overflow: hidden;
+  padding: 120px clamp(20px, 4vw, 56px) 100px;
 }
-.hero-bg {
-  position: absolute; inset: 0;
+.hero-bg { position: absolute; inset: 0; z-index: 0; }
+.hero-bg::before {
+  content:''; position: absolute; inset: 0;
   background:
-    linear-gradient(to bottom, transparent 40%, rgba(14,14,14,0.9) 100%),
-    linear-gradient(135deg, #0e0e0e 0%, #1a0808 60%, #0e0e0e 100%);
+    radial-gradient(120% 80% at 85% 10%, rgba(158,43,37,0.22) 0%, transparent 55%),
+    radial-gradient(90% 70% at 10% 90%, rgba(184,146,63,0.10) 0%, transparent 50%),
+    linear-gradient(160deg, #14110f 0%, #1c100e 50%, #110d0b 100%);
 }
-.hero-accent {
-  position: absolute; top: 0; right: 0; width: 45%; height: 100%;
-  background: linear-gradient(135deg, transparent 30%, rgba(178,34,34,0.06) 100%);
-  border-left: 1px solid rgba(201,168,76,0.08);
+.hero-bg::after {
+  content:''; position: absolute; inset: 0; opacity: 0.5;
+  background-image: radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 4px 4px;
 }
-.hero-inner { max-width: 1100px; margin: 0 auto; width: 100%; position: relative; z-index: 1; }
-.hero-label {
-  font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 24px; display: flex; align-items: center; gap: 12px;
+.hero-rule {
+  position: absolute; top: 0; bottom: 0; left: 62%; width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(184,146,63,0.2) 40%, rgba(184,146,63,0.2) 60%, transparent);
+  z-index: 1; display: none;
 }
-.hero-label::before { content: ''; display: block; width: 32px; height: 1px; background: var(--gold); }
+.hero-inner { max-width: 1240px; margin: 0 auto; width: 100%; position: relative; z-index: 2; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 14px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 36px;
+  opacity: 0; animation: fadeUp 0.8s 0.1s forwards;
+}
+.hero-eyebrow::before { content:''; width: 40px; height: 1px; background: var(--gold); }
 .hero-company {
-  font-family: var(--serif); font-size: clamp(48px, 7vw, 88px);
-  font-weight: 600; color: var(--white); line-height: 1; letter-spacing: -0.02em;
-  margin-bottom: 8px;
+  font-family: var(--disp); font-weight: 500; color: #fff;
+  font-size: clamp(52px, 9vw, 132px); line-height: 0.92; letter-spacing: -0.025em;
+  margin-bottom: 28px;
+  opacity: 0; animation: fadeUp 0.9s 0.22s forwards;
 }
-.hero-company em { font-style: italic; color: var(--gold); }
+.hero-company .mark { font-style: italic; font-weight: 400; color: var(--gold); }
+.hero-lead {
+  max-width: 560px;
+  opacity: 0; animation: fadeUp 0.9s 0.36s forwards;
+}
 .hero-tagline {
-  font-family: var(--serif); font-size: clamp(16px, 2vw, 22px);
-  font-weight: 400; font-style: italic; color: rgba(255,255,255,0.45);
-  margin-bottom: 48px; letter-spacing: 0.02em;
+  font-family: var(--disp); font-size: clamp(18px, 2.2vw, 26px); font-style: italic;
+  font-weight: 400; color: rgba(255,255,255,0.7); line-height: 1.4; margin-bottom: 22px;
 }
-.hero-desc {
-  font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.55);
-  max-width: 520px; line-height: 1.9; margin-bottom: 40px;
-}
-.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 72px; }
+.hero-desc { font-size: 15px; font-weight: 300; color: rgba(255,255,255,0.5); line-height: 1.85; }
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 44px;
+  opacity: 0; animation: fadeUp 0.9s 0.5s forwards; }
 .btn-primary {
-  font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
-  background: var(--red); color: var(--white); padding: 14px 32px;
-  border-radius: 2px; transition: background 0.2s; display: inline-block;
+  font-size: 13px; font-weight: 700; letter-spacing: 0.03em;
+  background: var(--red); color: #fff; padding: 16px 34px;
+  border-radius: 100px; transition: all 0.25s; display: inline-flex; align-items: center; gap: 9px;
 }
-.btn-primary:hover { background: var(--red-d); }
+.btn-primary:hover { background: var(--red-d); transform: translateY(-2px); box-shadow: 0 12px 30px rgba(158,43,37,0.35); }
+.btn-primary .arr { transition: transform 0.25s; }
+.btn-primary:hover .arr { transform: translateX(4px); }
 .btn-ghost {
-  font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
-  color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.2);
-  padding: 14px 32px; border-radius: 2px; display: inline-block; transition: all 0.2s;
+  font-size: 13px; font-weight: 600; letter-spacing: 0.03em;
+  color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.22);
+  padding: 16px 34px; border-radius: 100px; display: inline-block; transition: all 0.25s;
 }
-.btn-ghost:hover { color: var(--white); border-color: rgba(255,255,255,0.5); }
+.btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.04); }
 .hero-stats {
-  display: flex; gap: 0; border-top: 1px solid rgba(255,255,255,0.08);
-  padding-top: 32px;
+  position: absolute; right: clamp(20px,4vw,56px); bottom: 100px;
+  display: flex; flex-direction: column; gap: 28px; text-align: right;
+  z-index: 2;
+  opacity: 0; animation: fadeUp 1s 0.7s forwards;
 }
-.hero-stat { flex: 1; padding-right: 40px; border-right: 1px solid rgba(255,255,255,0.08); margin-right: 40px; }
-.hero-stat:last-child { border-right: none; }
 .hero-stat-num {
-  font-family: var(--serif); font-size: 40px; font-weight: 600;
-  color: var(--white); line-height: 1; letter-spacing: -0.02em;
+  font-family: var(--disp); font-size: clamp(40px, 4.5vw, 60px); font-weight: 500;
+  color: #fff; line-height: 0.9; letter-spacing: -0.02em;
+  font-variant-numeric: lining-nums;
 }
-.hero-stat-num sup { font-size: 18px; }
-.hero-stat-label { font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 0.06em; margin-top: 4px; }
+.hero-stat-num .unit { font-size: 0.42em; color: var(--gold); margin-left: 2px; font-style: italic; font-weight: 400; }
+.hero-stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 8px; }
+.hero-scroll {
+  position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 10px;
+  opacity: 0; animation: fadeIn 1s 1s forwards;
+}
+.hero-scroll .line { width: 1px; height: 36px; background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scrollPulse { 0%,100% { opacity: 0.3; transform: scaleY(1); } 50% { opacity: 1; transform: scaleY(1.15); } }
 
 /* ===== SECTION BASE ===== */
-.sec { padding: 100px 48px; }
-.sec-inner { max-width: 1100px; margin: 0 auto; }
-.sec-label {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--red); margin-bottom: 16px; display: flex; align-items: center; gap: 12px;
+.sec { padding: clamp(72px, 10vw, 130px) clamp(20px, 4vw, 56px); }
+.sec-inner { max-width: 1240px; margin: 0 auto; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 22px;
 }
-.sec-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
-.sec-title {
-  font-family: var(--serif); font-size: clamp(32px, 4vw, 52px);
-  font-weight: 600; color: var(--ink); line-height: 1.1; letter-spacing: -0.02em;
-  margin-bottom: 20px;
+.eyebrow::before { content:''; width: 28px; height: 1px; background: var(--red); }
+.eyebrow.on-gold { color: var(--gold); }
+.eyebrow.on-gold::before { background: var(--gold); }
+.title {
+  font-family: var(--disp); font-weight: 500; color: var(--ink);
+  font-size: clamp(34px, 5vw, 62px); line-height: 1.05; letter-spacing: -0.025em;
 }
-.sec-title em { font-style: italic; color: var(--red); }
-.sec-body { font-size: 14px; color: var(--mid); line-height: 1.9; max-width: 560px; }
+.title em { font-style: italic; font-weight: 400; color: var(--red); }
+.title .gold { color: var(--gold); }
+.lead { font-size: 16px; color: var(--mid); line-height: 1.85; max-width: 540px; }
+
+/* ===== INTRO / MARQUEE OF TRUST ===== */
+.sec-intro { background: var(--paper); border-bottom: 1px solid var(--line); padding-top: clamp(60px,8vw,90px); padding-bottom: clamp(60px,8vw,90px); }
+.intro-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(40px,6vw,90px); align-items: end; }
+.intro-statement {
+  font-family: var(--disp); font-size: clamp(24px, 3.2vw, 40px); font-weight: 500;
+  line-height: 1.35; letter-spacing: -0.02em; color: var(--ink);
+}
+.intro-statement em { font-style: italic; color: var(--red); }
+.intro-aside { font-size: 14px; color: var(--mid); line-height: 1.9; }
+.intro-aside p + p { margin-top: 16px; }
 
 /* ===== SERVICES ===== */
-.sec-services { background: var(--off); }
-.services-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 64px; }
-.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule-d); border: 1px solid var(--rule-d); }
-.service-item {
-  background: var(--white); padding: 48px 40px;
-  transition: background 0.2s;
+.sec-services { background: var(--white); }
+.services-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; margin-bottom: clamp(48px,6vw,76px); flex-wrap: wrap; }
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px,2.5vw,32px); }
+.service {
+  position: relative; padding: 40px 36px 44px;
+  border: 1px solid var(--line); border-radius: 4px;
+  background: var(--white); overflow: hidden;
+  transition: transform 0.4s cubic-bezier(.2,.7,.2,1), box-shadow 0.4s, border-color 0.4s;
 }
-.service-item:hover { background: #fdfcfb; }
-.service-index {
-  font-family: var(--serif); font-size: 64px; font-weight: 600;
-  color: rgba(0,0,0,0.05); line-height: 1; margin-bottom: 24px; letter-spacing: -0.04em;
+.service::before {
+  content:''; position: absolute; left: 0; top: 0; width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--red), var(--gold)); transform: scaleX(0); transform-origin: left;
+  transition: transform 0.45s cubic-bezier(.2,.7,.2,1);
 }
-.service-name {
-  font-family: var(--serif); font-size: 24px; font-weight: 600;
-  color: var(--ink); margin-bottom: 16px; line-height: 1.2;
+.service:hover { transform: translateY(-6px); box-shadow: 0 24px 50px -20px rgba(22,20,18,0.22); border-color: transparent; }
+.service:hover::before { transform: scaleX(1); }
+.service-idx {
+  font-family: var(--disp); font-size: 15px; font-weight: 600; font-style: italic;
+  color: var(--gold); margin-bottom: 28px; letter-spacing: 0.05em;
+  display: flex; align-items: center; gap: 10px;
 }
-.service-desc { font-size: 13px; color: var(--mid); line-height: 1.85; margin-bottom: 28px; }
-.service-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
-  border: 1px solid #ddd; color: var(--mid); padding: 4px 10px; border-radius: 2px;
-}
+.service-idx::after { content:''; flex:1; height:1px; background: var(--line); }
+.service-name { font-family: var(--disp); font-size: 27px; font-weight: 600; color: var(--ink); margin-bottom: 16px; line-height: 1.15; }
+.service-desc { font-size: 14px; color: var(--mid); line-height: 1.9; margin-bottom: 30px; }
+.service-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.chip { font-size: 11px; font-weight: 600; letter-spacing: 0.02em; color: var(--ink-2); background: var(--cream); padding: 6px 13px; border-radius: 100px; }
 
 /* ===== FLOW ===== */
-.sec-flow { background: var(--dark); }
-.sec-flow .sec-title { color: var(--white); }
-.sec-flow .sec-body { color: rgba(255,255,255,0.45); }
-.flow-tabs { display: flex; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 56px; }
+.sec-flow { background: var(--night); position: relative; overflow: hidden; }
+.sec-flow::before { content:''; position:absolute; inset:0; background: radial-gradient(80% 60% at 80% 0%, rgba(158,43,37,0.14), transparent 60%); }
+.sec-flow .title { color: #fff; position: relative; }
+.sec-flow .lead { color: rgba(255,255,255,0.5); position: relative; }
+.flow-head { position: relative; margin-bottom: 56px; }
+.flow-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 40px; position: relative; }
 .flow-tab {
-  font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-  color: rgba(255,255,255,0.35); padding: 14px 24px; cursor: pointer;
-  border-bottom: 1px solid transparent; margin-bottom: -1px; transition: all 0.15s;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.03em;
+  color: rgba(255,255,255,0.5); padding: 11px 22px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.14); border-radius: 100px; transition: all 0.25s; background: transparent;
 }
-.flow-tab:hover { color: rgba(255,255,255,0.65); }
-.flow-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
-.flow-content { display: none; }
-.flow-content.active { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); }
-.flow-step {
-  background: var(--dark); padding: 36px 28px;
-}
-.flow-step-num {
-  font-family: var(--serif); font-size: 48px; font-weight: 600;
-  color: rgba(255,255,255,0.06); line-height: 1; margin-bottom: 20px;
-}
-.flow-step-title { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 10px; }
-.flow-step-desc { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.8; }
+.flow-tab:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+.flow-tab.active { color: var(--night); background: var(--gold); border-color: var(--gold); }
+.flow-content { display: none; grid-template-columns: repeat(4,1fr); gap: clamp(16px,2vw,28px); position: relative; }
+.flow-content.active { display: grid; }
+.flow-step { position: relative; padding-top: 30px; }
+.flow-step::before { content:''; position: absolute; top: 0; left: 0; width: 100%; height: 1px; background: rgba(255,255,255,0.12); }
+.flow-step::after { content:''; position: absolute; top: -2px; left: 0; width: 36px; height: 3px; background: var(--gold); }
+.flow-step-num { font-family: var(--disp); font-size: 14px; font-weight: 600; font-style: italic; color: var(--gold); margin-bottom: 18px; }
+.flow-step-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 11px; }
+.flow-step-desc { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.8; }
 
 /* ===== WHY ===== */
-.sec-why { background: var(--white); }
-.why-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start; }
-.why-left { position: sticky; top: 100px; }
-.why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule-d); border: 1px solid var(--rule-d); }
-.why-item { background: var(--white); padding: 32px 28px; transition: background 0.2s; }
-.why-item:hover { background: var(--off); }
-.why-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
-.why-desc { font-size: 12px; color: var(--mid); line-height: 1.8; }
+.sec-why { background: var(--cream); }
+.why-layout { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(40px,6vw,96px); align-items: start; }
+.why-left { position: sticky; top: 110px; }
+.why-list { display: flex; flex-direction: column; }
+.why-item { padding: 28px 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: baseline; transition: padding-left 0.3s; }
+.why-item:last-child { border-bottom: 1px solid var(--line); }
+.why-item:hover { padding-left: 10px; }
+.why-num { font-family: var(--disp); font-size: 16px; font-weight: 600; font-style: italic; color: var(--gold); font-variant-numeric: lining-nums; }
+.why-title { font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+.why-desc { font-size: 14px; color: var(--mid); line-height: 1.85; }
 
 /* ===== INVENTORY ===== */
-.sec-inv { background: var(--off); }
-.inv-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; }
-.inv-link { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--red); display: flex; align-items: center; gap: 8px; }
-.inv-link::after { content: '→'; }
-.inv-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--rule-d); border: 1px solid var(--rule-d); margin-bottom: 40px; }
-.inv-card {
-  background: var(--white); display: block; text-decoration: none; color: inherit;
-  transition: background 0.15s;
-}
-.inv-card:hover { background: #fdfcfb; }
+.sec-inv { background: var(--white); }
+.inv-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; margin-bottom: clamp(40px,5vw,60px); flex-wrap: wrap; }
+.inv-link { font-size: 13px; font-weight: 700; letter-spacing: 0.02em; color: var(--red); display: inline-flex; align-items: center; gap: 9px; transition: gap 0.25s; }
+.inv-link:hover { gap: 15px; }
+.inv-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: clamp(16px,2vw,26px); }
+.inv-card { display: block; color: inherit; group: card; }
 .inv-thumb {
-  aspect-ratio: 16/10; background: #ece9e4;
+  aspect-ratio: 4/3; border-radius: 4px; overflow: hidden; position: relative;
+  background: linear-gradient(135deg, #ece7e0, #ddd6cc);
   display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
-  color: #aaa; border-bottom: 1px solid var(--rule-d);
+  border: 1px solid var(--line); transition: transform 0.4s cubic-bezier(.2,.7,.2,1), box-shadow 0.4s;
 }
-.inv-body { padding: 20px; }
-.inv-name { font-family: var(--serif); font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
-.inv-grade { font-size: 11px; color: var(--mid); margin-bottom: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.inv-price { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--red); line-height: 1; }
-.inv-price span { font-family: var(--sans); font-size: 11px; font-weight: 400; color: #aaa; margin-left: 2px; }
-.inv-meta { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
-.inv-meta-item { font-size: 10px; color: #aaa; letter-spacing: 0.04em; }
-.inv-meta-item.flag { color: var(--red); font-weight: 600; }
+.inv-card:hover .inv-thumb { transform: translateY(-5px); box-shadow: 0 22px 44px -22px rgba(22,20,18,0.4); }
+.inv-thumb-label { font-family: var(--disp); font-size: 13px; font-style: italic; color: rgba(22,20,18,0.28); letter-spacing: 0.05em; }
+.inv-flag {
+  position: absolute; top: 12px; left: 12px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  background: var(--red); color: #fff; padding: 4px 10px; border-radius: 100px;
+}
+.inv-body { padding: 18px 4px 0; }
+.inv-name { font-family: var(--disp); font-size: 19px; font-weight: 600; color: var(--ink); margin-bottom: 3px; line-height: 1.2; }
+.inv-grade { font-size: 12px; color: var(--mid); margin-bottom: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.inv-price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 12px; }
+.inv-price-num { font-family: var(--disp); font-size: 26px; font-weight: 600; color: var(--red); line-height: 1; font-variant-numeric: lining-nums; }
+.inv-price-unit { font-size: 12px; font-weight: 500; color: var(--faint); }
+.inv-meta { display: flex; flex-wrap: wrap; gap: 6px 14px; padding-top: 13px; border-top: 1px solid var(--line); }
+.inv-meta span { font-size: 11px; color: var(--mid); font-variant-numeric: lining-nums; }
 
 /* ===== REGIONS ===== */
-.sec-regions { background: var(--dark); }
-.sec-regions .sec-title { color: var(--white); }
-.regions-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); margin-top: 56px; }
-.region-item {
-  background: var(--dark); padding: 28px 20px;
-  transition: background 0.2s; cursor: default;
+.sec-regions { background: var(--night); position: relative; overflow: hidden; }
+.sec-regions::before { content:''; position:absolute; inset:0; background: radial-gradient(70% 80% at 20% 100%, rgba(184,146,63,0.1), transparent 60%); }
+.sec-regions .title { color: #fff; position: relative; }
+.regions-wrap { margin-top: 64px; position: relative; }
+.region-row {
+  display: grid; grid-template-columns: 40px 1.4fr 1fr 2fr; gap: 28px; align-items: center;
+  padding: 26px 0; border-top: 1px solid rgba(255,255,255,0.1); transition: padding-left 0.3s;
 }
-.region-item:hover { background: #161616; }
-.region-name { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 6px; }
-.region-sub { font-size: 11px; color: rgba(255,255,255,0.3); }
-.region-bar { height: 2px; background: rgba(255,255,255,0.06); margin-top: 16px; border-radius: 1px; overflow: hidden; }
-.region-bar-fill { height: 100%; background: var(--gold); border-radius: 1px; }
+.region-row:last-child { border-bottom: 1px solid rgba(255,255,255,0.1); }
+.region-row:hover { padding-left: 12px; }
+.region-idx { font-family: var(--disp); font-size: 14px; font-style: italic; color: var(--gold); font-variant-numeric: lining-nums; }
+.region-name { font-family: var(--disp); font-size: 22px; font-weight: 600; color: #fff; }
+.region-tag { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); letter-spacing: 0.02em; }
+.region-track { height: 4px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; }
+.region-fill { height: 100%; background: linear-gradient(90deg, var(--red-br), var(--gold)); border-radius: 100px; width: 0; transition: width 1.2s cubic-bezier(.2,.7,.2,1); }
 
 /* ===== CONTACT ===== */
-.sec-contact { background: var(--white); }
-.contact-layout { display: grid; grid-template-columns: 5fr 7fr; gap: 80px; align-items: start; }
-.contact-info-title { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 20px; }
-.contact-info-body { font-size: 13px; color: var(--mid); line-height: 1.9; margin-bottom: 36px; }
-.contact-details { display: flex; flex-direction: column; gap: 20px; }
-.cd-item {}
-.cd-label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
-.cd-value { font-size: 13px; color: var(--ink); }
-.contact-form-box { border: 1px solid var(--rule-d); padding: 40px; }
-.contact-form-title { font-family: var(--serif); font-size: 20px; font-weight: 600; margin-bottom: 28px; }
-.fg { margin-bottom: 18px; }
-.fl { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid); display: block; margin-bottom: 7px; }
+.sec-contact { background: var(--paper); }
+.contact-layout { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(40px,6vw,90px); align-items: start; }
+.contact-headline { font-family: var(--disp); font-size: clamp(20px,2.2vw,26px); font-weight: 600; color: var(--ink); line-height: 1.35; margin-bottom: 18px; }
+.contact-sub { font-size: 14px; color: var(--mid); line-height: 1.9; margin-bottom: 40px; }
+.contact-details { display: flex; flex-direction: column; }
+.cd { padding: 18px 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: 120px 1fr; gap: 20px; align-items: baseline; }
+.cd:last-child { border-bottom: 1px solid var(--line); }
+.cd-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+.cd-value { font-size: 14px; color: var(--ink); font-variant-numeric: lining-nums; }
+.contact-form-box { background: var(--white); border: 1px solid var(--line); border-radius: 6px; padding: clamp(28px,4vw,48px); box-shadow: 0 30px 70px -40px rgba(22,20,18,0.25); }
+.contact-form-title { font-family: var(--disp); font-size: 24px; font-weight: 600; margin-bottom: 30px; }
+.fg { margin-bottom: 20px; }
+.fl { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid); display: block; margin-bottom: 9px; }
 .fl .req { color: var(--red); }
 .fi, .fs, .ft {
-  width: 100%; border: 1px solid #ddd; padding: 11px 14px;
-  font-size: 13px; font-family: var(--sans); outline: none; border-radius: 0;
-  transition: border-color 0.15s; background: var(--white); color: var(--ink);
+  width: 100%; border: 1px solid var(--line); padding: 13px 15px;
+  font-size: 14px; font-family: var(--sans); outline: none; border-radius: 4px;
+  transition: border-color 0.2s, box-shadow 0.2s; background: var(--paper); color: var(--ink);
 }
-.fi:focus, .fs:focus, .ft:focus { border-color: var(--red); }
-.ft { resize: vertical; min-height: 100px; line-height: 1.7; }
-.fg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.fi:focus, .fs:focus, .ft:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(158,43,37,0.08); background: #fff; }
+.ft { resize: vertical; min-height: 110px; line-height: 1.7; }
+.fg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .submit-btn {
-  width: 100%; background: var(--red); color: var(--white); border: none;
-  padding: 14px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
-  text-transform: uppercase; cursor: pointer; margin-top: 6px;
-  transition: background 0.15s; font-family: var(--sans);
+  width: 100%; background: var(--red); color: #fff; border: none;
+  padding: 16px; font-size: 13px; font-weight: 700; letter-spacing: 0.04em;
+  cursor: pointer; margin-top: 8px; border-radius: 100px;
+  transition: all 0.25s; font-family: var(--sans);
 }
-.submit-btn:hover { background: var(--red-d); }
+.submit-btn:hover { background: var(--red-d); transform: translateY(-1px); box-shadow: 0 10px 26px -10px rgba(158,43,37,0.5); }
 .wa-btn {
-  width: 100%; background: transparent; border: 1px solid #25d366;
-  color: #25d366; padding: 12px; font-size: 12px; font-weight: 600;
-  letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
-  margin-top: 10px; font-family: var(--sans); transition: background 0.15s;
+  width: 100%; background: #fff; border: 1px solid #25d366; color: #1a9e4b;
+  padding: 14px; font-size: 13px; font-weight: 700; letter-spacing: 0.03em;
+  cursor: pointer; margin-top: 11px; border-radius: 100px; font-family: var(--sans); transition: all 0.25s;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
 }
-.wa-btn:hover { background: #25d366; color: var(--white); }
-.form-success { display: none; border: 1px solid #a5d6a7; background: #f1f8f1; padding: 14px; text-align: center; color: #2e7d32; font-size: 13px; margin-top: 12px; }
+.wa-btn:hover { background: #25d366; color: #fff; }
+.form-success { display: none; border: 1px solid #b6dcc0; background: #f0f8f2; padding: 15px; text-align: center; color: #1f7a3d; font-size: 13px; margin-top: 14px; border-radius: 4px; }
 
 /* ===== FOOTER ===== */
-footer {
-  background: #080808; padding: 60px 48px 32px;
-  border-top: 1px solid rgba(255,255,255,0.05);
-}
-.footer-inner { max-width: 1100px; margin: 0 auto; }
-.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 28px; }
-.footer-brand { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--white); margin-bottom: 14px; }
-.footer-brand em { font-style: italic; color: var(--gold); }
-.footer-tagline { font-size: 12px; color: rgba(255,255,255,0.3); line-height: 1.8; max-width: 240px; }
-.footer-col-title { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 16px; }
-.footer-links { display: flex; flex-direction: column; gap: 10px; }
-.footer-links a { font-size: 13px; color: rgba(255,255,255,0.4); transition: color 0.15s; }
-.footer-links a:hover { color: rgba(255,255,255,0.8); }
-.footer-bottom { display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.2); }
+footer { background: #0d0b09; padding: clamp(56px,7vw,84px) clamp(20px,4vw,56px) 36px; }
+.footer-inner { max-width: 1240px; margin: 0 auto; }
+.footer-top { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr; gap: clamp(32px,5vw,64px); padding-bottom: 52px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 32px; }
+.footer-brand { font-family: var(--disp); font-size: 26px; font-weight: 600; color: #fff; margin-bottom: 18px; }
+.footer-brand .mark { color: var(--gold); font-style: italic; }
+.footer-tagline { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.85; max-width: 280px; }
+.footer-col-title { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 18px; }
+.footer-links { display: flex; flex-direction: column; gap: 12px; }
+.footer-links a { font-size: 13px; color: rgba(255,255,255,0.45); transition: color 0.2s; width: fit-content; }
+.footer-links a:hover { color: #fff; }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: rgba(255,255,255,0.3); flex-wrap: wrap; gap: 8px; letter-spacing: 0.02em; }
+
+/* ===== REVEAL ===== */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(.2,.7,.2,1), transform 0.8s cubic-bezier(.2,.7,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
 
 /* ===== TOAST ===== */
-.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--white); padding: 12px 28px; font-size: 13px; opacity: 0; pointer-events: none; z-index: 9999; transition: opacity 0.3s; }
-.toast.show { opacity: 1; }
+.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--ink); color: #fff; padding: 13px 28px; font-size: 13px; font-weight: 500; opacity: 0; pointer-events: none; z-index: 9999; border-radius: 100px; transition: all 0.3s; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+}
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 960px) {
-  .header { padding: 0 24px; }
+@media (max-width: 1000px) {
   .h-nav { display: none; }
-  .hero { padding: 0 24px 64px; }
-  .hero-stats { flex-direction: column; gap: 24px; }
-  .hero-stat { border-right: none; margin-right: 0; padding-right: 0; }
-  .sec { padding: 72px 24px; }
-  .services-grid, .flow-content.active, .regions-grid { grid-template-columns: 1fr; }
-  .why-layout { grid-template-columns: 1fr; gap: 40px; }
+  .hero-stats { position: static; flex-direction: row; flex-wrap: wrap; gap: 32px; text-align: left; margin-top: 56px; }
+  .hero-scroll { display: none; }
+  .intro-grid { grid-template-columns: 1fr; gap: 32px; }
+  .services-grid { grid-template-columns: 1fr; }
+  .flow-content.active { grid-template-columns: 1fr 1fr; }
+  .why-layout { grid-template-columns: 1fr; gap: 36px; }
   .why-left { position: static; }
-  .why-grid { grid-template-columns: 1fr; }
-  .inv-grid { grid-template-columns: repeat(2,1fr); }
+  .inv-grid { grid-template-columns: 1fr 1fr; }
+  .region-row { grid-template-columns: 30px 1fr; gap: 8px 20px; }
+  .region-tag, .region-track { grid-column: 2; }
+  .region-track { margin-top: 8px; }
   .contact-layout { grid-template-columns: 1fr; gap: 40px; }
-  .footer-top { grid-template-columns: 1fr 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 36px; }
+}
+@media (max-width: 560px) {
+  .fg-row { grid-template-columns: 1fr; }
+  .inv-grid { grid-template-columns: 1fr; }
+  .flow-content.active { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; }
+  .hero-actions { flex-direction: column; }
+  .hero-actions a { width: 100%; justify-content: center; text-align: center; }
 }
 </style>
 </head>
 <body>
 
 <header class="header on-dark" id="hdr">
-  <a href="index.html" class="h-logo">Habibi <em>Auto Trading</em></a>
+  <a href="index.html" class="h-logo">Habibi&nbsp;<span class="mark">Auto Trading</span></a>
   <nav class="h-nav">
-    <a href="#services" class="ja">事業内容</a>
-    <a href="#services" class="en">Services</a>
-    <a href="#flow" class="ja">取引の流れ</a>
-    <a href="#flow" class="en">How It Works</a>
-    <a href="#inventory" class="ja">在庫車両</a>
-    <a href="#inventory" class="en">Inventory</a>
-    <a href="#regions" class="ja">輸出エリア</a>
-    <a href="#regions" class="en">Regions</a>
-    <a href="#contact" class="ja">お問い合わせ</a>
-    <a href="#contact" class="en">Contact</a>
+    <a href="#services" class="ja">事業内容</a><a href="#services" class="en">Services</a>
+    <a href="#flow" class="ja">取引の流れ</a><a href="#flow" class="en">Process</a>
+    <a href="#inventory" class="ja">在庫車両</a><a href="#inventory" class="en">Inventory</a>
+    <a href="#regions" class="ja">輸出エリア</a><a href="#regions" class="en">Regions</a>
+    <a href="#contact" class="ja">お問い合わせ</a><a href="#contact" class="en">Contact</a>
   </nav>
   <div class="h-right">
     <button class="lang-btn" id="langBtn" onclick="toggleLang()">EN</button>
@@ -352,38 +429,60 @@ footer {
 <!-- HERO -->
 <section class="hero" id="top">
   <div class="hero-bg"></div>
-  <div class="hero-accent"></div>
+  <div class="hero-rule"></div>
   <div class="hero-inner">
-    <div class="hero-label">
+    <div class="hero-eyebrow">
       <span class="ja">中古車輸出・国内販売・買取</span>
       <span class="en">Export · Domestic Sales · Procurement</span>
     </div>
-    <h1 class="hero-company">Habibi <em>Auto Trading</em></h1>
-    <p class="hero-tagline ja">日本から世界へ、信頼の一台を。</p>
-    <p class="hero-tagline en">From Japan to the World — One Trusted Vehicle at a Time.</p>
-    <p class="hero-desc ja">千葉を拠点に、JU系オークションから厳選した中古車を世界60カ国以上へ輸出。国内販売・買取仲介も一貫して対応する中古車専門商社です。</p>
-    <p class="hero-desc en">Based in Chiba, Japan. We source selected used vehicles from JU auction networks and export to 60+ countries worldwide, while also handling domestic sales and vehicle procurement.</p>
+    <h1 class="hero-company">Habibi <span class="mark">Auto Trading</span></h1>
+    <div class="hero-lead">
+      <p class="hero-tagline ja">日本から世界へ、信頼の一台を。</p>
+      <p class="hero-tagline en">From Japan to the world — one trusted vehicle at a time.</p>
+      <p class="hero-desc ja">千葉を拠点に、JU系オークションから厳選した中古車を世界60カ国以上へ輸出。国内販売・買取仲介まで一貫して対応する中古車専門商社です。</p>
+      <p class="hero-desc en">Based in Chiba, Japan. We source carefully selected used vehicles from JU auction networks and export to over 60 countries, while handling domestic sales and procurement end to end.</p>
+    </div>
     <div class="hero-actions">
-      <a href="#inventory" class="btn-primary ja">在庫車両を見る</a>
-      <a href="#inventory" class="btn-primary en">Browse Inventory</a>
+      <a href="#inventory" class="btn-primary ja">在庫車両を見る <span class="arr">→</span></a>
+      <a href="#inventory" class="btn-primary en">Browse Inventory <span class="arr">→</span></a>
       <a href="#contact" class="btn-ghost ja">お問い合わせ</a>
       <a href="#contact" class="btn-ghost en">Get in Touch</a>
     </div>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-num">60<sup>+</sup></div>
-        <div class="hero-stat-label ja">輸出対応国</div>
-        <div class="hero-stat-label en">Countries</div>
+  </div>
+  <div class="hero-stats num">
+    <div>
+      <div class="hero-stat-num">60<span class="unit">+</span></div>
+      <div class="hero-stat-label ja">輸出対応国</div>
+      <div class="hero-stat-label en">Countries</div>
+    </div>
+    <div>
+      <div class="hero-stat-num">430<span class="unit">K+</span></div>
+      <div class="hero-stat-label ja">月間データ参照</div>
+      <div class="hero-stat-label en">Records / Month</div>
+    </div>
+    <div>
+      <div class="hero-stat-num">3</div>
+      <div class="hero-stat-label ja">コア事業</div>
+      <div class="hero-stat-label en">Core Lines</div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span class="ja">スクロール</span><span class="en">Scroll</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="sec sec-intro">
+  <div class="sec-inner">
+    <div class="intro-grid">
+      <div class="intro-statement reveal">
+        <span class="ja">数字で選び、言葉で繋ぐ。<br>私たちは日本の良質な一台を、<em>世界の必要とする場所へ</em>届けます。</span>
+        <span class="en">Chosen by data, connected by language. We deliver Japan's finest vehicles <em>to where the world needs them.</em></span>
       </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">43<sup>万+</sup></div>
-        <div class="hero-stat-label ja">月間オークション参照台数</div>
-        <div class="hero-stat-label en">Auction Records / Month</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">3</div>
-        <div class="hero-stat-label ja">コア事業領域</div>
-        <div class="hero-stat-label en">Core Business Lines</div>
+      <div class="intro-aside reveal">
+        <p class="ja">毎月43万件を超えるオークションデータを分析し、市場価値と現地需要の両面から仕入れを判断。海外バイヤーとは英語で直接やり取りし、見積もりから船積み、書類作成までを一貫して担います。</p>
+        <p class="en">We analyze over 430,000 auction records each month, judging purchases by both market value and local demand. We communicate with overseas buyers directly in English, handling everything from quotation to shipping and documentation.</p>
       </div>
     </div>
   </div>
@@ -392,53 +491,47 @@ footer {
 <!-- SERVICES -->
 <section class="sec sec-services" id="services">
   <div class="sec-inner">
-    <div class="services-header">
-      <div>
-        <div class="sec-label ja">事業内容</div>
-        <div class="sec-label en">Services</div>
-        <h2 class="sec-title ja">3つの<em>コア事業</em></h2>
-        <h2 class="sec-title en">Three <em>Core Lines</em></h2>
+    <div class="services-head">
+      <div class="reveal">
+        <div class="eyebrow ja">事業内容</div>
+        <div class="eyebrow en">Services</div>
+        <h2 class="title ja">3つの<em>コア事業</em></h2>
+        <h2 class="title en">Three <em>Core Lines</em></h2>
       </div>
-      <p class="sec-body" style="margin-bottom:0;max-width:400px">
-        <span class="ja">調達から販売まで、中古車バリューチェーンを一貫してカバーします。</span>
-        <span class="en">We cover the full used-car value chain, from sourcing to final sale.</span>
+      <p class="lead reveal" style="max-width:380px">
+        <span class="ja">調達から販売まで、中古車のバリューチェーンを一貫してカバーします。</span>
+        <span class="en">From sourcing to final sale, we cover the entire used-car value chain.</span>
       </p>
     </div>
     <div class="services-grid">
-      <div class="service-item">
-        <div class="service-index">01</div>
-        <div class="service-name ja">中古車輸出</div>
-        <div class="service-name en">Used Car Export</div>
-        <p class="service-desc ja">JUオークションで仕入れた車両を独自の海外バイヤーネットワークを通じて販売。アフリカ・中東・東南アジア市場への輸出に強みを持ちます。FOB価格での見積もりから書類作成まで一貫対応。</p>
-        <p class="service-desc en">Vehicles sourced from JU auctions are sold through our overseas buyer network. Strong expertise in African, Middle Eastern, and Southeast Asian markets. Full support from FOB quotation to documentation.</p>
+      <div class="service reveal">
+        <div class="service-idx num">01</div>
+        <h3 class="service-name ja">中古車輸出</h3>
+        <h3 class="service-name en">Used Car Export</h3>
+        <p class="service-desc ja">JUオークションで仕入れた車両を、独自の海外バイヤーネットワークを通じて販売。アフリカ・中東・東南アジア市場に強みを持ち、FOB価格の見積もりから輸出書類の作成まで一貫して対応します。</p>
+        <p class="service-desc en">Vehicles sourced at JU auctions are sold through our own overseas buyer network. With strong expertise in African, Middle Eastern, and Southeast Asian markets, we handle everything from FOB quotes to export documentation.</p>
         <div class="service-chips">
-          <span class="chip">FOB対応</span>
-          <span class="chip">60カ国+</span>
-          <span class="chip">書類一式</span>
+          <span class="chip">FOB対応</span><span class="chip">60カ国+</span><span class="chip">書類一式</span>
         </div>
       </div>
-      <div class="service-item">
-        <div class="service-index">02</div>
-        <div class="service-name ja">国内販売</div>
-        <div class="service-name en">Domestic Sales</div>
-        <p class="service-desc ja">カーセンサー・ヤフオクを活用した国内向け販売。輸出に向かない車種・年式も国内相場を精密に分析し、最適なチャネルで販売します。個人・業者どちらにも対応。</p>
-        <p class="service-desc en">Domestic sales via CarSensor and Yahoo Auctions. Vehicles less suited for export are sold through the optimal domestic channel, based on precise market analysis. Open to both private buyers and dealers.</p>
+      <div class="service reveal">
+        <div class="service-idx num">02</div>
+        <h3 class="service-name ja">国内販売</h3>
+        <h3 class="service-name en">Domestic Sales</h3>
+        <p class="service-desc ja">カーセンサー・ヤフオクを活用した国内向け販売。輸出に向かない車種や年式も、国内相場を精密に分析し、最適なチャネルで販売します。個人のお客様・業者様どちらにも対応します。</p>
+        <p class="service-desc en">Domestic sales via CarSensor and Yahoo Auctions. Vehicles less suited to export are sold through the optimal channel based on precise market analysis. Open to both private buyers and dealers.</p>
         <div class="service-chips">
-          <span class="chip">カーセンサー</span>
-          <span class="chip">ヤフオク</span>
-          <span class="chip">個人・業者OK</span>
+          <span class="chip">カーセンサー</span><span class="chip">ヤフオク</span><span class="chip">個人・業者OK</span>
         </div>
       </div>
-      <div class="service-item">
-        <div class="service-index">03</div>
-        <div class="service-name ja">買取・調達</div>
-        <div class="service-name en">Procurement & Appraisal</div>
-        <p class="service-desc ja">JU系43万台超のオークションデータを月次分析し、輸出・国内双方の利益が最大化できる車両を戦略的に仕入れ。個人様からの買取査定も承ります。</p>
-        <p class="service-desc en">We analyze 430,000+ JU auction records monthly to strategically source vehicles that maximize profit across both export and domestic channels. Individual vehicle appraisals also available.</p>
+      <div class="service reveal">
+        <div class="service-idx num">03</div>
+        <h3 class="service-name ja">買取・調達</h3>
+        <h3 class="service-name en">Procurement & Appraisal</h3>
+        <p class="service-desc ja">JU系43万台超のオークションデータを月次で分析し、輸出・国内双方で利益が最大化できる車両を戦略的に仕入れます。個人のお客様からの買取査定も承っております。</p>
+        <p class="service-desc en">We analyze over 430,000 JU auction records monthly to strategically source vehicles that maximize profit across both export and domestic channels. Vehicle appraisals for individuals are also available.</p>
         <div class="service-chips">
-          <span class="chip">JUオークション</span>
-          <span class="chip">データ分析</span>
-          <span class="chip">買取査定</span>
+          <span class="chip">JUオークション</span><span class="chip">データ分析</span><span class="chip">買取査定</span>
         </div>
       </div>
     </div>
@@ -448,53 +541,55 @@ footer {
 <!-- FLOW -->
 <section class="sec sec-flow" id="flow">
   <div class="sec-inner">
-    <div class="sec-label ja">取引の流れ</div>
-    <div class="sec-label en" style="color:var(--gold)">How It Works</div>
-    <h2 class="sec-title ja">スムーズな<em style="color:var(--gold)">取引プロセス</em></h2>
-    <h2 class="sec-title en">A Smooth <em style="color:var(--gold)">Transaction Process</em></h2>
-    <div class="flow-tabs" style="margin-top:40px">
-      <div class="flow-tab active ja" onclick="setFlow('ej')">輸出購入</div>
-      <div class="flow-tab ja" onclick="setFlow('dj')">国内購入</div>
-      <div class="flow-tab ja" onclick="setFlow('sj')">買取・査定</div>
-      <div class="flow-tab active en" onclick="setFlow('ee')">Export Purchase</div>
-      <div class="flow-tab en" onclick="setFlow('de')">Domestic Purchase</div>
-      <div class="flow-tab en" onclick="setFlow('se')">Vehicle Appraisal</div>
+    <div class="flow-head">
+      <div class="eyebrow on-gold ja">取引の流れ</div>
+      <div class="eyebrow on-gold en">Process</div>
+      <h2 class="title ja">スムーズな<span class="gold">取引プロセス</span></h2>
+      <h2 class="title en">A Smooth <span class="gold">Process</span></h2>
+      <div class="flow-tabs">
+        <button class="flow-tab active ja" data-f="ej" onclick="setFlow('ej')">輸出購入</button>
+        <button class="flow-tab ja" data-f="dj" onclick="setFlow('dj')">国内購入</button>
+        <button class="flow-tab ja" data-f="sj" onclick="setFlow('sj')">買取・査定</button>
+        <button class="flow-tab active en" data-f="ee" onclick="setFlow('ee')">Export</button>
+        <button class="flow-tab en" data-f="de" onclick="setFlow('de')">Domestic</button>
+        <button class="flow-tab en" data-f="se" onclick="setFlow('se')">Appraisal</button>
+      </div>
     </div>
     <div class="flow-content active" id="fc-ej">
-      <div class="flow-step"><div class="flow-step-num">01</div><div class="flow-step-title">お問い合わせ</div><div class="flow-step-desc">メール・WhatsApp・フォームでご希望車両をお知らせください。</div></div>
-      <div class="flow-step"><div class="flow-step-num">02</div><div class="flow-step-title">FOB見積もり</div><div class="flow-step-desc">車両状態と輸出先港に応じたFOB価格をご提示します。</div></div>
-      <div class="flow-step"><div class="flow-step-num">03</div><div class="flow-step-title">入金・船積み</div><div class="flow-step-desc">ご入金確認後、船積み手配と書類作成を進めます。</div></div>
-      <div class="flow-step"><div class="flow-step-num">04</div><div class="flow-step-title">書類送付</div><div class="flow-step-desc">出港後、B/L・輸出証明等の書類一式をお送りします。</div></div>
+      <div class="flow-step"><div class="flow-step-num num">01</div><div class="flow-step-title">お問い合わせ</div><div class="flow-step-desc">メール・WhatsApp・フォームでご希望の車両をお知らせください。</div></div>
+      <div class="flow-step"><div class="flow-step-num num">02</div><div class="flow-step-title">FOB見積もり</div><div class="flow-step-desc">車両状態と輸出先港に応じたFOB価格をご提示します。</div></div>
+      <div class="flow-step"><div class="flow-step-num num">03</div><div class="flow-step-title">入金・船積み</div><div class="flow-step-desc">ご入金確認後、船積み手配と書類作成を進めます。</div></div>
+      <div class="flow-step"><div class="flow-step-num num">04</div><div class="flow-step-title">書類送付</div><div class="flow-step-desc">出港後、B/L・輸出証明等の書類一式をお送りします。</div></div>
     </div>
     <div class="flow-content" id="fc-dj">
-      <div class="flow-step"><div class="flow-step-num">01</div><div class="flow-step-title">在庫確認</div><div class="flow-step-desc">サイトまたはお電話で在庫をご確認ください。</div></div>
-      <div class="flow-step"><div class="flow-step-num">02</div><div class="flow-step-title">現車確認・商談</div><div class="flow-step-desc">ご来社いただき現車をご確認。条件をご相談します。</div></div>
-      <div class="flow-step"><div class="flow-step-num">03</div><div class="flow-step-title">契約・入金</div><div class="flow-step-desc">売買契約締結後、ご入金をお願いします。</div></div>
-      <div class="flow-step"><div class="flow-step-num">04</div><div class="flow-step-title">名義変更・納車</div><div class="flow-step-desc">手続き完了後、ご指定の場所へ納車いたします。</div></div>
+      <div class="flow-step"><div class="flow-step-num num">01</div><div class="flow-step-title">在庫確認</div><div class="flow-step-desc">サイトまたはお電話で在庫をご確認ください。</div></div>
+      <div class="flow-step"><div class="flow-step-num num">02</div><div class="flow-step-title">現車確認・商談</div><div class="flow-step-desc">ご来社いただき現車をご確認。条件をご相談します。</div></div>
+      <div class="flow-step"><div class="flow-step-num num">03</div><div class="flow-step-title">契約・入金</div><div class="flow-step-desc">売買契約締結後、ご入金をお願いします。</div></div>
+      <div class="flow-step"><div class="flow-step-num num">04</div><div class="flow-step-title">名義変更・納車</div><div class="flow-step-desc">手続き完了後、ご指定の場所へ納車いたします。</div></div>
     </div>
     <div class="flow-content" id="fc-sj">
-      <div class="flow-step"><div class="flow-step-num">01</div><div class="flow-step-title">査定依頼</div><div class="flow-step-desc">フォームまたはお電話で車両情報をお知らせください。</div></div>
-      <div class="flow-step"><div class="flow-step-num">02</div><div class="flow-step-title">概算提示</div><div class="flow-step-desc">オークション・市場データをもとに概算をご提示します。</div></div>
-      <div class="flow-step"><div class="flow-step-num">03</div><div class="flow-step-title">現車確認</div><div class="flow-step-desc">現車を確認後、正式な買取金額を提示します。</div></div>
-      <div class="flow-step"><div class="flow-step-num">04</div><div class="flow-step-title">契約・お支払い</div><div class="flow-step-desc">契約後、迅速にお支払いいたします。</div></div>
+      <div class="flow-step"><div class="flow-step-num num">01</div><div class="flow-step-title">査定依頼</div><div class="flow-step-desc">フォームまたはお電話で車両情報をお知らせください。</div></div>
+      <div class="flow-step"><div class="flow-step-num num">02</div><div class="flow-step-title">概算提示</div><div class="flow-step-desc">オークション・市場データをもとに概算をご提示します。</div></div>
+      <div class="flow-step"><div class="flow-step-num num">03</div><div class="flow-step-title">現車確認</div><div class="flow-step-desc">現車を確認後、正式な買取金額を提示します。</div></div>
+      <div class="flow-step"><div class="flow-step-num num">04</div><div class="flow-step-title">契約・お支払い</div><div class="flow-step-desc">契約後、迅速にお支払いいたします。</div></div>
     </div>
     <div class="flow-content" id="fc-ee">
-      <div class="flow-step"><div class="flow-step-num">01</div><div class="flow-step-title">Inquiry</div><div class="flow-step-desc">Contact us via form, email, or WhatsApp with your target vehicle.</div></div>
-      <div class="flow-step"><div class="flow-step-num">02</div><div class="flow-step-title">FOB Quote</div><div class="flow-step-desc">We provide an FOB price based on vehicle condition and destination port.</div></div>
-      <div class="flow-step"><div class="flow-step-num">03</div><div class="flow-step-title">Payment & Shipping</div><div class="flow-step-desc">Shipping and documentation proceed after payment confirmation.</div></div>
-      <div class="flow-step"><div class="flow-step-num">04</div><div class="flow-step-title">Documents</div><div class="flow-step-desc">B/L and all export documents are sent after departure.</div></div>
+      <div class="flow-step"><div class="flow-step-num num">01</div><div class="flow-step-title">Inquiry</div><div class="flow-step-desc">Contact us via form, email, or WhatsApp with your target vehicle.</div></div>
+      <div class="flow-step"><div class="flow-step-num num">02</div><div class="flow-step-title">FOB Quote</div><div class="flow-step-desc">We provide an FOB price based on vehicle condition and destination port.</div></div>
+      <div class="flow-step"><div class="flow-step-num num">03</div><div class="flow-step-title">Payment & Shipping</div><div class="flow-step-desc">Shipping and documentation proceed after payment is confirmed.</div></div>
+      <div class="flow-step"><div class="flow-step-num num">04</div><div class="flow-step-title">Documents</div><div class="flow-step-desc">B/L and all export documents are sent after departure.</div></div>
     </div>
     <div class="flow-content" id="fc-de">
-      <div class="flow-step"><div class="flow-step-num">01</div><div class="flow-step-title">Check Stock</div><div class="flow-step-desc">Browse inventory online or call us to confirm availability.</div></div>
-      <div class="flow-step"><div class="flow-step-num">02</div><div class="flow-step-title">Inspect & Negotiate</div><div class="flow-step-desc">Visit us to inspect the vehicle and discuss purchase terms.</div></div>
-      <div class="flow-step"><div class="flow-step-num">03</div><div class="flow-step-title">Contract & Payment</div><div class="flow-step-desc">Sign the sales agreement and complete payment.</div></div>
-      <div class="flow-step"><div class="flow-step-num">04</div><div class="flow-step-title">Transfer & Delivery</div><div class="flow-step-desc">We deliver to your location after paperwork is complete.</div></div>
+      <div class="flow-step"><div class="flow-step-num num">01</div><div class="flow-step-title">Check Stock</div><div class="flow-step-desc">Browse inventory online or call us to confirm availability.</div></div>
+      <div class="flow-step"><div class="flow-step-num num">02</div><div class="flow-step-title">Inspect</div><div class="flow-step-desc">Visit us to inspect the vehicle and discuss purchase terms.</div></div>
+      <div class="flow-step"><div class="flow-step-num num">03</div><div class="flow-step-title">Contract</div><div class="flow-step-desc">Sign the sales agreement and complete payment.</div></div>
+      <div class="flow-step"><div class="flow-step-num num">04</div><div class="flow-step-title">Delivery</div><div class="flow-step-desc">We deliver to your location after paperwork is complete.</div></div>
     </div>
     <div class="flow-content" id="fc-se">
-      <div class="flow-step"><div class="flow-step-num">01</div><div class="flow-step-title">Submit Details</div><div class="flow-step-desc">Send vehicle info via form or phone.</div></div>
-      <div class="flow-step"><div class="flow-step-num">02</div><div class="flow-step-title">Preliminary Quote</div><div class="flow-step-desc">We estimate value from auction and market data.</div></div>
-      <div class="flow-step"><div class="flow-step-num">03</div><div class="flow-step-title">Physical Inspection</div><div class="flow-step-desc">We inspect the car and confirm the final offer.</div></div>
-      <div class="flow-step"><div class="flow-step-num">04</div><div class="flow-step-title">Contract & Payment</div><div class="flow-step-desc">We pay promptly after the contract is signed.</div></div>
+      <div class="flow-step"><div class="flow-step-num num">01</div><div class="flow-step-title">Submit Details</div><div class="flow-step-desc">Send vehicle information via form or phone.</div></div>
+      <div class="flow-step"><div class="flow-step-num num">02</div><div class="flow-step-title">Preliminary Quote</div><div class="flow-step-desc">We estimate value from auction and market data.</div></div>
+      <div class="flow-step"><div class="flow-step-num num">03</div><div class="flow-step-title">Inspection</div><div class="flow-step-desc">We inspect the car and confirm a final offer.</div></div>
+      <div class="flow-step"><div class="flow-step-num num">04</div><div class="flow-step-title">Payment</div><div class="flow-step-desc">We pay promptly after the contract is signed.</div></div>
     </div>
   </div>
 </section>
@@ -503,51 +598,21 @@ footer {
 <section class="sec sec-why">
   <div class="sec-inner">
     <div class="why-layout">
-      <div class="why-left">
-        <div class="sec-label ja">選ばれる理由</div>
-        <div class="sec-label en">Why Choose Us</div>
-        <h2 class="sec-title ja">私たちの<em>強み</em></h2>
-        <h2 class="sec-title en">Our <em>Edge</em></h2>
-        <p class="sec-body ja">データと語学力、そして現場の知見。3つの軸が、他にはない調達力と販売力を生み出します。</p>
-        <p class="sec-body en">Data, language, and on-the-ground expertise. Three axes that produce sourcing and sales capabilities unlike anyone else.</p>
+      <div class="why-left reveal">
+        <div class="eyebrow ja">選ばれる理由</div>
+        <div class="eyebrow en">Why Us</div>
+        <h2 class="title ja">私たちの<em>強み</em></h2>
+        <h2 class="title en">Our <em>Edge</em></h2>
+        <p class="lead ja" style="margin-top:24px">データ・語学力・現場の知見。3つの軸が、他にはない調達力と販売力を生み出します。</p>
+        <p class="lead en" style="margin-top:24px">Data, language, and on-the-ground expertise — three axes that create sourcing and sales power unlike anyone else.</p>
       </div>
-      <div class="why-grid">
-        <div class="why-item">
-          <div class="why-title ja">43万件超のオークションデータ</div>
-          <div class="why-title en">430K+ Auction Records</div>
-          <div class="why-desc ja">JU系オークション・カーセンサーを月次で横断分析。利益最大化できる車両を数字で選びます。</div>
-          <div class="why-desc en">Monthly cross-analysis of JU auctions and CarSensor. We choose vehicles by the numbers.</div>
-        </div>
-        <div class="why-item">
-          <div class="why-title ja">英語での直接交渉</div>
-          <div class="why-title en">Direct English Communication</div>
-          <div class="why-desc ja">TOEIC 910・英検準1級のスタッフが海外バイヤーと直接交渉。仲介コストを省きます。</div>
-          <div class="why-desc en">Staff with TOEIC 910 / Eiken Pre-1 negotiate directly. No middlemen, no markup.</div>
-        </div>
-        <div class="why-item">
-          <div class="why-title ja">国内調達の専門知識</div>
-          <div class="why-title en">Procurement Expertise</div>
-          <div class="why-desc ja">JUオークションの仕入れネットワークと車両評価の知見で、割安な良質車両を発掘します。</div>
-          <div class="why-desc en">Deep JU auction network and vehicle assessment knowledge surface undervalued quality units.</div>
-        </div>
-        <div class="why-item">
-          <div class="why-title ja">迅速なレスポンス</div>
-          <div class="why-title en">Fast Turnaround</div>
-          <div class="why-desc ja">問い合わせから見積もりまで最短即日。WhatsAppでのリアルタイム対応も可能です。</div>
-          <div class="why-desc en">Quote within one business day. Real-time responses available via WhatsApp.</div>
-        </div>
-        <div class="why-item">
-          <div class="why-title ja">輸出書類の完全サポート</div>
-          <div class="why-title en">Full Export Documentation</div>
-          <div class="why-desc ja">B/L・輸出証明・通関書類まで一括サポート。初めての海外バイヤーも安心です。</div>
-          <div class="why-desc en">B/L, export certificates, customs docs — all handled. First-time buyers welcome.</div>
-        </div>
-        <div class="why-item">
-          <div class="why-title ja">誠実な情報開示</div>
-          <div class="why-title en">Transparent Disclosure</div>
-          <div class="why-desc ja">車両状態・修復歴・オークション評価点を正直に開示。長期的なパートナーシップを重視します。</div>
-          <div class="why-desc en">Honest disclosure of condition, repair history, and auction scores. Long-term relationships matter.</div>
-        </div>
+      <div class="why-list">
+        <div class="why-item reveal"><div class="why-num num">01</div><div><div class="why-title ja">43万件超のオークションデータ</div><div class="why-title en">430K+ Auction Records</div><div class="why-desc ja">JU系オークションとカーセンサーを月次で横断分析。利益が最大化できる車両を、感覚ではなく数字で選び抜きます。</div><div class="why-desc en">Monthly cross-analysis of JU auctions and CarSensor. We select the most profitable vehicles by the numbers, not by instinct.</div></div></div>
+        <div class="why-item reveal"><div class="why-num num">02</div><div><div class="why-title ja">英語での直接交渉</div><div class="why-title en">Direct English Communication</div><div class="why-desc ja">TOEIC 910・英検準1級のスタッフが海外バイヤーと直接交渉。余計な仲介を挟まず、迅速かつ正確に対応します。</div><div class="why-desc en">Staff with TOEIC 910 and Eiken Pre-1 negotiate directly with overseas buyers — no middlemen, fast and accurate.</div></div></div>
+        <div class="why-item reveal"><div class="why-num num">03</div><div><div class="why-title ja">国内調達の専門知識</div><div class="why-title en">Procurement Expertise</div><div class="why-desc ja">JUオークションの仕入れネットワークと、車両コンディション評価の深い知見で、割安な良質車両を発掘します。</div><div class="why-desc en">A strong JU auction network and deep vehicle-assessment knowledge surface undervalued, high-quality units.</div></div></div>
+        <div class="why-item reveal"><div class="why-num num">04</div><div><div class="why-title ja">迅速なレスポンス</div><div class="why-title en">Fast Turnaround</div><div class="why-desc ja">お問い合わせから見積もりまで最短即日。WhatsAppでのリアルタイムなやり取りにも対応しています。</div><div class="why-desc en">From inquiry to quote in as little as one business day, with real-time responses available via WhatsApp.</div></div></div>
+        <div class="why-item reveal"><div class="why-num num">05</div><div><div class="why-title ja">輸出書類の完全サポート</div><div class="why-title en">Full Export Documentation</div><div class="why-desc ja">B/L・輸出証明・通関書類まで一括サポート。初めての海外バイヤー様も安心してお取引いただけます。</div><div class="why-desc en">B/L, export certificates, and customs documents — all handled. First-time overseas buyers are welcome.</div></div></div>
+        <div class="why-item reveal"><div class="why-num num">06</div><div><div class="why-title ja">誠実な情報開示</div><div class="why-title en">Transparent Disclosure</div><div class="why-desc ja">車両の状態・修復歴・オークション評価点を正直に開示。長期的なパートナーシップを何より大切にします。</div><div class="why-desc en">We honestly disclose condition, repair history, and auction scores. Long-term partnerships matter most to us.</div></div></div>
       </div>
     </div>
   </div>
@@ -556,15 +621,15 @@ footer {
 <!-- INVENTORY -->
 <section class="sec sec-inv" id="inventory">
   <div class="sec-inner">
-    <div class="inv-header">
-      <div>
-        <div class="sec-label ja">在庫車両</div>
-        <div class="sec-label en">Inventory</div>
-        <h2 class="sec-title ja" style="margin-bottom:0">注目の<em>在庫車両</em></h2>
-        <h2 class="sec-title en" style="margin-bottom:0"><em>Featured</em> Vehicles</h2>
+    <div class="inv-head">
+      <div class="reveal">
+        <div class="eyebrow ja">在庫車両</div>
+        <div class="eyebrow en">Inventory</div>
+        <h2 class="title ja">注目の<em>在庫車両</em></h2>
+        <h2 class="title en"><em>Featured</em> Vehicles</h2>
       </div>
-      <a href="used_car_site.html" class="inv-link ja">在庫一覧をすべて見る</a>
-      <a href="used_car_site.html" class="inv-link en">View All Inventory</a>
+      <a href="used_car_site.html" class="inv-link reveal ja">在庫一覧をすべて見る →</a>
+      <a href="used_car_site.html" class="inv-link reveal en">View all inventory →</a>
     </div>
     <div class="inv-grid" id="invGrid"></div>
   </div>
@@ -573,15 +638,18 @@ footer {
 <!-- REGIONS -->
 <section class="sec sec-regions" id="regions">
   <div class="sec-inner">
-    <div class="sec-label" style="color:var(--gold)">Export Regions</div>
-    <h2 class="sec-title ja">世界60カ国以上への<em style="color:var(--gold)">輸出実績</em></h2>
-    <h2 class="sec-title en">Exporting to <em style="color:var(--gold)">60+ Countries</em></h2>
-    <div class="regions-grid">
-      <div class="region-item"><div class="region-name ja">東アフリカ</div><div class="region-name en">East Africa</div><div class="region-sub ja">主力市場</div><div class="region-sub en">Primary Market</div><div class="region-bar"><div class="region-bar-fill" style="width:90%"></div></div></div>
-      <div class="region-item"><div class="region-name ja">西アフリカ</div><div class="region-name en">West Africa</div><div class="region-sub ja">成長市場</div><div class="region-sub en">Growing</div><div class="region-bar"><div class="region-bar-fill" style="width:65%"></div></div></div>
-      <div class="region-item"><div class="region-name ja">中東</div><div class="region-name en">Middle East</div><div class="region-sub ja">高単価需要</div><div class="region-sub en">Premium Demand</div><div class="region-bar"><div class="region-bar-fill" style="width:75%"></div></div></div>
-      <div class="region-item"><div class="region-name ja">東南アジア</div><div class="region-name en">Southeast Asia</div><div class="region-sub ja">安定需要</div><div class="region-sub en">Steady Demand</div><div class="region-bar"><div class="region-bar-fill" style="width:55%"></div></div></div>
-      <div class="region-item"><div class="region-name ja">太平洋島嶼</div><div class="region-name en">Pacific Islands</div><div class="region-sub ja">対応可</div><div class="region-sub en">Available</div><div class="region-bar"><div class="region-bar-fill" style="width:30%"></div></div></div>
+    <div class="reveal">
+      <div class="eyebrow on-gold ja">輸出エリア</div>
+      <div class="eyebrow on-gold en">Export Regions</div>
+      <h2 class="title ja">世界60カ国以上への<span class="gold">輸出実績</span></h2>
+      <h2 class="title en">Exporting to <span class="gold">60+ Countries</span></h2>
+    </div>
+    <div class="regions-wrap" id="regionsWrap">
+      <div class="region-row reveal" data-fill="92"><div class="region-idx num">01</div><div class="region-name ja">東アフリカ</div><div class="region-name en">East Africa</div><div class="region-tag ja">主力市場</div><div class="region-tag en">Primary Market</div><div class="region-track"><div class="region-fill"></div></div></div>
+      <div class="region-row reveal" data-fill="68"><div class="region-idx num">02</div><div class="region-name ja">西アフリカ</div><div class="region-name en">West Africa</div><div class="region-tag ja">成長市場</div><div class="region-tag en">Growing</div><div class="region-track"><div class="region-fill"></div></div></div>
+      <div class="region-row reveal" data-fill="78"><div class="region-idx num">03</div><div class="region-name ja">中東</div><div class="region-name en">Middle East</div><div class="region-tag ja">高単価需要</div><div class="region-tag en">Premium Demand</div><div class="region-track"><div class="region-fill"></div></div></div>
+      <div class="region-row reveal" data-fill="56"><div class="region-idx num">04</div><div class="region-name ja">東南アジア</div><div class="region-name en">Southeast Asia</div><div class="region-tag ja">安定需要</div><div class="region-tag en">Steady Demand</div><div class="region-track"><div class="region-fill"></div></div></div>
+      <div class="region-row reveal" data-fill="34"><div class="region-idx num">05</div><div class="region-name ja">太平洋島嶼</div><div class="region-name en">Pacific Islands</div><div class="region-tag ja">対応可</div><div class="region-tag en">Available</div><div class="region-track"><div class="region-fill"></div></div></div>
     </div>
   </div>
 </section>
@@ -589,87 +657,42 @@ footer {
 <!-- CONTACT -->
 <section class="sec sec-contact" id="contact">
   <div class="sec-inner">
-    <div class="sec-label ja">お問い合わせ</div>
-    <div class="sec-label en">Contact</div>
-    <h2 class="sec-title ja" style="margin-bottom:48px">お気軽に<em>ご相談ください</em></h2>
-    <h2 class="sec-title en" style="margin-bottom:48px">Get in <em>Touch</em></h2>
     <div class="contact-layout">
-      <div>
-        <div class="contact-info-title ja">輸出・国内販売・買取、何でもご相談ください</div>
-        <div class="contact-info-title en">We're ready to help with export, domestic sales, and appraisals</div>
-        <p class="contact-info-body ja">日本語・英語どちらでも対応可能です。通常24時間以内にご返信いたします。</p>
-        <p class="contact-info-body en">We respond in both Japanese and English, usually within 24 hours.</p>
+      <div class="reveal">
+        <div class="eyebrow ja">お問い合わせ</div>
+        <div class="eyebrow en">Contact</div>
+        <h2 class="title ja" style="margin-bottom:32px">お気軽に<em>ご相談ください</em></h2>
+        <h2 class="title en" style="margin-bottom:32px">Get in <em>Touch</em></h2>
+        <p class="contact-headline ja">輸出・国内販売・買取、どんなことでもご相談ください。</p>
+        <p class="contact-headline en">Export, domestic sales, or appraisals — we're here to help.</p>
+        <p class="contact-sub ja">日本語・英語どちらでも対応可能です。通常24時間以内にご返信いたします。</p>
+        <p class="contact-sub en">We respond in both Japanese and English, usually within 24 hours.</p>
         <div class="contact-details">
-          <div class="cd-item">
-            <div class="cd-label ja">会社名</div>
-            <div class="cd-label en">Company</div>
-            <div class="cd-value">Habibi Auto Trading 合同会社</div>
-          </div>
-          <div class="cd-item">
-            <div class="cd-label ja">所在地</div>
-            <div class="cd-label en">Location</div>
-            <div class="cd-value ja">千葉県（詳細はお問い合わせください）</div>
-            <div class="cd-value en">Chiba, Japan</div>
-          </div>
-          <div class="cd-item">
-            <div class="cd-label">Email</div>
-            <div class="cd-value">info@habibi-auto.jp</div>
-          </div>
-          <div class="cd-item">
-            <div class="cd-label">WhatsApp</div>
-            <div class="cd-value">+81-XX-XXXX-XXXX</div>
-          </div>
-          <div class="cd-item">
-            <div class="cd-label ja">営業時間</div>
-            <div class="cd-label en">Hours</div>
-            <div class="cd-value ja">平日 9:00〜18:00</div>
-            <div class="cd-value en">Mon–Fri 9:00–18:00 JST</div>
-          </div>
+          <div class="cd"><div class="cd-label ja">会社名</div><div class="cd-label en">Company</div><div class="cd-value">Habibi Auto Trading 合同会社</div></div>
+          <div class="cd"><div class="cd-label ja">所在地</div><div class="cd-label en">Location</div><div class="cd-value ja">千葉県（詳細はお問い合わせください）</div><div class="cd-value en">Chiba, Japan</div></div>
+          <div class="cd"><div class="cd-label">Email</div><div class="cd-value">info@habibi-auto.jp</div></div>
+          <div class="cd"><div class="cd-label">WhatsApp</div><div class="cd-value num">+81-XX-XXXX-XXXX</div></div>
+          <div class="cd"><div class="cd-label ja">営業時間</div><div class="cd-label en">Hours</div><div class="cd-value ja num">平日 9:00〜18:00</div><div class="cd-value en num">Mon–Fri 9:00–18:00 JST</div></div>
         </div>
       </div>
-      <div class="contact-form-box">
+      <div class="contact-form-box reveal">
         <div class="contact-form-title ja">お問い合わせフォーム</div>
         <div class="contact-form-title en">Send a Message</div>
         <div class="fg-row">
-          <div class="fg">
-            <label class="fl"><span class="ja">お名前</span><span class="en">Name</span><span class="req"> *</span></label>
-            <input type="text" class="fi" id="cf-name" placeholder="田中 太郎 / John Smith">
-          </div>
-          <div class="fg">
-            <label class="fl"><span class="ja">会社名</span><span class="en">Company</span></label>
-            <input type="text" class="fi" id="cf-company" placeholder="任意 / Optional">
-          </div>
+          <div class="fg"><label class="fl"><span class="ja">お名前</span><span class="en">Name</span><span class="req"> *</span></label><input type="text" class="fi" id="cf-name" placeholder="田中 太郎 / John Smith"></div>
+          <div class="fg"><label class="fl"><span class="ja">会社名</span><span class="en">Company</span></label><input type="text" class="fi" id="cf-company" placeholder="任意 / Optional"></div>
         </div>
-        <div class="fg">
-          <label class="fl">Email <span class="req">*</span></label>
-          <input type="email" class="fi" id="cf-email" placeholder="your@email.com">
-        </div>
-        <div class="fg">
-          <label class="fl"><span class="ja">種別</span><span class="en">Inquiry Type</span></label>
+        <div class="fg"><label class="fl">Email <span class="req">*</span></label><input type="email" class="fi" id="cf-email" placeholder="your@email.com"></div>
+        <div class="fg"><label class="fl"><span class="ja">種別</span><span class="en">Inquiry Type</span></label>
           <select class="fs" id="cf-type">
-            <option class="ja">輸出購入を検討</option>
-            <option class="ja">国内購入を検討</option>
-            <option class="ja">買取・査定の依頼</option>
-            <option class="ja">その他</option>
-            <option class="en">Export Purchase</option>
-            <option class="en">Domestic Purchase</option>
-            <option class="en">Vehicle Appraisal</option>
-            <option class="en">Other</option>
+            <option class="ja">輸出購入を検討</option><option class="ja">国内購入を検討</option><option class="ja">買取・査定の依頼</option><option class="ja">その他</option>
+            <option class="en">Export Purchase</option><option class="en">Domestic Purchase</option><option class="en">Vehicle Appraisal</option><option class="en">Other</option>
           </select>
         </div>
-        <div class="fg">
-          <label class="fl"><span class="ja">メッセージ</span><span class="en">Message</span><span class="req"> *</span></label>
-          <textarea class="ft" id="cf-msg" placeholder="ご質問・ご要望をご記入ください / Please describe your inquiry..."></textarea>
-        </div>
-        <button class="submit-btn" onclick="submitContact()">
-          <span class="ja">送信する</span>
-          <span class="en">Send Message</span>
-        </button>
-        <button class="wa-btn" onclick="openWA()">WhatsApp</button>
-        <div class="form-success" id="cf-success">
-          <span class="ja">お問い合わせを受け付けました。24時間以内にご連絡いたします。</span>
-          <span class="en">Message received. We'll get back to you within 24 hours.</span>
-        </div>
+        <div class="fg"><label class="fl"><span class="ja">メッセージ</span><span class="en">Message</span><span class="req"> *</span></label><textarea class="ft" id="cf-msg" placeholder="ご質問・ご要望をご記入ください / Please describe your inquiry..."></textarea></div>
+        <button class="submit-btn" onclick="submitContact()"><span class="ja">送信する</span><span class="en">Send Message</span></button>
+        <button class="wa-btn" onclick="openWA()">WhatsApp<span class="ja">で問い合わせ</span></button>
+        <div class="form-success" id="cf-success"><span class="ja">お問い合わせを受け付けました。24時間以内にご連絡いたします。</span><span class="en">Message received. We'll reply within 24 hours.</span></div>
       </div>
     </div>
   </div>
@@ -680,49 +703,37 @@ footer {
   <div class="footer-inner">
     <div class="footer-top">
       <div>
-        <div class="footer-brand">Habibi <em>Auto Trading</em></div>
+        <div class="footer-brand">Habibi <span class="mark">Auto Trading</span></div>
         <p class="footer-tagline ja">日本全国から厳選した中古車を、世界60カ国以上のバイヤーへ届ける中古車専門商社。</p>
         <p class="footer-tagline en">A specialized used-car trading company delivering quality Japanese vehicles to buyers in 60+ countries.</p>
       </div>
       <div>
-        <div class="footer-col-title ja">サービス</div>
-        <div class="footer-col-title en">Services</div>
+        <div class="footer-col-title ja">サービス</div><div class="footer-col-title en">Services</div>
         <div class="footer-links">
-          <a href="#services" class="ja">中古車輸出</a>
-          <a href="#services" class="en">Used Car Export</a>
-          <a href="#services" class="ja">国内販売</a>
-          <a href="#services" class="en">Domestic Sales</a>
-          <a href="#services" class="ja">買取・査定</a>
-          <a href="#services" class="en">Appraisal</a>
+          <a href="#services" class="ja">中古車輸出</a><a href="#services" class="en">Used Car Export</a>
+          <a href="#services" class="ja">国内販売</a><a href="#services" class="en">Domestic Sales</a>
+          <a href="#services" class="ja">買取・査定</a><a href="#services" class="en">Appraisal</a>
         </div>
       </div>
       <div>
-        <div class="footer-col-title ja">在庫・取引</div>
-        <div class="footer-col-title en">Inventory</div>
+        <div class="footer-col-title ja">在庫・取引</div><div class="footer-col-title en">Inventory</div>
         <div class="footer-links">
-          <a href="used_car_site.html" class="ja">在庫一覧</a>
-          <a href="used_car_site.html" class="en">All Inventory</a>
-          <a href="#flow" class="ja">取引の流れ</a>
-          <a href="#flow" class="en">How It Works</a>
-          <a href="#regions" class="ja">輸出エリア</a>
-          <a href="#regions" class="en">Export Regions</a>
+          <a href="used_car_site.html" class="ja">在庫一覧</a><a href="used_car_site.html" class="en">All Inventory</a>
+          <a href="#flow" class="ja">取引の流れ</a><a href="#flow" class="en">Process</a>
+          <a href="#regions" class="ja">輸出エリア</a><a href="#regions" class="en">Regions</a>
         </div>
       </div>
       <div>
-        <div class="footer-col-title ja">会社情報</div>
-        <div class="footer-col-title en">Company</div>
+        <div class="footer-col-title ja">会社情報</div><div class="footer-col-title en">Company</div>
         <div class="footer-links">
-          <a href="#contact" class="ja">お問い合わせ</a>
-          <a href="#contact" class="en">Contact</a>
-          <a href="#" class="ja">プライバシーポリシー</a>
-          <a href="#" class="en">Privacy Policy</a>
-          <a href="#" class="ja">特定商取引法に基づく表示</a>
-          <a href="#" class="en">Legal Notice</a>
+          <a href="#contact" class="ja">お問い合わせ</a><a href="#contact" class="en">Contact</a>
+          <a href="#" class="ja">プライバシーポリシー</a><a href="#" class="en">Privacy Policy</a>
+          <a href="#" class="ja">特定商取引法に基づく表示</a><a href="#" class="en">Legal Notice</a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2025 Habibi Auto Trading 合同会社. All rights reserved.</span>
+      <span class="num">© 2025 Habibi Auto Trading 合同会社. All rights reserved.</span>
       <span>Chiba, Japan</span>
     </div>
   </div>
@@ -731,68 +742,72 @@ footer {
 <div class="toast" id="toast"></div>
 
 <script>
-// LANG
 let lang = 'ja';
 function toggleLang() {
   lang = lang === 'ja' ? 'en' : 'ja';
   document.body.classList.toggle('lang-en', lang === 'en');
   document.getElementById('langBtn').textContent = lang === 'ja' ? 'EN' : 'JA';
   document.documentElement.lang = lang;
-  if (lang === 'ja') activateFlow('ej');
-  else               activateFlow('ee');
+  activateFlow(lang === 'ja' ? 'ej' : 'ee');
 }
 
-// HEADER scroll
 const hdr = document.getElementById('hdr');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > window.innerHeight * 0.85) {
-    hdr.classList.replace('on-dark', 'on-light');
-  } else {
-    hdr.classList.replace('on-light', 'on-dark');
-  }
-});
+function onScroll() {
+  if (window.scrollY > window.innerHeight * 0.82) hdr.classList.replace('on-dark','on-light');
+  else hdr.classList.replace('on-light','on-dark');
+}
+window.addEventListener('scroll', onScroll, { passive: true });
 
-// FLOW
 function activateFlow(id) {
-  document.querySelectorAll('.flow-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.flow-tab').forEach(t => t.classList.toggle('active', t.dataset.f === id));
   document.querySelectorAll('.flow-content').forEach(c => c.classList.remove('active'));
-  const tab = document.querySelector(`.flow-tab[onclick="setFlow('${id}')"]`);
-  if (tab) tab.classList.add('active');
   const fc = document.getElementById('fc-' + id);
   if (fc) fc.classList.add('active');
 }
 function setFlow(id) { activateFlow(id); }
 
-// INVENTORY
 const CARS = [
   { id:7,  name:"ハイエース バン",     grade:"スーパーGL ダークプライム",  year:2022, km:2.1, price:368, fuel:"ディーゼル", drive:"2WD", export:true  },
   { id:12, name:"ランクル プラド",      grade:"TZ-G ディーゼル 4WD",        year:2022, km:1.8, price:498, fuel:"ディーゼル", drive:"4WD", export:true  },
   { id:9,  name:"ランドクルーザー 200", grade:"ZX 4WD フルオプション",      year:2019, km:5.5, price:680, fuel:"ディーゼル", drive:"4WD", export:true  },
   { id:6,  name:"ノア",                grade:"Si W×B III 7人乗り",         year:2021, km:3.8, price:265, fuel:"ガソリン",   drive:"2WD", export:false },
 ];
-document.getElementById('invGrid').innerHTML = CARS.map(c => `
-  <a class="inv-card" href="detail.html?id=${c.id}">
-    <div class="inv-thumb">Photo</div>
+document.getElementById('invGrid').innerHTML = CARS.map((c,i) => `
+  <a class="inv-card reveal" href="detail.html?id=${c.id}" style="transition-delay:${i*0.06}s">
+    <div class="inv-thumb">
+      ${c.export ? '<span class="inv-flag">輸出向け</span>' : ''}
+      <span class="inv-thumb-label">Photo</span>
+    </div>
     <div class="inv-body">
       <div class="inv-name">${c.name}</div>
       <div class="inv-grade">${c.grade}</div>
-      <div class="inv-price">${c.price.toLocaleString()}<span>万円（税込）</span></div>
-      <div class="inv-meta">
-        <span class="inv-meta-item">${c.year}年式</span>
-        <span class="inv-meta-item">走行 ${c.km}万km</span>
-        <span class="inv-meta-item">${c.fuel}</span>
-        <span class="inv-meta-item">${c.drive}</span>
-        ${c.export ? '<span class="inv-meta-item flag">輸出向け</span>' : ''}
+      <div class="inv-price"><span class="inv-price-num num">${c.price.toLocaleString()}</span><span class="inv-price-unit">万円（税込）</span></div>
+      <div class="inv-meta num">
+        <span>${c.year}年式</span><span>走行 ${c.km}万km</span><span>${c.fuel}</span><span>${c.drive}</span>
       </div>
     </div>
   </a>
 `).join('');
 
-// CONTACT
+// reveal on scroll
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      if (e.target.classList.contains('region-row')) {
+        const fill = e.target.querySelector('.region-fill');
+        if (fill) fill.style.width = e.target.dataset.fill + '%';
+      }
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
 function submitContact() {
-  const name  = document.getElementById('cf-name').value.trim();
+  const name = document.getElementById('cf-name').value.trim();
   const email = document.getElementById('cf-email').value.trim();
-  const msg   = document.getElementById('cf-msg').value.trim();
+  const msg = document.getElementById('cf-msg').value.trim();
   if (!name || !email || !msg) { showToast(lang === 'ja' ? '必須項目を入力してください' : 'Please fill in required fields'); return; }
   document.getElementById('cf-success').style.display = 'block';
   showToast(lang === 'ja' ? '送信しました' : 'Message sent!');
@@ -804,8 +819,9 @@ function openWA() {
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+  setTimeout(() => t.classList.remove('show'), 2600);
 }
+onScroll();
 </script>
 </body>
 </html>
