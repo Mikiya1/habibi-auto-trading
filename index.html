@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habibi Auto Trading — 日本から世界へ、信頼の中古車輸出</title>
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red:    #c0392b;
+  --red-d:  #a93226;
+  --red-l:  #fff0ee;
+  --gold:   #f0c040;
+  --dark:   #1a1a1a;
+  --gray:   #555;
+  --light:  #f7f7f7;
+  --border: #e0e0e0;
+  --white:  #ffffff;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Segoe UI', sans-serif; color: var(--dark); background: var(--white); font-size: 15px; line-height: 1.7; }
+a { text-decoration: none; color: inherit; }
+img { display: block; max-width: 100%; }
+
+/* ===== LANG TOGGLE ===== */
+.en { display: none; }
+body.lang-en .ja { display: none; }
+body.lang-en .en { display: revert; }
+
+/* ===== HEADER ===== */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(26,26,26,0.96);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center;
+  padding: 0 40px; height: 64px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: background 0.3s;
+}
+.header.scrolled { background: rgba(26,26,26,0.99); }
+.h-logo { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+.h-logo span { color: var(--gold); }
+.h-nav { display: flex; gap: 28px; margin-left: 48px; }
+.h-nav a { font-size: 13px; color: rgba(255,255,255,0.7); transition: color 0.2s; font-weight: 500; }
+.h-nav a:hover { color: #fff; }
+.h-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.lang-btn {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px; color: rgba(255,255,255,0.8); font-size: 12px; font-weight: 600;
+  padding: 5px 12px; cursor: pointer; transition: background 0.2s;
+}
+.lang-btn:hover { background: rgba(255,255,255,0.18); color: #fff; }
+.h-cta {
+  background: var(--red); color: #fff; border: none; border-radius: 5px;
+  padding: 8px 20px; font-size: 13px; font-weight: 700; cursor: pointer;
+  transition: background 0.2s;
+}
+.h-cta:hover { background: var(--red-d); }
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh; display: flex; align-items: center;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1e1a18 50%, #1a0a08 100%);
+  position: relative; overflow: hidden; padding: 80px 40px 60px;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 70% 40%, rgba(192,57,43,0.25) 0%, transparent 60%),
+              radial-gradient(ellipse at 20% 80%, rgba(240,192,64,0.08) 0%, transparent 50%);
+}
+.hero-grid {
+  position: absolute; inset: 0; opacity: 0.04;
+  background-image: linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; width: 100%; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(192,57,43,0.2); border: 1px solid rgba(192,57,43,0.4);
+  border-radius: 20px; padding: 5px 14px; margin-bottom: 28px;
+}
+.hero-eyebrow-dot { width: 7px; height: 7px; background: var(--red); border-radius: 50%; }
+.hero-eyebrow span { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.8); letter-spacing: 0.08em; text-transform: uppercase; }
+.hero-title {
+  font-size: clamp(36px, 5vw, 64px); font-weight: 900; color: #fff;
+  line-height: 1.1; margin-bottom: 24px; letter-spacing: -1px;
+}
+.hero-title .accent { color: var(--gold); }
+.hero-title .red-line {
+  display: block; font-size: clamp(28px, 4vw, 52px);
+  color: rgba(255,255,255,0.75); font-weight: 400; font-style: italic;
+  letter-spacing: 0;
+}
+.hero-body { font-size: 16px; color: rgba(255,255,255,0.6); max-width: 560px; margin-bottom: 40px; line-height: 1.8; }
+.hero-btns { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 56px; }
+.btn-primary {
+  background: var(--red); color: #fff; padding: 14px 32px;
+  border-radius: 6px; font-size: 15px; font-weight: 700; border: none; cursor: pointer;
+  transition: background 0.2s, transform 0.15s; display: inline-block;
+}
+.btn-primary:hover { background: var(--red-d); transform: translateY(-1px); }
+.btn-outline {
+  background: transparent; color: rgba(255,255,255,0.85);
+  border: 1px solid rgba(255,255,255,0.3); padding: 14px 32px;
+  border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, transform 0.15s; display: inline-block;
+}
+.btn-outline:hover { border-color: rgba(255,255,255,0.6); color: #fff; transform: translateY(-1px); }
+.hero-stats { display: flex; gap: 40px; flex-wrap: wrap; }
+.stat-item {}
+.stat-num { font-size: 32px; font-weight: 900; color: var(--gold); line-height: 1; }
+.stat-num sup { font-size: 16px; }
+.stat-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+.hero-cars {
+  position: absolute; right: -20px; bottom: 0; top: 64px;
+  width: 480px; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; gap: 0;
+  pointer-events: none;
+}
+.hero-emoji-stack { font-size: 140px; line-height: 1; opacity: 0.55; filter: drop-shadow(0 0 60px rgba(192,57,43,0.4)); }
+
+/* ===== SECTION COMMON ===== */
+.section { padding: 80px 40px; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+.section-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--red); margin-bottom: 10px; }
+.section-title { font-size: clamp(24px, 3vw, 36px); font-weight: 800; color: var(--dark); line-height: 1.2; margin-bottom: 16px; letter-spacing: -0.5px; }
+.section-body { font-size: 15px; color: var(--gray); max-width: 600px; line-height: 1.8; margin-bottom: 48px; }
+.section-title .accent { color: var(--red); }
+
+/* ===== SERVICES ===== */
+.services-section { background: var(--light); }
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.service-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 12px; padding: 32px 28px;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  cursor: default;
+}
+.service-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); border-color: var(--red); }
+.service-icon { font-size: 40px; margin-bottom: 20px; }
+.service-num { font-size: 11px; font-weight: 700; color: var(--red); letter-spacing: 0.1em; margin-bottom: 8px; }
+.service-name { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+.service-desc { font-size: 13px; color: var(--gray); line-height: 1.8; margin-bottom: 20px; }
+.service-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.stag { font-size: 11px; background: var(--red-l); color: var(--red); border: 1px solid rgba(192,57,43,0.2); border-radius: 4px; padding: 3px 9px; font-weight: 600; }
+.service-cta { display: inline-block; margin-top: 20px; font-size: 13px; color: var(--red); font-weight: 700; }
+.service-cta:hover { text-decoration: underline; }
+
+/* ===== FLOW ===== */
+.flow-section { background: var(--white); }
+.flow-tabs { display: flex; gap: 0; margin-bottom: 40px; border-bottom: 2px solid var(--border); }
+.flow-tab {
+  padding: 12px 28px; font-size: 14px; font-weight: 600; cursor: pointer;
+  color: var(--gray); border-bottom: 2px solid transparent; margin-bottom: -2px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.flow-tab.active { color: var(--red); border-bottom-color: var(--red); }
+.flow-content { display: none; }
+.flow-content.active { display: block; }
+.flow-steps { display: flex; gap: 0; position: relative; }
+.flow-steps::before {
+  content: ''; position: absolute; top: 28px; left: 28px; right: 28px; height: 2px;
+  background: linear-gradient(90deg, var(--red) 0%, var(--gold) 100%); opacity: 0.3;
+}
+.flow-step { flex: 1; text-align: center; padding: 0 12px; position: relative; }
+.step-circle {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--red); color: #fff; display: flex; align-items: center;
+  justify-content: center; font-size: 20px; font-weight: 900; margin: 0 auto 16px;
+  position: relative; z-index: 1; box-shadow: 0 4px 16px rgba(192,57,43,0.3);
+}
+.step-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.step-desc { font-size: 12px; color: var(--gray); line-height: 1.6; }
+
+/* ===== WHY ===== */
+.why-section { background: linear-gradient(135deg, #1a0a08 0%, #1e1a18 100%); color: #fff; }
+.why-section .section-title { color: #fff; }
+.why-section .section-body { color: rgba(255,255,255,0.6); }
+.why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.why-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 28px 24px; transition: background 0.2s; }
+.why-card:hover { background: rgba(255,255,255,0.08); }
+.why-icon { font-size: 32px; margin-bottom: 16px; }
+.why-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.why-desc { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.7; }
+
+/* ===== INVENTORY PREVIEW ===== */
+.inventory-section { background: var(--light); }
+.inv-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 32px; }
+.inv-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden; cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  text-decoration: none; color: inherit; display: block;
+}
+.inv-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.09); border-color: var(--red); }
+.inv-thumb {
+  aspect-ratio: 16/10; background: #f0f0f0;
+  display: flex; align-items: center; justify-content: center; font-size: 52px;
+}
+.inv-info { padding: 10px 12px 13px; }
+.inv-name { font-size: 13px; font-weight: 700; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.inv-grade { font-size: 11px; color: #888; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.inv-price { font-size: 18px; font-weight: 700; color: var(--red); line-height: 1; }
+.inv-price span { font-size: 11px; font-weight: 400; color: #aaa; }
+.inv-spec { font-size: 10px; color: #aaa; margin-top: 4px; }
+.inv-cta-wrap { text-align: center; }
+.btn-secondary {
+  display: inline-block; border: 2px solid var(--red); color: var(--red);
+  padding: 12px 36px; border-radius: 6px; font-size: 14px; font-weight: 700;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-secondary:hover { background: var(--red); color: #fff; }
+
+/* ===== REGIONS ===== */
+.regions-section { background: var(--white); }
+.regions-map {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+}
+.region-card {
+  border: 1px solid var(--border); border-radius: 8px; padding: 18px 14px;
+  text-align: center; transition: border-color 0.15s, background 0.15s;
+  cursor: default;
+}
+.region-card:hover { border-color: var(--red); background: var(--red-l); }
+.region-flag { font-size: 28px; margin-bottom: 8px; }
+.region-name { font-size: 12px; font-weight: 700; }
+.region-count { font-size: 11px; color: var(--gray); margin-top: 3px; }
+
+/* ===== CONTACT ===== */
+.contact-section { background: var(--light); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.contact-info {}
+.contact-info p { font-size: 14px; color: var(--gray); line-height: 1.8; margin-bottom: 24px; }
+.contact-details { display: flex; flex-direction: column; gap: 12px; }
+.contact-detail { display: flex; gap: 12px; align-items: flex-start; }
+.contact-detail-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+.contact-detail-body {}
+.contact-detail-label { font-size: 11px; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: 0.06em; }
+.contact-detail-value { font-size: 14px; }
+.contact-form-box { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 28px 28px 24px; }
+.contact-form-title { font-size: 16px; font-weight: 800; margin-bottom: 20px; }
+.form-group { margin-bottom: 14px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--gray); display: block; margin-bottom: 5px; }
+.form-label .req { color: var(--red); margin-left: 2px; }
+.form-input, .form-select, .form-textarea {
+  width: 100%; border: 1px solid #ddd; border-radius: 6px;
+  padding: 9px 12px; font-size: 13px; outline: none; font-family: inherit;
+  transition: border-color 0.15s; background: #fff;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--red); }
+.form-textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.submit-btn {
+  width: 100%; background: var(--red); color: #fff; border: none;
+  border-radius: 6px; padding: 13px; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: background 0.15s; margin-top: 4px;
+}
+.submit-btn:hover { background: var(--red-d); }
+.wa-btn {
+  width: 100%; background: #25d366; color: #fff; border: none;
+  border-radius: 6px; padding: 11px; font-size: 13px; font-weight: 600;
+  cursor: pointer; margin-top: 8px; transition: background 0.15s;
+}
+.wa-btn:hover { background: #1ebe5d; }
+.form-success { display: none; background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 6px; padding: 14px; text-align: center; color: #2e7d32; font-size: 13px; margin-top: 12px; }
+
+/* ===== FOOTER ===== */
+.footer { background: #111; color: rgba(255,255,255,0.55); padding: 48px 40px 28px; }
+.footer-inner { max-width: 1100px; margin: 0 auto; }
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+.footer-logo { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+.footer-logo span { color: var(--gold); }
+.footer-tagline { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.7; max-width: 260px; }
+.footer-col-title { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+.footer-links { display: flex; flex-direction: column; gap: 8px; }
+.footer-links a { font-size: 13px; color: rgba(255,255,255,0.5); transition: color 0.15s; }
+.footer-links a:hover { color: rgba(255,255,255,0.9); }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.07); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 12px; }
+
+/* ===== TOAST ===== */
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 24px; border-radius: 20px; font-size: 13px; opacity: 0; pointer-events: none; z-index: 9999; transition: opacity 0.3s; }
+.toast.show { opacity: 1; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .header { padding: 0 20px; }
+  .h-nav { display: none; }
+  .hero { padding: 80px 24px 60px; }
+  .hero-cars { display: none; }
+  .section { padding: 60px 24px; }
+  .services-grid { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr 1fr; }
+  .inv-grid { grid-template-columns: repeat(2, 1fr); }
+  .regions-map { grid-template-columns: repeat(3, 1fr); }
+  .contact-grid { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .flow-steps { flex-direction: column; gap: 16px; }
+  .flow-steps::before { display: none; }
+  .flow-step { display: flex; gap: 16px; text-align: left; align-items: flex-start; }
+  .step-circle { flex-shrink: 0; margin: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header" id="mainHeader">
+  <a href="index.html" class="h-logo">Habibi <span>Auto Trading</span></a>
+  <nav class="h-nav">
+    <a href="#services" class="ja">事業内容</a>
+    <a href="#services" class="en">Services</a>
+    <a href="#flow" class="ja">取引の流れ</a>
+    <a href="#flow" class="en">How It Works</a>
+    <a href="#inventory" class="ja">在庫一覧</a>
+    <a href="#inventory" class="en">Inventory</a>
+    <a href="#regions" class="ja">輸出実績</a>
+    <a href="#regions" class="en">Export Regions</a>
+    <a href="#contact" class="ja">お問い合わせ</a>
+    <a href="#contact" class="en">Contact</a>
+  </nav>
+  <div class="h-right">
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">EN</button>
+    <a href="#contact" class="h-cta ja">無料相談</a>
+    <a href="#contact" class="h-cta en">Get in Touch</a>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="top">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-dot"></div>
+      <span class="ja">日本全国のオークションから世界へ</span>
+      <span class="en">From Japan's Auctions to the World</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="ja">信頼の日本車を<br><span class="accent">世界市場へ</span>届ける</span>
+      <span class="en">Trusted Japanese Cars<br><span class="accent">Delivered Worldwide</span></span>
+      <span class="red-line ja">Japan Quality. Global Reach.</span>
+      <span class="red-line en" style="font-style:normal;font-size:clamp(18px,2.5vw,32px)">品質・スピード・信頼</span>
+    </h1>
+    <p class="hero-body">
+      <span class="ja">Habibi Auto Tradingは、日本全国のJU系オークションから厳選した中古車を世界60カ国以上に輸出するほか、国内販売・買取仲介まで一貫して対応する中古車専門商社です。</span>
+      <span class="en">Habibi Auto Trading is a specialized used-car trading company sourcing vehicles from Japan's JU auction network and exporting to 60+ countries, while also handling domestic sales and purchase brokerage.</span>
+    </p>
+    <div class="hero-btns">
+      <a href="#inventory" class="btn-primary ja">在庫車両を見る 🚗</a>
+      <a href="#inventory" class="btn-primary en">Browse Inventory 🚗</a>
+      <a href="#contact" class="btn-outline ja">お問い合わせ</a>
+      <a href="#contact" class="btn-outline en">Contact Us</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">60<sup>+</sup></div>
+        <div class="stat-label ja">輸出対応国</div>
+        <div class="stat-label en">Countries Served</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">43<sup>万+</sup></div>
+        <div class="stat-label ja">オークション参照台数 / 月</div>
+        <div class="stat-label en">Auction Records / Month</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">BE<span style="font-size:20px">FORWARD</span></div>
+        <div class="stat-label ja">輸出パートナー</div>
+        <div class="stat-label en">Export Partner</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-cars">
+    <div class="hero-emoji-stack">🚙</div>
+  </div>
+</section>
+
+<!-- ===== SERVICES ===== -->
+<section class="section services-section" id="services">
+  <div class="section-inner">
+    <div class="section-eyebrow ja">事業内容</div>
+    <div class="section-eyebrow en">Our Services</div>
+    <h2 class="section-title">
+      <span class="ja">3つの<span class="accent">コア事業</span></span>
+      <span class="en">3 Core <span class="accent">Business Lines</span></span>
+    </h2>
+    <p class="section-body">
+      <span class="ja">調達から販売まで、中古車ビジネスのバリューチェーン全体をカバーします。</span>
+      <span class="en">We cover the full value chain of used-car trading — from sourcing to sales.</span>
+    </p>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">✈️</div>
+        <div class="service-num">SERVICE 01</div>
+        <div class="service-name ja">中古車輸出</div>
+        <div class="service-name en">Used Car Export</div>
+        <div class="service-desc">
+          <span class="ja">JUオークションで仕入れた厳選車両を、BE FORWARDをはじめとした輸出プラットフォームを通じて海外バイヤーへ販売。アフリカ・中東・東南アジア市場に強みを持ちます。</span>
+          <span class="en">We source vehicles from JU auctions and sell to overseas buyers via BE FORWARD and other platforms. Strong presence in Africa, Middle East, and Southeast Asia.</span>
+        </div>
+        <div class="service-tags">
+          <span class="stag">FOB対応</span>
+          <span class="stag">BE FORWARD</span>
+          <span class="stag">60カ国+</span>
+        </div>
+        <a href="#inventory" class="service-cta ja">在庫を見る →</a>
+        <a href="#inventory" class="service-cta en">View Inventory →</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🏷️</div>
+        <div class="service-num">SERVICE 02</div>
+        <div class="service-name ja">国内販売</div>
+        <div class="service-name en">Domestic Sales</div>
+        <div class="service-desc">
+          <span class="ja">カーセンサー・ヤフオクを活用した国内向け販売。輸出では売りにくい車種・年式の車両も国内相場に合わせて柔軟に対応します。</span>
+          <span class="en">Domestic sales via CarSensor and Yahoo Auctions. We flexibly handle vehicles less suitable for export by matching them to domestic market conditions.</span>
+        </div>
+        <div class="service-tags">
+          <span class="stag">カーセンサー</span>
+          <span class="stag">ヤフオク</span>
+          <span class="stag">個人・業者OK</span>
+        </div>
+        <a href="#inventory" class="service-cta ja">在庫を見る →</a>
+        <a href="#inventory" class="service-cta en">View Inventory →</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🔨</div>
+        <div class="service-num">SERVICE 03</div>
+        <div class="service-name ja">買取・オークション調達</div>
+        <div class="service-name en">Procurement & Brokerage</div>
+        <div class="service-desc">
+          <span class="ja">JU系オークション43万台超のデータを分析し、輸出・国内双方の利益が最大化できる車両を戦略的に仕入れ。個人様の車両買取も対応します。</span>
+          <span class="en">We analyze 430,000+ auction records monthly to strategically source vehicles maximizing profit for both export and domestic markets. We also buy vehicles directly from individuals.</span>
+        </div>
+        <div class="service-tags">
+          <span class="stag">JUオークション</span>
+          <span class="stag">データ分析</span>
+          <span class="stag">買取査定</span>
+        </div>
+        <a href="#contact" class="service-cta ja">査定を依頼する →</a>
+        <a href="#contact" class="service-cta en">Request a Quote →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== FLOW ===== -->
+<section class="section flow-section" id="flow">
+  <div class="section-inner">
+    <div class="section-eyebrow ja">取引の流れ</div>
+    <div class="section-eyebrow en">How It Works</div>
+    <h2 class="section-title">
+      <span class="ja">シンプルな<span class="accent">3ステップ</span></span>
+      <span class="en"><span class="accent">Simple Steps</span> to Buy or Sell</span>
+    </h2>
+    <div class="flow-tabs">
+      <div class="flow-tab active ja" onclick="setFlow('export-ja')">輸出購入</div>
+      <div class="flow-tab ja" onclick="setFlow('domestic-ja')">国内購入</div>
+      <div class="flow-tab ja" onclick="setFlow('sell-ja')">買取・査定</div>
+      <div class="flow-tab active en" onclick="setFlow('export-en')">Export Purchase</div>
+      <div class="flow-tab en" onclick="setFlow('domestic-en')">Domestic Purchase</div>
+      <div class="flow-tab en" onclick="setFlow('sell-en')">Vehicle Appraisal</div>
+    </div>
+
+    <div class="flow-content active" id="fc-export-ja">
+      <div class="flow-steps">
+        <div class="flow-step"><div class="step-circle">1</div><div class="step-title">在庫・お問い合わせ</div><div class="step-desc">本サイトまたはメール・WhatsAppでご希望の車両をご連絡ください。</div></div>
+        <div class="flow-step"><div class="step-circle">2</div><div class="step-title">見積・FOB価格提示</div><div class="step-desc">車両状態・輸出先港に応じたFOB価格をご提示します。</div></div>
+        <div class="flow-step"><div class="step-circle">3</div><div class="step-title">入金・船積み手配</div><div class="step-desc">ご入金確認後、船積み手配・書類作成を進めます。</div></div>
+        <div class="flow-step"><div class="step-circle">4</div><div class="step-title">出港・書類送付</div><div class="step-desc">出港後、B/L・輸出証明等の書類一式をお送りします。</div></div>
+      </div>
+    </div>
+    <div class="flow-content" id="fc-domestic-ja">
+      <div class="flow-steps">
+        <div class="flow-step"><div class="step-circle">1</div><div class="step-title">在庫確認</div><div class="step-desc">本サイトまたはお電話でご希望の車両をご確認ください。</div></div>
+        <div class="flow-step"><div class="step-circle">2</div><div class="step-title">現車確認・商談</div><div class="step-desc">ご来社いただき現車を確認。価格・条件をご相談します。</div></div>
+        <div class="flow-step"><div class="step-circle">3</div><div class="step-title">契約・入金</div><div class="step-desc">売買契約締結後、ご入金をお願いします。</div></div>
+        <div class="flow-step"><div class="step-circle">4</div><div class="step-title">名義変更・納車</div><div class="step-desc">書類手続き完了後、ご指定の場所へ納車いたします。</div></div>
+      </div>
+    </div>
+    <div class="flow-content" id="fc-sell-ja">
+      <div class="flow-steps">
+        <div class="flow-step"><div class="step-circle">1</div><div class="step-title">査定依頼</div><div class="step-desc">フォームまたはお電話で車両情報をお知らせください。</div></div>
+        <div class="flow-step"><div class="step-circle">2</div><div class="step-title">概算査定</div><div class="step-desc">オークション・輸出相場データをもとに概算をご提示します。</div></div>
+        <div class="flow-step"><div class="step-circle">3</div><div class="step-title">現車確認・正式査定</div><div class="step-desc">現車を確認後、正式な買取金額を提示します。</div></div>
+        <div class="flow-step"><div class="step-circle">4</div><div class="step-title">契約・代金お支払い</div><div class="step-desc">契約後、迅速にお支払いいたします。</div></div>
+      </div>
+    </div>
+    <!-- EN versions -->
+    <div class="flow-content" id="fc-export-en">
+      <div class="flow-steps">
+        <div class="flow-step"><div class="step-circle">1</div><div class="step-title">Inquiry</div><div class="step-desc">Contact us via this site, email, or WhatsApp with your desired vehicle.</div></div>
+        <div class="flow-step"><div class="step-circle">2</div><div class="step-title">FOB Quote</div><div class="step-desc">We provide an FOB price based on vehicle condition and destination port.</div></div>
+        <div class="flow-step"><div class="step-circle">3</div><div class="step-title">Payment & Shipping</div><div class="step-desc">After payment is confirmed, we arrange shipping and prepare documents.</div></div>
+        <div class="flow-step"><div class="step-circle">4</div><div class="step-title">Departure & Docs</div><div class="step-desc">After departure, we send B/L and all required export documents.</div></div>
+      </div>
+    </div>
+    <div class="flow-content" id="fc-domestic-en">
+      <div class="flow-steps">
+        <div class="flow-step"><div class="step-circle">1</div><div class="step-title">Check Inventory</div><div class="step-desc">Browse our stock online or call us to confirm availability.</div></div>
+        <div class="flow-step"><div class="step-circle">2</div><div class="step-title">Inspection & Negotiation</div><div class="step-desc">Visit us to inspect the vehicle and discuss terms.</div></div>
+        <div class="flow-step"><div class="step-circle">3</div><div class="step-title">Contract & Payment</div><div class="step-desc">Sign the purchase agreement and complete payment.</div></div>
+        <div class="flow-step"><div class="step-circle">4</div><div class="step-title">Transfer & Delivery</div><div class="step-desc">After paperwork is complete, we deliver to your location.</div></div>
+      </div>
+    </div>
+    <div class="flow-content" id="fc-sell-en">
+      <div class="flow-steps">
+        <div class="flow-step"><div class="step-circle">1</div><div class="step-title">Submit Info</div><div class="step-desc">Send vehicle details via form or phone.</div></div>
+        <div class="flow-step"><div class="step-circle">2</div><div class="step-title">Preliminary Quote</div><div class="step-desc">We estimate value using auction and export market data.</div></div>
+        <div class="flow-step"><div class="step-circle">3</div><div class="step-title">Physical Inspection</div><div class="step-desc">We inspect the vehicle and confirm a final purchase price.</div></div>
+        <div class="flow-step"><div class="step-circle">4</div><div class="step-title">Contract & Payment</div><div class="step-desc">We pay promptly after signing the purchase contract.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY ===== -->
+<section class="section why-section">
+  <div class="section-inner">
+    <div class="section-eyebrow ja">選ばれる理由</div>
+    <div class="section-eyebrow en">Why Choose Us</div>
+    <h2 class="section-title">
+      <span class="ja">Habibi Auto Trading の<span class="accent">強み</span></span>
+      <span class="en">Our <span class="accent">Competitive Edge</span></span>
+    </h2>
+    <p class="section-body">
+      <span class="ja">データドリブンな仕入れと、豊富な海外バイヤーネットワークで他社に差をつけます。</span>
+      <span class="en">Data-driven procurement and a strong overseas buyer network set us apart.</span>
+    </p>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">📊</div>
+        <div class="why-title ja">43万件超のオークションデータ分析</div>
+        <div class="why-title en">430K+ Auction Records Analyzed</div>
+        <div class="why-desc ja">JU系オークション・BE FORWARD・カーセンサーの3データを月次で分析し、利益最大化できる車両を戦略的に調達します。</div>
+        <div class="why-desc en">We cross-analyze JU auctions, BE FORWARD, and CarSensor monthly to strategically source the most profitable vehicles.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🌍</div>
+        <div class="why-title ja">海外バイヤーとの直接英語対応</div>
+        <div class="why-title en">Direct English Communication</div>
+        <div class="why-desc ja">TOEIC 910・英検準1級取得スタッフが海外バイヤーと直接交渉。余計な仲介コストをカットし、迅速な対応を実現します。</div>
+        <div class="why-desc en">Our staff (TOEIC 910, Eiken Pre-1) negotiate directly with overseas buyers — cutting middlemen and enabling fast responses.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🔍</div>
+        <div class="why-title ja">国内調達の専門知識</div>
+        <div class="why-title en">Domestic Procurement Expertise</div>
+        <div class="why-desc ja">JUオークションを中心とした国内調達ネットワークと、車両コンディション評価の深い知見で、割安な良質車両を発掘します。</div>
+        <div class="why-desc en">Deep expertise in JU auction sourcing and vehicle condition assessment allows us to find undervalued, high-quality units.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">⚡</div>
+        <div class="why-title ja">スピーディーな対応</div>
+        <div class="why-title en">Fast Response & Turnaround</div>
+        <div class="why-desc ja">問い合わせから見積もりまで最短即日。WhatsAppでのリアルタイム対応にも対応しています。</div>
+        <div class="why-desc en">From inquiry to quote in as little as one business day. Real-time responses via WhatsApp.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📄</div>
+        <div class="why-title ja">書類・輸出手続きのサポート</div>
+        <div class="why-title en">Full Export Documentation</div>
+        <div class="why-desc ja">B/L・輸出証明・通関書類など輸出に必要な書類作成・手配を一括サポート。初めてのバイヤー様も安心です。</div>
+        <div class="why-desc en">We handle all export paperwork including B/L, export certificates, and customs documents. First-time buyers welcome.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🤝</div>
+        <div class="why-title ja">誠実・透明な取引</div>
+        <div class="why-title en">Honest & Transparent Dealings</div>
+        <div class="why-desc ja">車両の状態・修復歴・オークション評価を正直に開示。長期的なパートナーシップを大切にします。</div>
+        <div class="why-desc en">We honestly disclose vehicle condition, repair history, and auction scores. We value long-term partnerships.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INVENTORY PREVIEW ===== -->
+<section class="section inventory-section" id="inventory">
+  <div class="section-inner">
+    <div class="section-eyebrow ja">在庫車両</div>
+    <div class="section-eyebrow en">Current Inventory</div>
+    <h2 class="section-title">
+      <span class="ja">注目の<span class="accent">在庫車両</span></span>
+      <span class="en"><span class="accent">Featured</span> Vehicles</span>
+    </h2>
+    <p class="section-body">
+      <span class="ja">随時更新中。輸出向け・国内向けともにラインナップ。</span>
+      <span class="en">Updated regularly. Export and domestic inventory available.</span>
+    </p>
+    <div class="inv-grid" id="invGrid"></div>
+    <div class="inv-cta-wrap">
+      <a href="used_car_site.html" class="btn-secondary ja">在庫一覧をすべて見る（12台）</a>
+      <a href="used_car_site.html" class="btn-secondary en">View Full Inventory (12 vehicles)</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REGIONS ===== -->
+<section class="section regions-section" id="regions">
+  <div class="section-inner">
+    <div class="section-eyebrow ja">輸出対応エリア</div>
+    <div class="section-eyebrow en">Export Regions</div>
+    <h2 class="section-title">
+      <span class="ja">世界60カ国以上に<span class="accent">輸出実績</span></span>
+      <span class="en"><span class="accent">Export Track Record</span> in 60+ Countries</span>
+    </h2>
+    <div class="regions-map">
+      <div class="region-card"><div class="region-flag">🌍</div><div class="region-name ja">東アフリカ</div><div class="region-name en">East Africa</div><div class="region-count ja">主力市場</div><div class="region-count en">Primary Market</div></div>
+      <div class="region-card"><div class="region-flag">🌍</div><div class="region-name ja">西アフリカ</div><div class="region-name en">West Africa</div><div class="region-count ja">成長市場</div><div class="region-count en">Growing Market</div></div>
+      <div class="region-card"><div class="region-flag">🕌</div><div class="region-name ja">中東</div><div class="region-name en">Middle East</div><div class="region-count ja">高単価需要</div><div class="region-count en">Premium Demand</div></div>
+      <div class="region-card"><div class="region-flag">🌏</div><div class="region-name ja">東南アジア</div><div class="region-name en">SE Asia</div><div class="region-count ja">安定需要</div><div class="region-count en">Steady Demand</div></div>
+      <div class="region-card"><div class="region-flag">🌊</div><div class="region-name ja">太平洋島嶼</div><div class="region-name en">Pacific Islands</div><div class="region-count ja">対応可</div><div class="region-count en">Available</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="section contact-section" id="contact">
+  <div class="section-inner">
+    <div class="section-eyebrow ja">お問い合わせ</div>
+    <div class="section-eyebrow en">Contact Us</div>
+    <h2 class="section-title">
+      <span class="ja">お気軽に<span class="accent">ご相談ください</span></span>
+      <span class="en">Get in <span class="accent">Touch</span></span>
+    </h2>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p>
+          <span class="ja">輸出購入・国内販売・買取査定など、どんなことでもお気軽にご連絡ください。英語・日本語どちらでも対応可能です。通常24時間以内にご返信いたします。</span>
+          <span class="en">Feel free to reach out for export purchases, domestic sales, or vehicle appraisals. We respond in both English and Japanese, usually within 24 hours.</span>
+        </p>
+        <div class="contact-details">
+          <div class="contact-detail">
+            <div class="contact-detail-icon">🏢</div>
+            <div class="contact-detail-body">
+              <div class="contact-detail-label ja">会社名</div>
+              <div class="contact-detail-label en">Company</div>
+              <div class="contact-detail-value">Habibi Auto Trading 合同会社</div>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📍</div>
+            <div class="contact-detail-body">
+              <div class="contact-detail-label ja">所在地</div>
+              <div class="contact-detail-label en">Location</div>
+              <div class="contact-detail-value ja">千葉県（詳細はお問い合わせください）</div>
+              <div class="contact-detail-value en">Chiba, Japan (details on request)</div>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📧</div>
+            <div class="contact-detail-body">
+              <div class="contact-detail-label">Email</div>
+              <div class="contact-detail-value">info@habibi-auto.jp</div>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">💬</div>
+            <div class="contact-detail-body">
+              <div class="contact-detail-label">WhatsApp</div>
+              <div class="contact-detail-value">+81-XX-XXXX-XXXX</div>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">🕐</div>
+            <div class="contact-detail-body">
+              <div class="contact-detail-label ja">営業時間</div>
+              <div class="contact-detail-label en">Business Hours</div>
+              <div class="contact-detail-value ja">平日 9:00〜18:00（土日祝は翌営業日対応）</div>
+              <div class="contact-detail-value en">Mon–Fri 9:00–18:00 JST</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form-box">
+        <div class="contact-form-title ja">お問い合わせフォーム</div>
+        <div class="contact-form-title en">Send Us a Message</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label"><span class="ja">お名前</span><span class="en">Name</span><span class="req">*</span></label>
+            <input type="text" class="form-input" id="cf-name" placeholder="田中 太郎 / John Smith">
+          </div>
+          <div class="form-group">
+            <label class="form-label"><span class="ja">会社名</span><span class="en">Company</span></label>
+            <input type="text" class="form-input" id="cf-company" placeholder="（任意 / Optional）">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email<span class="req">*</span></label>
+          <input type="email" class="form-input" id="cf-email" placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label"><span class="ja">お問い合わせ種別</span><span class="en">Inquiry Type</span></label>
+          <select class="form-select" id="cf-type">
+            <option class="ja">輸出購入を検討</option>
+            <option class="ja">国内購入を検討</option>
+            <option class="ja">車両買取・査定の依頼</option>
+            <option class="ja">その他</option>
+            <option class="en">Export Purchase</option>
+            <option class="en">Domestic Purchase</option>
+            <option class="en">Vehicle Appraisal</option>
+            <option class="en">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label"><span class="ja">メッセージ</span><span class="en">Message</span><span class="req">*</span></label>
+          <textarea class="form-textarea" id="cf-msg" placeholder="ご質問・ご要望をご記入ください / Please describe your inquiry..."></textarea>
+        </div>
+        <button class="submit-btn" onclick="submitContact()">
+          <span class="ja">送信する</span>
+          <span class="en">Send Message</span>
+        </button>
+        <button class="wa-btn" onclick="openWA()">💬 WhatsApp</button>
+        <div class="form-success" id="cf-success">
+          <span class="ja">✅ お問い合わせを受け付けました。24時間以内にご連絡いたします。</span>
+          <span class="en">✅ Your message has been received. We'll get back to you within 24 hours.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">Habibi <span>Auto Trading</span></div>
+        <p class="footer-tagline ja">日本全国のオークションから厳選した中古車を、世界60カ国以上のバイヤーへ。</p>
+        <p class="footer-tagline en">Sourcing quality Japanese used cars from nationwide auctions and delivering them to buyers in 60+ countries.</p>
+      </div>
+      <div>
+        <div class="footer-col-title ja">サービス</div>
+        <div class="footer-col-title en">Services</div>
+        <div class="footer-links">
+          <a href="#services" class="ja">中古車輸出</a>
+          <a href="#services" class="en">Used Car Export</a>
+          <a href="#services" class="ja">国内販売</a>
+          <a href="#services" class="en">Domestic Sales</a>
+          <a href="#services" class="ja">買取・査定</a>
+          <a href="#services" class="en">Vehicle Appraisal</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title ja">在庫・取引</div>
+        <div class="footer-col-title en">Inventory</div>
+        <div class="footer-links">
+          <a href="used_car_site.html" class="ja">在庫一覧</a>
+          <a href="used_car_site.html" class="en">All Inventory</a>
+          <a href="#flow" class="ja">取引の流れ</a>
+          <a href="#flow" class="en">How It Works</a>
+          <a href="#regions" class="ja">輸出対応エリア</a>
+          <a href="#regions" class="en">Export Regions</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title ja">会社情報</div>
+        <div class="footer-col-title en">Company</div>
+        <div class="footer-links">
+          <a href="#contact" class="ja">お問い合わせ</a>
+          <a href="#contact" class="en">Contact Us</a>
+          <a href="#" class="ja">プライバシーポリシー</a>
+          <a href="#" class="en">Privacy Policy</a>
+          <a href="#" class="ja">特定商取引法</a>
+          <a href="#" class="en">Legal Notice</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Habibi Auto Trading 合同会社. All rights reserved.</span>
+      <span style="color:rgba(255,255,255,0.3)">Chiba, Japan 🇯🇵</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== LANGUAGE TOGGLE =====
+let lang = 'ja';
+function toggleLang() {
+  lang = lang === 'ja' ? 'en' : 'ja';
+  document.body.classList.toggle('lang-en', lang === 'en');
+  document.getElementById('langBtn').textContent = lang === 'ja' ? 'EN' : 'JA';
+  document.documentElement.lang = lang;
+  // フローのタブも再描画
+  if (lang === 'ja') activateFlowTab('export-ja');
+  else               activateFlowTab('export-en');
+}
+
+// ===== SCROLL HEADER =====
+window.addEventListener('scroll', () => {
+  document.getElementById('mainHeader').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ===== FLOW TABS =====
+function activateFlowTab(id) {
+  const suffix = id.endsWith('-ja') ? '-ja' : '-en';
+  document.querySelectorAll('.flow-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.flow-content').forEach(c => c.classList.remove('active'));
+  const activeTab = document.querySelector(`.flow-tab[onclick="setFlow('${id}')"]`);
+  if (activeTab) activeTab.classList.add('active');
+  const activeContent = document.getElementById('fc-' + id);
+  if (activeContent) activeContent.classList.add('active');
+}
+function setFlow(id) {
+  activateFlowTab(id);
+}
+
+// ===== INVENTORY PREVIEW =====
+const CARS = [
+  { id:7,  name:"ハイエース バン",        grade:"スーパーGL ダークプライム",    year:2022, km:2.1,  price:368, fuel:"ディーゼル", drive:"2WD", emoji:"🚐", export:true  },
+  { id:12, name:"ランクル プラド",         grade:"TZ-G ディーゼル 4WD",          year:2022, km:1.8,  price:498, fuel:"ディーゼル", drive:"4WD", emoji:"🚙", export:true  },
+  { id:9,  name:"ランドクルーザー 200",    grade:"ZX 4WD フルオプション",        year:2019, km:5.5,  price:680, fuel:"ディーゼル", drive:"4WD", emoji:"🚙", export:true  },
+  { id:6,  name:"ノア",                    grade:"Si W×B III 7人乗り",           year:2021, km:3.8,  price:265, fuel:"ガソリン",   drive:"2WD", emoji:"🚐", export:false },
+];
+document.getElementById('invGrid').innerHTML = CARS.map(c => `
+  <a class="inv-card" href="detail.html?id=${c.id}">
+    <div class="inv-thumb">${c.emoji}</div>
+    <div class="inv-info">
+      <div class="inv-name">${c.name}</div>
+      <div class="inv-grade">${c.grade}</div>
+      <div class="inv-price">${c.price.toLocaleString()}<span>万円</span></div>
+      <div class="inv-spec">${c.year}年式 ・ 走行${c.km}万km ・ ${c.fuel} ・ ${c.drive}${c.export ? ' ・ 輸出向け' : ''}</div>
+    </div>
+  </a>
+`).join('');
+
+// ===== CONTACT =====
+function submitContact() {
+  const name  = document.getElementById('cf-name').value.trim();
+  const email = document.getElementById('cf-email').value.trim();
+  const msg   = document.getElementById('cf-msg').value.trim();
+  if (!name || !email || !msg) { showToast(lang==='ja' ? '必須項目を入力してください' : 'Please fill in required fields'); return; }
+  document.getElementById('cf-success').style.display = 'block';
+  showToast(lang==='ja' ? '送信しました' : 'Message sent!');
+}
+function openWA() {
+  const msg = encodeURIComponent('Hello, I found your website and would like to inquire about a vehicle.');
+  window.open('https://wa.me/818012345678?text=' + msg, '_blank');
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
