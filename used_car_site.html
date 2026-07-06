@@ -255,21 +255,9 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
 </footer>
 
 <script src="lang.js"></script>
+<script src="data.js"></script>
 <script>
-const CARS = [
-  { id: 1,  name: "ハイエース バン",        nameEn: "Hiace Van",              grade: "DX GL パッケージ 標準ボディ",  gradeEn: "DX GL Package, Standard Body", year: 2019, km: 8.2,  price: 189, fuel: "ディーゼル", fuelEn: "Diesel", trans: "AT",  drive: "2WD", status: "available", export: true  },
-  { id: 2,  name: "ランドクルーザー プラド", nameEn: "Land Cruiser Prado",     grade: "TX Lパッケージ 4WD",           gradeEn: "TX L Package, 4WD",            year: 2018, km: 6.1,  price: 348, fuel: "ガソリン",   fuelEn: "Gasoline", trans: "AT",  drive: "4WD", status: "available", export: true  },
-  { id: 3,  name: "ランドクルーザー プラド", nameEn: "Land Cruiser Prado",     grade: "TX 4WD 走行22万km",            gradeEn: "TX 4WD, 224,000km",             year: 2014, km: 22.4, price: 138, fuel: "ガソリン",   fuelEn: "Gasoline", trans: "AT",  drive: "4WD", status: "available", export: true  },
-  { id: 4,  name: "アルファード",            nameEn: "Alphard",                grade: "2.5S Cパッケージ",             gradeEn: "2.5S C Package",                year: 2020, km: 4.5,  price: 420, fuel: "ガソリン",   fuelEn: "Gasoline", trans: "CVT", drive: "2WD", status: "reserved",  export: false },
-  { id: 5,  name: "プリウス",                nameEn: "Prius",                  grade: "S 1.8L ハイブリッド",          gradeEn: "S 1.8L Hybrid",                 year: 2017, km: 11.3, price: 98,  fuel: "HV",        fuelEn: "Hybrid", trans: "CVT", drive: "2WD", status: "available", export: false },
-  { id: 6,  name: "ノア",                    nameEn: "Noah",                   grade: "Si W×B III 7人乗り",          gradeEn: "Si W×B III, 7-Seater",          year: 2021, km: 3.8,  price: 265, fuel: "ガソリン",   fuelEn: "Gasoline", trans: "CVT", drive: "2WD", status: "available", export: false },
-  { id: 7,  name: "ハイエース バン",         nameEn: "Hiace Van",              grade: "スーパーGL ダークプライム",    gradeEn: "Super GL Dark Prime",           year: 2022, km: 2.1,  price: 368, fuel: "ディーゼル", fuelEn: "Diesel", trans: "AT",  drive: "2WD", status: "available", export: true  },
-  { id: 8,  name: "プロボックス",            nameEn: "Probox",                 grade: "DX 1.5L",                      gradeEn: "DX 1.5L",                       year: 2016, km: 18.7, price: 55,  fuel: "ガソリン",   fuelEn: "Gasoline", trans: "AT",  drive: "2WD", status: "sold",      export: false },
-  { id: 9,  name: "ランドクルーザー 200",    nameEn: "Land Cruiser 200",       grade: "ZX 4WD フルオプション",        gradeEn: "ZX 4WD, Fully Loaded",          year: 2019, km: 5.5,  price: 680, fuel: "ディーゼル", fuelEn: "Diesel", trans: "AT",  drive: "4WD", status: "available", export: true  },
-  { id: 10, name: "ヴィッツ",               nameEn: "Vitz",                    grade: "F 1.0L",                        gradeEn: "F 1.0L",                        year: 2018, km: 7.2,  price: 68,  fuel: "ガソリン",   fuelEn: "Gasoline", trans: "CVT", drive: "2WD", status: "available", export: false },
-  { id: 11, name: "ノア ハイブリッド",       nameEn: "Noah Hybrid",             grade: "G 1.8HV 8人乗り",             gradeEn: "G 1.8HV, 8-Seater",             year: 2020, km: 6.4,  price: 248, fuel: "HV",        fuelEn: "Hybrid", trans: "CVT", drive: "2WD", status: "available", export: false },
-  { id: 12, name: "ランクル プラド",         nameEn: "Land Cruiser Prado",     grade: "TZ-G ディーゼル 4WD",         gradeEn: "TZ-G Diesel 4WD",               year: 2022, km: 1.8,  price: 498, fuel: "ディーゼル", fuelEn: "Diesel", trans: "AT",  drive: "4WD", status: "available", export: true  },
-];
+let CARS = [];
 
 let quickFilter = '';
 let page = 1;
@@ -381,7 +369,7 @@ document.querySelectorAll('.qtag').forEach(t => {
 });
 
 window.addEventListener('langchange', render);
-render();
+loadCars().then(data => { CARS = data; render(); });
 </script>
 </body>
 </html>

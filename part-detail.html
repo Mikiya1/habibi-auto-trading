@@ -239,34 +239,22 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; margin-to
 <div class="toast" id="toast"></div>
 
 <script src="lang.js"></script>
+<script src="data.js"></script>
 <script>
-const PARTS_DATA = [
-  { id: 101, name: "エンジンASSY 2KD-FTV", nameEn: "Engine Assembly 2KD-FTV", cat: "engine", catLabel: "エンジン関連", catLabelEn: "Engine", fit: "ハイエース 200系（2013-2019）", fitEn: "Hiace 200 Series (2013-2019)", partNo: "19000-30D50", price: 185000, condition: "used", stock: 2, desc: "走行8万km時取り外し。始動良好、圧縮圧力正常。実働確認済みです。取り外し時の写真もご用意可能です。", descEn: "Removed at 80,000km. Starts well, normal compression, tested running. Removal photos available on request." },
-  { id: 102, name: "オルタネーター", nameEn: "Alternator", cat: "electrical", catLabel: "電装品", catLabelEn: "Electrical", fit: "プリウス ZVW30系", fitEn: "Prius ZVW30 Series", partNo: "27060-37160", price: 12000, condition: "refurb", stock: 5, desc: "リビルト品。6ヶ月保証付き。発電量テスト済みです。", descEn: "Refurbished. 6-month warranty. Output tested." },
-  { id: 103, name: "フロントバンパー", nameEn: "Front Bumper", cat: "body", catLabel: "外装・ボディ", catLabelEn: "Body/Exterior", fit: "ランドクルーザー プラド 150系（前期）", fitEn: "Land Cruiser Prado 150 Series (early)", partNo: "52119-60934", price: 28000, condition: "used", stock: 1, desc: "小傷ありだが割れ・歪みなし。色：ホワイトパールクリスタルシャイン。", descEn: "Minor scratches, no cracks or warping. Color: White Pearl Crystal Shine." },
-  { id: 104, name: "純正アルミホイール 18インチ 4本セット", nameEn: "OEM Alloy Wheels 18\" (Set of 4)", cat: "wheel", catLabel: "ホイール・タイヤ", catLabelEn: "Wheels/Tires", fit: "ランドクルーザー 200系", fitEn: "Land Cruiser 200 Series", partNo: "—", price: 68000, condition: "used", stock: 1, desc: "4本セット。タイヤ溝残り約60%。センターキャップ付属。", descEn: "Set of 4. Tire tread approx. 60% remaining. Center caps included." },
-  { id: 105, name: "ヘッドライト（左右セット）", nameEn: "Headlights (Left & Right Set)", cat: "electrical", catLabel: "電装品", catLabelEn: "Electrical", fit: "アルファード AGH30系", fitEn: "Alphard AGH30 Series", partNo: "81145-58560", price: 42000, condition: "used", stock: 2, desc: "LEDタイプ。点灯確認済み、レンズクラックなし。左右セット価格です。", descEn: "LED type. Tested working, no lens cracks. Price is for the set." },
-  { id: 106, name: "ショックアブソーバー（フロント）", nameEn: "Shock Absorber (Front)", cat: "suspension", catLabel: "足回り", catLabelEn: "Suspension", fit: "ハイエース 200系 全般", fitEn: "Hiace 200 Series (all)", partNo: "48510-29835", price: 9800, condition: "new", stock: 8, desc: "新品社外品。左右1本ずつの価格です。", descEn: "New aftermarket. Price is per single unit." },
-  { id: 107, name: "リアシート一式", nameEn: "Rear Seat Set", cat: "interior", catLabel: "内装", catLabelEn: "Interior", fit: "ノア ZRR80系", fitEn: "Noah ZRR80 Series", partNo: "—", price: 35000, condition: "used", stock: 1, desc: "ファブリック地、破れ・シミなし。7人乗り3列目含みます。", descEn: "Fabric upholstery, no tears or stains. Includes 3rd row (7-seater)." },
-  { id: 108, name: "ラジエーター", nameEn: "Radiator", cat: "engine", catLabel: "エンジン関連", catLabelEn: "Engine", fit: "ヴィッツ KSP90系", fitEn: "Vitz KSP90 Series", partNo: "16400-21200", price: 8500, condition: "refurb", stock: 4, desc: "リビルト品。圧力テスト済み、水漏れなしです。", descEn: "Refurbished. Pressure tested, no leaks." },
-  { id: 109, name: "ドアミラー（右）", nameEn: "Door Mirror (Right)", cat: "electrical", catLabel: "電装品", catLabelEn: "Electrical", fit: "プロボックス NCP51系", fitEn: "Probox NCP51 Series", partNo: "87910-52660", price: 4500, condition: "used", stock: 3, desc: "電動格納式。ウィンカー内蔵、動作確認済みです。", descEn: "Power-folding type. Built-in turn signal, tested working." },
-  { id: 110, name: "マフラー（純正）", nameEn: "Muffler (OEM)", cat: "engine", catLabel: "エンジン関連", catLabelEn: "Engine", fit: "ランクル プラド 150系（ディーゼル）", fitEn: "Land Cruiser Prado 150 Series (Diesel)", partNo: "17410-30E10", price: 22000, condition: "used", stock: 1, desc: "腐食少なめ。取り付け金具付属です。", descEn: "Minimal corrosion. Mounting brackets included." },
-  { id: 111, name: "テールランプ（左右セット）", nameEn: "Tail Lights (Left & Right Set)", cat: "body", catLabel: "外装・ボディ", catLabelEn: "Body/Exterior", fit: "ハイエース 200系（後期）", fitEn: "Hiace 200 Series (late)", partNo: "81551-26580", price: 15000, condition: "new", stock: 6, desc: "社外新品LEDテール。左右セット。防水パッキン付属です。", descEn: "New aftermarket LED tail lights. Set of 2. Waterproof gasket included." },
-  { id: 112, name: "バッテリー 80D26L", nameEn: "Battery 80D26L", cat: "electrical", catLabel: "電装品", catLabelEn: "Electrical", fit: "汎用（多くのトヨタ車に適合）", fitEn: "Universal (fits many Toyota models)", partNo: "80D26L", price: 9800, condition: "new", stock: 12, desc: "新品バッテリー。1年保証付きです。", descEn: "New battery. 1-year warranty included." },
-];
-
 const COND_LABEL = {
   ja: { new: ["新品","new"], used: ["中古（良品）","used"], refurb: ["リビルト品","refurb"] },
   en: { new: ["New","new"], used: ["Used (Good)","used"], refurb: ["Refurbished","refurb"] }
 };
 
 const params = new URLSearchParams(location.search);
-const partId = parseInt(params.get('id')) || PARTS_DATA[0].id;
-const part = PARTS_DATA.find(p => p.id === partId) || PARTS_DATA[0];
+const partId = parseInt(params.get('id')) || 101;
+let PARTS_DATA = [];
+let part = null;
 
 function curLang() { return window.currentLang || 'ja'; }
 
 function init() {
+  if (!part) return;
   const lang = curLang();
   const name = lang === 'ja' ? part.name : part.nameEn;
   const fit = lang === 'ja' ? part.fit : part.fitEn;
@@ -323,7 +311,11 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 window.addEventListener('langchange', init);
-init();
+loadParts().then(data => {
+  PARTS_DATA = data;
+  part = PARTS_DATA.find(p => p.id === partId) || PARTS_DATA[0];
+  init();
+});
 </script>
 </body>
 </html>

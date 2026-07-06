@@ -280,35 +280,15 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
 </footer>
 
 <script src="lang.js"></script>
+<script src="data.js"></script>
 <script>
 /*
   ===== 部品データ =====
-  現在はローカル配列によるモックデータです。
-  将来的に在庫管理システム（在庫DB・スプレッドシート等）とAPI連携する際は、
-  loadParts() 関数の中身を fetch('/api/parts') 等に差し替えるだけで
-  以下の描画ロジックはそのまま利用できる設計にしています。
+  data.js の共有データ層から読み込みます（ローカルストレージ上書き対応）。
+  将来的に在庫管理システムとAPI連携する際は、data.js内の loadParts() の
+  中身を fetch('/api/parts') に差し替えるだけで、このページのロジックは
+  そのまま利用できます。
 */
-const PARTS_DATA = [
-  { id: 101, name: "エンジンASSY 2KD-FTV", nameEn: "Engine Assembly 2KD-FTV", cat: "engine", fit: "ハイエース 200系（2013-2019）", fitEn: "Hiace 200 Series (2013-2019)", partNo: "19000-30D50", price: 185000, condition: "used",   stock: 2,  desc: "走行8万km時取り外し。始動良好、圧縮圧力正常。実働確認済み。", descEn: "Removed at 80,000km. Starts well, normal compression, tested running." },
-  { id: 102, name: "オルタネーター", nameEn: "Alternator", cat: "electrical", fit: "プリウス ZVW30系", fitEn: "Prius ZVW30 Series", partNo: "27060-37160", price: 12000, condition: "refurb", stock: 5,  desc: "リビルト品。6ヶ月保証付き。", descEn: "Refurbished. 6-month warranty included." },
-  { id: 103, name: "フロントバンパー", nameEn: "Front Bumper", cat: "body", fit: "ランドクルーザー プラド 150系（前期）", fitEn: "Land Cruiser Prado 150 Series (early)", partNo: "52119-60934", price: 28000, condition: "used", stock: 1,  desc: "小傷ありだが割れ・歪みなし。色：ホワイトパールクリスタルシャイン。", descEn: "Minor scratches, no cracks or warping. Color: White Pearl Crystal Shine." },
-  { id: 104, name: "純正アルミホイール 18インチ 4本セット", nameEn: "OEM Alloy Wheels 18\" (Set of 4)", cat: "wheel", fit: "ランドクルーザー 200系", fitEn: "Land Cruiser 200 Series", partNo: "—", price: 68000, condition: "used", stock: 1,  desc: "4本セット。タイヤ溝残り約60%。センターキャップ付属。", descEn: "Set of 4. Tire tread approx. 60% remaining. Center caps included." },
-  { id: 105, name: "ヘッドライト（左右セット）", nameEn: "Headlights (Left & Right Set)", cat: "electrical", fit: "アルファード AGH30系", fitEn: "Alphard AGH30 Series", partNo: "81145-58560", price: 42000, condition: "used", stock: 2,  desc: "LEDタイプ。点灯確認済み、レンズクラックなし。左右セット価格。", descEn: "LED type. Tested working, no lens cracks. Price is for the set." },
-  { id: 106, name: "ショックアブソーバー（フロント）", nameEn: "Shock Absorber (Front)", cat: "suspension", fit: "ハイエース 200系 全般", fitEn: "Hiace 200 Series (all)", partNo: "48510-29835", price: 9800, condition: "new", stock: 8,  desc: "新品社外品。左右1本ずつの価格。", descEn: "New aftermarket. Price is per single unit." },
-  { id: 107, name: "リアシート一式", nameEn: "Rear Seat Set", cat: "interior", fit: "ノア ZRR80系", fitEn: "Noah ZRR80 Series", partNo: "—", price: 35000, condition: "used", stock: 1,  desc: "ファブリック地、破れ・シミなし。7人乗り3列目含む。", descEn: "Fabric upholstery, no tears or stains. Includes 3rd row (7-seater)." },
-  { id: 108, name: "ラジエーター", nameEn: "Radiator", cat: "engine", fit: "ヴィッツ KSP90系", fitEn: "Vitz KSP90 Series", partNo: "16400-21200", price: 8500, condition: "refurb", stock: 4,  desc: "リビルト品。圧力テスト済み、水漏れなし。", descEn: "Refurbished. Pressure tested, no leaks." },
-  { id: 109, name: "ドアミラー（右）", nameEn: "Door Mirror (Right)", cat: "electrical", fit: "プロボックス NCP51系", fitEn: "Probox NCP51 Series", partNo: "87910-52660", price: 4500, condition: "used", stock: 3,  desc: "電動格納式。ウィンカー内蔵、動作確認済み。", descEn: "Power-folding type. Built-in turn signal, tested working." },
-  { id: 110, name: "マフラー（純正）", nameEn: "Muffler (OEM)", cat: "engine", fit: "ランクル プラド 150系（ディーゼル）", fitEn: "Land Cruiser Prado 150 Series (Diesel)", partNo: "17410-30E10", price: 22000, condition: "used", stock: 1,  desc: "腐食少なめ。取り付け金具付属。", descEn: "Minimal corrosion. Mounting brackets included." },
-  { id: 111, name: "テールランプ（左右セット）", nameEn: "Tail Lights (Left & Right Set)", cat: "body", fit: "ハイエース 200系（後期）", fitEn: "Hiace 200 Series (late)", partNo: "81551-26580", price: 15000, condition: "new", stock: 6,  desc: "社外新品LEDテール。左右セット。防水パッキン付属。", descEn: "New aftermarket LED tail lights. Set of 2. Waterproof gasket included." },
-  { id: 112, name: "バッテリー 80D26L", nameEn: "Battery 80D26L", cat: "electrical", fit: "汎用（多くのトヨタ車に適合）", fitEn: "Universal (fits many Toyota models)", partNo: "80D26L", price: 9800, condition: "new", stock: 12, desc: "新品バッテリー。1年保証付き。", descEn: "New battery. 1-year warranty included." },
-];
-
-function loadParts() {
-  // 将来的に fetch('/api/parts').then(r => r.json()) へ差し替え可能
-  return Promise.resolve(PARTS_DATA);
-}
-
-const CAT_LABEL = {
   ja: { engine:"エンジン関連", body:"外装・ボディ", interior:"内装", electrical:"電装品", wheel:"ホイール・タイヤ", suspension:"足回り", other:"その他" },
   en: { engine:"Engine", body:"Body/Exterior", interior:"Interior", electrical:"Electrical", wheel:"Wheels/Tires", suspension:"Suspension", other:"Other" }
 };
