@@ -745,6 +745,8 @@ footer { background: #0d0b09; padding: clamp(56px,7vw,84px) clamp(20px,4vw,56px)
 
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="data.js"></script>
 <script>
 let lang = 'ja';
 function toggleLang() {
@@ -812,9 +814,21 @@ function submitContact() {
   const name = document.getElementById('cf-name').value.trim();
   const email = document.getElementById('cf-email').value.trim();
   const msg = document.getElementById('cf-msg').value.trim();
+  const company = document.getElementById('cf-company').value.trim();
+  const inquiryType = document.getElementById('cf-type').value;
   if (!name || !email || !msg) { showToast(lang === 'ja' ? '必須項目を入力してください' : 'Please fill in required fields'); return; }
-  document.getElementById('cf-success').style.display = 'block';
-  showToast(lang === 'ja' ? '送信しました' : 'Message sent!');
+
+  addInquiry({
+    kind: 'general',
+    refLabel: company || null,
+    name, email, inquiryType, message: msg,
+  }).then(() => {
+    document.getElementById('cf-success').style.display = 'block';
+    showToast(lang === 'ja' ? '送信しました' : 'Message sent!');
+  }).catch(err => {
+    console.error(err);
+    showToast(lang === 'ja' ? '送信に失敗しました。時間を置いて再度お試しください' : 'Failed to send. Please try again later.');
+  });
 }
 function openWA() {
   const msg = encodeURIComponent('Hello, I found your website and would like to make an inquiry.');

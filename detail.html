@@ -352,6 +352,7 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; margin-to
 <div class="toast" id="toast"></div>
 
 <script src="lang.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="data.js"></script>
 <script>
 const params = new URLSearchParams(location.search);
@@ -434,9 +435,22 @@ function submitForm() {
   const lang = curLang();
   const name = document.getElementById('f-name').value.trim();
   const email = document.getElementById('f-email').value.trim();
+  const inquiryType = document.getElementById('f-type').value;
+  const msg = document.getElementById('f-msg').value.trim();
   if (!name || !email) { showToast(lang === 'ja' ? 'お名前とメールアドレスは必須です' : 'Name and email are required'); return; }
-  document.getElementById('successMsg').style.display = 'block';
-  showToast(lang === 'ja' ? 'お問い合わせを送信しました' : 'Message sent!');
+
+  addInquiry({
+    kind: 'car',
+    refId: car.id,
+    refLabel: `${car.name} ${car.grade}`,
+    name, email, inquiryType, message: msg,
+  }).then(() => {
+    document.getElementById('successMsg').style.display = 'block';
+    showToast(lang === 'ja' ? 'お問い合わせを送信しました' : 'Message sent!');
+  }).catch(err => {
+    console.error(err);
+    showToast(lang === 'ja' ? '送信に失敗しました' : 'Failed to send');
+  });
 }
 function openWhatsApp() {
   const msg = encodeURIComponent(`【在庫問い合わせ】${car.name} ${car.grade}（${car.year}年 走行${car.km}万km ${car.price}万円）について詳細をお聞きしたいです。`);

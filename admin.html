@@ -176,12 +176,13 @@ tr:hover td { background: #fdfcfb; }
 
   <div class="wrap">
     <div class="notice">
-      <strong>ご注意：</strong>この管理画面での変更は、現在このブラウザのローカルストレージにのみ保存されます。他の端末や他の訪問者には反映されません。全端末・全訪問者に反映するには、将来的にサーバー側のデータベースとAPI連携が必要です（<code>data.js</code> の <code>loadCars()</code> / <code>loadParts()</code> を差し替えるだけで移行できる設計にしてあります）。
+      <strong>ご注意：</strong>この管理画面での変更はSupabase（クラウドデータベース）に保存され、サイトを見ているすべての方に反映されます。削除は取り消せませんのでご注意ください。
     </div>
 
     <div class="tabs">
       <button class="tab active" onclick="setTab('cars')" id="tabCars">車両管理</button>
       <button class="tab" onclick="setTab('parts')" id="tabParts">部品管理</button>
+      <button class="tab" onclick="setTab('inquiries')" id="tabInquiries">お問い合わせ（<span id="inqBadge" class="num">0</span>）</button>
     </div>
 
     <!-- CARS PANEL -->
@@ -216,6 +217,20 @@ tr:hover td { background: #fdfcfb; }
         <table>
           <thead><tr><th>部品名</th><th>カテゴリ</th><th>適合車種</th><th>価格</th><th>在庫数</th><th></th></tr></thead>
           <tbody id="partRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- INQUIRIES PANEL -->
+    <div class="panel" id="panelInquiries">
+      <div class="toolbar">
+        <div class="tb-title">お問い合わせ一覧</div>
+        <button class="btn ghost" onclick="loadInquiriesPanel()">再読み込み</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>受信日時</th><th>種別</th><th>対象</th><th>お名前</th><th>連絡先</th><th>メッセージ</th><th>状態</th></tr></thead>
+          <tbody id="inqRows"></tbody>
         </table>
       </div>
     </div>
@@ -301,6 +316,7 @@ tr:hover td { background: #fdfcfb; }
 
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="data.js"></script>
 <script>
 /* ===== ACCESS GATE =====
@@ -342,13 +358,52 @@ function boot() {
     CARS = cars; PARTS = parts;
     renderCars(); renderParts();
   });
+  listInquiries().then(list => {
+    const newCount = list.filter(i => i.status === 'new').length;
+    document.getElementById('inqBadge').textContent = newCount;
+  });
+}
+
+function loadInquiriesPanel() {
+  listInquiries().then(list => {
+    document.getElementById('inqBadge').textContent = list.filter(i => i.status === 'new').length;
+    const rows = document.getElementById('inqRows');
+    if (!list.length) {
+      rows.innerHTML = `<tr class="empty-row"><td colspan="7">お問い合わせはまだありません</td></tr>`;
+      return;
+    }
+    const KIND_LABEL = { car: '車両', part: '部品', general: '一般' };
+    rows.innerHTML = list.map(i => {
+      const dt = new Date(i.created_at);
+      const dtStr = dt.toLocaleString('ja-JP', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+      return `
+      <tr>
+        <td data-label="受信日時" class="num">${dtStr}</td>
+        <td data-label="種別">${KIND_LABEL[i.kind] || i.kind || '—'}</td>
+        <td data-label="対象">${i.ref_label || '—'}</td>
+        <td data-label="お名前">${i.name || '—'}</td>
+        <td data-label="連絡先">${i.email || ''}${i.phone ? ' / ' + i.phone : ''}</td>
+        <td data-label="メッセージ" style="max-width:260px;white-space:normal">${(i.message || '').slice(0,140)}</td>
+        <td data-label="状態">
+          <select class="fs" style="font-size:11px;padding:5px 8px" onchange="updateInquiryStatus(${i.id}, this.value).then(loadInquiriesPanel)">
+            <option value="new" ${i.status==='new'?'selected':''}>未対応</option>
+            <option value="read" ${i.status==='read'?'selected':''}>確認済み</option>
+            <option value="replied" ${i.status==='replied'?'selected':''}>返信済み</option>
+          </select>
+        </td>
+      </tr>`;
+    }).join('');
+  });
 }
 
 function setTab(name) {
   document.getElementById('tabCars').classList.toggle('active', name === 'cars');
   document.getElementById('tabParts').classList.toggle('active', name === 'parts');
+  document.getElementById('tabInquiries').classList.toggle('active', name === 'inquiries');
   document.getElementById('panelCars').classList.toggle('active', name === 'cars');
   document.getElementById('panelParts').classList.toggle('active', name === 'parts');
+  document.getElementById('panelInquiries').classList.toggle('active', name === 'inquiries');
+  if (name === 'inquiries') loadInquiriesPanel();
 }
 
 const STATUS_LABEL = { available: '在庫あり', reserved: '商談中', sold: '売約済み' };
@@ -371,7 +426,7 @@ function renderCars() {
       <td data-label="">
         <div class="row-actions">
           <button class="icon-btn" onclick="openCarModal(${c.id})">編集</button>
-          <button class="icon-btn del" onclick="deleteCar(${c.id})">削除</button>
+          <button class="icon-btn del" onclick="handleDeleteCar(${c.id})">削除</button>
         </div>
       </td>
     </tr>
@@ -425,24 +480,19 @@ function saveCarForm() {
     commentEn: document.getElementById('cf-commentEn').value.trim(),
   };
 
-  if (editingCarId) {
-    const idx = CARS.findIndex(c => c.id === editingCarId);
-    CARS[idx] = { ...CARS[idx], ...data };
-  } else {
-    CARS.push({ id: nextCarId(CARS), ...data });
-  }
-
-  saveCars(CARS).then(() => {
+  const req = editingCarId ? updateCar(editingCarId, data) : addCar(data);
+  req.then(() => loadCars()).then(list => {
+    CARS = list;
     renderCars();
     closeCarModal();
     showToast('車両を保存しました');
-  });
+  }).catch(err => { console.error(err); showToast('保存に失敗しました'); });
 }
 
-function deleteCar(id) {
+function handleDeleteCar(id) {
   if (!confirm('この車両を削除しますか？この操作は取り消せません。')) return;
-  CARS = CARS.filter(c => c.id !== id);
-  saveCars(CARS).then(() => { renderCars(); showToast('削除しました'); });
+  deleteCar(id).then(() => loadCars()).then(list => { CARS = list; renderCars(); showToast('削除しました'); })
+    .catch(err => { console.error(err); showToast('削除に失敗しました'); });
 }
 
 function confirmResetCars() {
@@ -470,7 +520,7 @@ function renderParts() {
       <td data-label="">
         <div class="row-actions">
           <button class="icon-btn" onclick="openPartModal(${p.id})">編集</button>
-          <button class="icon-btn del" onclick="deletePart(${p.id})">削除</button>
+          <button class="icon-btn del" onclick="handleDeletePart(${p.id})">削除</button>
         </div>
       </td>
     </tr>
@@ -516,24 +566,19 @@ function savePartForm() {
     descEn: document.getElementById('pf-descEn').value.trim(),
   };
 
-  if (editingPartId) {
-    const idx = PARTS.findIndex(p => p.id === editingPartId);
-    PARTS[idx] = { ...PARTS[idx], ...data };
-  } else {
-    PARTS.push({ id: nextPartId(PARTS), ...data });
-  }
-
-  saveParts(PARTS).then(() => {
+  const req = editingPartId ? updatePart(editingPartId, data) : addPart(data);
+  req.then(() => loadParts()).then(list => {
+    PARTS = list;
     renderParts();
     closePartModal();
     showToast('部品を保存しました');
-  });
+  }).catch(err => { console.error(err); showToast('保存に失敗しました'); });
 }
 
-function deletePart(id) {
+function handleDeletePart(id) {
   if (!confirm('この部品を削除しますか？この操作は取り消せません。')) return;
-  PARTS = PARTS.filter(p => p.id !== id);
-  saveParts(PARTS).then(() => { renderParts(); showToast('削除しました'); });
+  deletePart(id).then(() => loadParts()).then(list => { PARTS = list; renderParts(); showToast('削除しました'); })
+    .catch(err => { console.error(err); showToast('削除に失敗しました'); });
 }
 
 function confirmResetParts() {
@@ -560,12 +605,17 @@ function importData(kind, file) {
     try {
       const data = JSON.parse(e.target.result);
       if (!Array.isArray(data)) throw new Error('not an array');
+      const cleaned = data.map(item => { const c = { ...item }; delete c.id; delete c.created_at; return c; });
       if (kind === 'cars') {
-        CARS = data;
-        saveCars(CARS).then(() => { renderCars(); showToast('車両データを読み込みました'); });
+        Promise.all(cleaned.map(c => addCar(c)))
+          .then(() => loadCars())
+          .then(list => { CARS = list; renderCars(); showToast(`車両データ${cleaned.length}件を追加しました`); })
+          .catch(err => { console.error(err); showToast('インポートに失敗しました'); });
       } else {
-        PARTS = data;
-        saveParts(PARTS).then(() => { renderParts(); showToast('部品データを読み込みました'); });
+        Promise.all(cleaned.map(p => addPart(p)))
+          .then(() => loadParts())
+          .then(list => { PARTS = list; renderParts(); showToast(`部品データ${cleaned.length}件を追加しました`); })
+          .catch(err => { console.error(err); showToast('インポートに失敗しました'); });
       }
     } catch (err) {
       showToast('JSONファイルの読み込みに失敗しました');

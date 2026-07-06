@@ -239,6 +239,7 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; margin-to
 <div class="toast" id="toast"></div>
 
 <script src="lang.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="data.js"></script>
 <script>
 const COND_LABEL = {
@@ -296,10 +297,23 @@ function setThumb(el) {
 function submitForm() {
   const name = document.getElementById('f-name').value.trim();
   const email = document.getElementById('f-email').value.trim();
+  const vin = document.getElementById('f-vin').value.trim();
+  const msg = document.getElementById('f-msg').value.trim();
   const lang = curLang();
   if (!name || !email) { showToast(lang === 'ja' ? 'お名前とメールアドレスは必須です' : 'Name and email are required'); return; }
-  document.getElementById('successMsg').style.display = 'block';
-  showToast(lang === 'ja' ? 'お問い合わせを送信しました' : 'Message sent!');
+
+  addInquiry({
+    kind: 'part',
+    refId: part.id,
+    refLabel: part.name,
+    name, email, vin, message: msg,
+  }).then(() => {
+    document.getElementById('successMsg').style.display = 'block';
+    showToast(lang === 'ja' ? 'お問い合わせを送信しました' : 'Message sent!');
+  }).catch(err => {
+    console.error(err);
+    showToast(lang === 'ja' ? '送信に失敗しました' : 'Failed to send');
+  });
 }
 function openWhatsApp() {
   const msg = encodeURIComponent(`【部品問い合わせ】${part.name}（品番: ${part.partNo}）について詳細をお聞きしたいです。`);
