@@ -31,6 +31,11 @@ a { text-decoration: none; color: inherit; }
 :lang(ja) { font-feature-settings: "palt"; }
 .num { font-variant-numeric: tabular-nums lining-nums; }
 ::selection { background: var(--red); color: #fff; }
+.en { display: none; }
+body.lang-en .ja { display: none; }
+body.lang-en .en { display: revert; }
+.lang-btn { font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--mid); background: none; border: 1px solid var(--line); border-radius: 100px; padding: 6px 13px; cursor: pointer; transition: all 0.25s; }
+.lang-btn:hover { color: var(--ink); border-color: var(--ink); }
 
 /* HEADER (shared) */
 .header {
@@ -182,64 +187,68 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
 <header class="header">
   <a href="index.html" class="h-logo">Habibi&nbsp;<span class="mark">Auto Trading</span></a>
   <nav class="h-nav">
-    <a href="index.html#services">事業内容</a>
-    <a href="used_car_site.html">在庫車両</a>
-    <a href="parts.html" class="active">部品在庫</a>
-    <a href="about.html">会社概要</a>
-    <a href="index.html#contact">お問い合わせ</a>
+    <a href="index.html#services" class="ja">事業内容</a><a href="index.html#services" class="en">Services</a>
+    <a href="used_car_site.html" class="ja">在庫車両</a><a href="used_car_site.html" class="en">Vehicles</a>
+    <a href="parts.html" class="active ja">部品在庫</a><a href="parts.html" class="active en">Parts</a>
+    <a href="about.html" class="ja">会社概要</a><a href="about.html" class="en">About</a>
+    <a href="index.html#contact" class="ja">お問い合わせ</a><a href="index.html#contact" class="en">Contact</a>
   </nav>
   <div class="h-right">
-    <a href="index.html#contact" class="h-cta">お問い合わせ</a>
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">EN</button>
+    <a href="index.html#contact" class="h-cta ja">お問い合わせ</a>
+    <a href="index.html#contact" class="h-cta en">Contact Us</a>
   </div>
 </header>
 
 <div class="page-head">
   <div class="page-head-inner">
     <div class="eyebrow">Parts Inventory</div>
-    <h1 class="page-title">部品<em>在庫一覧</em></h1>
-    <p class="page-sub">解体車両からのリユースパーツ・新品パーツを取り扱っています。適合車種・型式でお探しください。</p>
+    <h1 class="page-title ja">部品<em>在庫一覧</em></h1>
+    <h1 class="page-title en">Parts <em>Inventory</em></h1>
+    <p class="page-sub ja">解体車両からのリユースパーツ・新品パーツを取り扱っています。適合車種・型式でお探しください。</p>
+    <p class="page-sub en">We carry reused parts from dismantled vehicles as well as new parts. Search by compatible model or part number.</p>
   </div>
 </div>
 
 <div class="toolbar">
   <div class="toolbar-inner">
-    <div class="tb-count"><strong class="num" id="count">0</strong> 点の部品</div>
+    <div class="tb-count"><strong class="num" id="count">0</strong> <span class="ja">点の部品</span><span class="en">parts</span></div>
     <div class="tb-spacer"></div>
     <input type="text" class="tb-search" id="searchInput" placeholder="部品名・型式・適合車種で検索" oninput="applyFilters()">
     <select class="tb-select" id="catSel" onchange="applyFilters()">
-      <option value="">すべてのカテゴリ</option>
-      <option value="engine">エンジン関連</option>
-      <option value="body">外装・ボディ</option>
-      <option value="interior">内装</option>
-      <option value="electrical">電装品</option>
-      <option value="wheel">ホイール・タイヤ</option>
-      <option value="suspension">足回り</option>
-      <option value="other">その他</option>
+      <option value="" class="ja">すべてのカテゴリ</option><option value="" class="en">All Categories</option>
+      <option value="engine" class="ja">エンジン関連</option><option value="engine" class="en">Engine</option>
+      <option value="body" class="ja">外装・ボディ</option><option value="body" class="en">Body/Exterior</option>
+      <option value="interior" class="ja">内装</option><option value="interior" class="en">Interior</option>
+      <option value="electrical" class="ja">電装品</option><option value="electrical" class="en">Electrical</option>
+      <option value="wheel" class="ja">ホイール・タイヤ</option><option value="wheel" class="en">Wheels/Tires</option>
+      <option value="suspension" class="ja">足回り</option><option value="suspension" class="en">Suspension</option>
+      <option value="other" class="ja">その他</option><option value="other" class="en">Other</option>
     </select>
     <select class="tb-select" id="condSel" onchange="applyFilters()">
-      <option value="">状態を問わず</option>
-      <option value="new">新品</option>
-      <option value="used">中古（良品）</option>
-      <option value="refurb">リビルト品</option>
+      <option value="" class="ja">状態を問わず</option><option value="" class="en">Any Condition</option>
+      <option value="new" class="ja">新品</option><option value="new" class="en">New</option>
+      <option value="used" class="ja">中古（良品）</option><option value="used" class="en">Used (Good)</option>
+      <option value="refurb" class="ja">リビルト品</option><option value="refurb" class="en">Refurbished</option>
     </select>
     <select class="tb-select" id="sortSel" onchange="applyFilters()">
-      <option value="new">新着順</option>
-      <option value="price_asc">価格が安い順</option>
-      <option value="price_desc">価格が高い順</option>
+      <option value="new" class="ja">新着順</option><option value="new" class="en">Newest</option>
+      <option value="price_asc" class="ja">価格が安い順</option><option value="price_asc" class="en">Price: Low to High</option>
+      <option value="price_desc" class="ja">価格が高い順</option><option value="price_desc" class="en">Price: High to Low</option>
     </select>
   </div>
 </div>
 
 <div class="quick-row">
   <div class="quick-inner" id="qtags">
-    <span class="qtag on" data-q="">すべて</span>
-    <span class="qtag" data-q="engine">エンジン関連</span>
-    <span class="qtag" data-q="body">外装・ボディ</span>
-    <span class="qtag" data-q="electrical">電装品</span>
-    <span class="qtag" data-q="wheel">ホイール・タイヤ</span>
-    <span class="qtag" data-q="new">新品のみ</span>
-    <span class="qtag" data-q="under10">1万円以下</span>
-    <span class="qtag" data-q="instock">在庫ありのみ</span>
+    <span class="qtag on ja" data-q="">すべて</span><span class="qtag on en" data-q="">All</span>
+    <span class="qtag ja" data-q="engine">エンジン関連</span><span class="qtag en" data-q="engine">Engine</span>
+    <span class="qtag ja" data-q="body">外装・ボディ</span><span class="qtag en" data-q="body">Body</span>
+    <span class="qtag ja" data-q="electrical">電装品</span><span class="qtag en" data-q="electrical">Electrical</span>
+    <span class="qtag ja" data-q="wheel">ホイール・タイヤ</span><span class="qtag en" data-q="wheel">Wheels</span>
+    <span class="qtag ja" data-q="new">新品のみ</span><span class="qtag en" data-q="new">New Only</span>
+    <span class="qtag ja" data-q="under10">1万円以下</span><span class="qtag en" data-q="under10">Under ¥10,000</span>
+    <span class="qtag ja" data-q="instock">在庫ありのみ</span><span class="qtag en" data-q="instock">In Stock Only</span>
   </div>
 </div>
 
@@ -247,12 +256,15 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
   <div class="main-inner">
     <div class="notice">
       <span class="notice-icon">i</span>
-      <span>掲載部品は解体車両からの取り外しパーツを含みます。適合確認のため、ご購入前に車台番号・型式をお知らせください。在庫は随時更新されます。</span>
+      <span class="ja">掲載部品は解体車両からの取り外しパーツを含みます。適合確認のため、ご購入前に車台番号・型式をお知らせください。在庫は随時更新されます。</span>
+      <span class="en">Listed parts may include items removed from dismantled vehicles. Please provide your VIN or model code before purchase for fitment confirmation. Stock is updated regularly.</span>
     </div>
     <div class="grid" id="grid"></div>
     <div class="empty" id="empty" style="display:none">
-      <div class="empty-title">該当する部品が見つかりませんでした</div>
-      <p>検索条件を変えて再度お試しください。</p>
+      <div class="empty-title ja">該当する部品が見つかりませんでした</div>
+      <div class="empty-title en">No matching parts found</div>
+      <p class="ja">検索条件を変えて再度お試しください。</p>
+      <p class="en">Please try different search criteria.</p>
     </div>
     <div class="pagination" id="pagination"></div>
   </div>
@@ -261,11 +273,13 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">Habibi <span class="mark">Auto Trading</span></div>
-    <a href="index.html" class="footer-back">← トップページへ戻る</a>
+    <a href="index.html" class="footer-back ja">← トップページへ戻る</a>
+    <a href="index.html" class="footer-back en">← Back to Home</a>
     <div class="footer-note num">© 2026 Habibi Auto Trading 合同会社</div>
   </div>
 </footer>
 
+<script src="lang.js"></script>
 <script>
 /*
   ===== 部品データ =====
@@ -275,18 +289,18 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
   以下の描画ロジックはそのまま利用できる設計にしています。
 */
 const PARTS_DATA = [
-  { id: 101, name: "エンジンASSY 2KD-FTV", cat: "engine", fit: "ハイエース 200系（2013-2019）", partNo: "19000-30D50", price: 185000, condition: "used",   stock: 2,  desc: "走行8万km時取り外し。始動良好、圧縮圧力正常。実働確認済み。" },
-  { id: 102, name: "オルタネーター", cat: "electrical", fit: "プリウス ZVW30系", partNo: "27060-37160", price: 12000, condition: "refurb", stock: 5,  desc: "リビルト品。6ヶ月保証付き。" },
-  { id: 103, name: "フロントバンパー", cat: "body", fit: "ランドクルーザー プラド 150系（前期）", partNo: "52119-60934", price: 28000, condition: "used", stock: 1,  desc: "小傷ありだが割れ・歪みなし。色：ホワイトパールクリスタルシャイン。" },
-  { id: 104, name: "純正アルミホイール 18インチ 4本セット", cat: "wheel", fit: "ランドクルーザー 200系", partNo: "—", price: 68000, condition: "used", stock: 1,  desc: "4本セット。タイヤ溝残り約60%。センターキャップ付属。" },
-  { id: 105, name: "ヘッドライト（左右セット）", cat: "electrical", fit: "アルファード AGH30系", partNo: "81145-58560", price: 42000, condition: "used", stock: 2,  desc: "LEDタイプ。点灯確認済み、レンズクラックなし。左右セット価格。" },
-  { id: 106, name: "ショックアブソーバー（フロント）", cat: "suspension", fit: "ハイエース 200系 全般", partNo: "48510-29835", price: 9800, condition: "new", stock: 8,  desc: "新品社外品。左右1本ずつの価格。" },
-  { id: 107, name: "リアシート一式", cat: "interior", fit: "ノア ZRR80系", partNo: "—", price: 35000, condition: "used", stock: 1,  desc: "ファブリック地、破れ・シミなし。7人乗り3列目含む。" },
-  { id: 108, name: "ラジエーター", cat: "engine", fit: "ヴィッツ KSP90系", partNo: "16400-21200", price: 8500, condition: "refurb", stock: 4,  desc: "リビルト品。圧力テスト済み、水漏れなし。" },
-  { id: 109, name: "ドアミラー（右）", cat: "electrical", fit: "プロボックス NCP51系", partNo: "87910-52660", price: 4500, condition: "used", stock: 3,  desc: "電動格納式。ウィンカー内蔵、動作確認済み。" },
-  { id: 110, name: "マフラー（純正）", cat: "engine", fit: "ランクル プラド 150系（ディーゼル）", partNo: "17410-30E10", price: 22000, condition: "used", stock: 1,  desc: "腐食少なめ。取り付け金具付属。" },
-  { id: 111, name: "テールランプ（左右セット）", cat: "body", fit: "ハイエース 200系（後期）", partNo: "81551-26580", price: 15000, condition: "new", stock: 6,  desc: "社外新品LEDテール。左右セット。防水パッキン付属。" },
-  { id: 112, name: "バッテリー 80D26L", cat: "electrical", fit: "汎用（多くのトヨタ車に適合）", partNo: "80D26L", price: 9800, condition: "new", stock: 12, desc: "新品バッテリー。1年保証付き。" },
+  { id: 101, name: "エンジンASSY 2KD-FTV", nameEn: "Engine Assembly 2KD-FTV", cat: "engine", fit: "ハイエース 200系（2013-2019）", fitEn: "Hiace 200 Series (2013-2019)", partNo: "19000-30D50", price: 185000, condition: "used",   stock: 2,  desc: "走行8万km時取り外し。始動良好、圧縮圧力正常。実働確認済み。", descEn: "Removed at 80,000km. Starts well, normal compression, tested running." },
+  { id: 102, name: "オルタネーター", nameEn: "Alternator", cat: "electrical", fit: "プリウス ZVW30系", fitEn: "Prius ZVW30 Series", partNo: "27060-37160", price: 12000, condition: "refurb", stock: 5,  desc: "リビルト品。6ヶ月保証付き。", descEn: "Refurbished. 6-month warranty included." },
+  { id: 103, name: "フロントバンパー", nameEn: "Front Bumper", cat: "body", fit: "ランドクルーザー プラド 150系（前期）", fitEn: "Land Cruiser Prado 150 Series (early)", partNo: "52119-60934", price: 28000, condition: "used", stock: 1,  desc: "小傷ありだが割れ・歪みなし。色：ホワイトパールクリスタルシャイン。", descEn: "Minor scratches, no cracks or warping. Color: White Pearl Crystal Shine." },
+  { id: 104, name: "純正アルミホイール 18インチ 4本セット", nameEn: "OEM Alloy Wheels 18\" (Set of 4)", cat: "wheel", fit: "ランドクルーザー 200系", fitEn: "Land Cruiser 200 Series", partNo: "—", price: 68000, condition: "used", stock: 1,  desc: "4本セット。タイヤ溝残り約60%。センターキャップ付属。", descEn: "Set of 4. Tire tread approx. 60% remaining. Center caps included." },
+  { id: 105, name: "ヘッドライト（左右セット）", nameEn: "Headlights (Left & Right Set)", cat: "electrical", fit: "アルファード AGH30系", fitEn: "Alphard AGH30 Series", partNo: "81145-58560", price: 42000, condition: "used", stock: 2,  desc: "LEDタイプ。点灯確認済み、レンズクラックなし。左右セット価格。", descEn: "LED type. Tested working, no lens cracks. Price is for the set." },
+  { id: 106, name: "ショックアブソーバー（フロント）", nameEn: "Shock Absorber (Front)", cat: "suspension", fit: "ハイエース 200系 全般", fitEn: "Hiace 200 Series (all)", partNo: "48510-29835", price: 9800, condition: "new", stock: 8,  desc: "新品社外品。左右1本ずつの価格。", descEn: "New aftermarket. Price is per single unit." },
+  { id: 107, name: "リアシート一式", nameEn: "Rear Seat Set", cat: "interior", fit: "ノア ZRR80系", fitEn: "Noah ZRR80 Series", partNo: "—", price: 35000, condition: "used", stock: 1,  desc: "ファブリック地、破れ・シミなし。7人乗り3列目含む。", descEn: "Fabric upholstery, no tears or stains. Includes 3rd row (7-seater)." },
+  { id: 108, name: "ラジエーター", nameEn: "Radiator", cat: "engine", fit: "ヴィッツ KSP90系", fitEn: "Vitz KSP90 Series", partNo: "16400-21200", price: 8500, condition: "refurb", stock: 4,  desc: "リビルト品。圧力テスト済み、水漏れなし。", descEn: "Refurbished. Pressure tested, no leaks." },
+  { id: 109, name: "ドアミラー（右）", nameEn: "Door Mirror (Right)", cat: "electrical", fit: "プロボックス NCP51系", fitEn: "Probox NCP51 Series", partNo: "87910-52660", price: 4500, condition: "used", stock: 3,  desc: "電動格納式。ウィンカー内蔵、動作確認済み。", descEn: "Power-folding type. Built-in turn signal, tested working." },
+  { id: 110, name: "マフラー（純正）", nameEn: "Muffler (OEM)", cat: "engine", fit: "ランクル プラド 150系（ディーゼル）", fitEn: "Land Cruiser Prado 150 Series (Diesel)", partNo: "17410-30E10", price: 22000, condition: "used", stock: 1,  desc: "腐食少なめ。取り付け金具付属。", descEn: "Minimal corrosion. Mounting brackets included." },
+  { id: 111, name: "テールランプ（左右セット）", nameEn: "Tail Lights (Left & Right Set)", cat: "body", fit: "ハイエース 200系（後期）", fitEn: "Hiace 200 Series (late)", partNo: "81551-26580", price: 15000, condition: "new", stock: 6,  desc: "社外新品LEDテール。左右セット。防水パッキン付属。", descEn: "New aftermarket LED tail lights. Set of 2. Waterproof gasket included." },
+  { id: 112, name: "バッテリー 80D26L", nameEn: "Battery 80D26L", cat: "electrical", fit: "汎用（多くのトヨタ車に適合）", fitEn: "Universal (fits many Toyota models)", partNo: "80D26L", price: 9800, condition: "new", stock: 12, desc: "新品バッテリー。1年保証付き。", descEn: "New battery. 1-year warranty included." },
 ];
 
 function loadParts() {
@@ -294,18 +308,26 @@ function loadParts() {
   return Promise.resolve(PARTS_DATA);
 }
 
-const CAT_LABEL = { engine:"エンジン関連", body:"外装・ボディ", interior:"内装", electrical:"電装品", wheel:"ホイール・タイヤ", suspension:"足回り", other:"その他" };
-const COND_LABEL = { new:["新品","new"], used:["中古（良品）","used"], refurb:["リビルト品","refurb"] };
+const CAT_LABEL = {
+  ja: { engine:"エンジン関連", body:"外装・ボディ", interior:"内装", electrical:"電装品", wheel:"ホイール・タイヤ", suspension:"足回り", other:"その他" },
+  en: { engine:"Engine", body:"Body/Exterior", interior:"Interior", electrical:"Electrical", wheel:"Wheels/Tires", suspension:"Suspension", other:"Other" }
+};
+const COND_LABEL = {
+  ja: { new:["新品","new"], used:["中古（良品）","used"], refurb:["リビルト品","refurb"] },
+  en: { new:["New","new"], used:["Used (Good)","used"], refurb:["Refurbished","refurb"] }
+};
 
 let ALL_PARTS = [];
 let quickFilter = '';
 let page = 1;
 const PER = 12;
 
+function curLang() { return window.currentLang || 'ja'; }
+
 function getFiltered() {
   let list = [...ALL_PARTS];
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  if (q) list = list.filter(p => (p.name + p.fit + p.partNo).toLowerCase().includes(q));
+  if (q) list = list.filter(p => (p.name + p.nameEn + p.fit + p.fitEn + p.partNo).toLowerCase().includes(q));
 
   const cat = document.getElementById('catSel').value;
   if (cat) list = list.filter(p => p.cat === cat);
@@ -313,7 +335,7 @@ function getFiltered() {
   const cond = document.getElementById('condSel').value;
   if (cond) list = list.filter(p => p.condition === cond);
 
-  if (quickFilter && CAT_LABEL[quickFilter]) list = list.filter(p => p.cat === quickFilter);
+  if (quickFilter && CAT_LABEL.ja[quickFilter]) list = list.filter(p => p.cat === quickFilter);
   if (quickFilter === 'new')      list = list.filter(p => p.condition === 'new');
   if (quickFilter === 'under10')  list = list.filter(p => p.price <= 10000);
   if (quickFilter === 'instock')  list = list.filter(p => p.stock > 0);
@@ -325,6 +347,8 @@ function getFiltered() {
 }
 
 function render() {
+  const lang = curLang();
+  const cat = CAT_LABEL[lang], cond = COND_LABEL[lang];
   const list = getFiltered();
   const grid = document.getElementById('grid');
   const start = (page - 1) * PER;
@@ -333,23 +357,27 @@ function render() {
   document.getElementById('count').textContent = list.length;
   document.getElementById('empty').style.display = list.length ? 'none' : 'block';
 
+  const stockLabel = lang === 'ja' ? '在庫 ' : 'Stock: ';
+  const outLabel = lang === 'ja' ? '在庫切れ' : 'Out of Stock';
+  const partNoLabel = lang === 'ja' ? '品番 ' : 'P/N ';
+
   grid.innerHTML = pageItems.map(p => {
-    const [condLabel, condCls] = COND_LABEL[p.condition];
+    const [condLabel, condCls] = cond[p.condition];
     const low = p.stock > 0 && p.stock <= 2;
     return `
     <a class="card" href="part-detail.html?id=${p.id}">
       <div class="card-thumb">
         <span class="badge ${condCls}">${condLabel}</span>
-        <span class="stock-flag ${low ? 'low' : ''}">${p.stock > 0 ? '在庫 ' + p.stock : '在庫切れ'}</span>
+        <span class="stock-flag ${low ? 'low' : ''}">${p.stock > 0 ? stockLabel + p.stock : outLabel}</span>
         <span class="card-thumb-label">Photo</span>
       </div>
       <div class="card-body">
-        <div class="card-cat">${CAT_LABEL[p.cat]}</div>
-        <div class="card-name">${p.name}</div>
-        <div class="card-fit">${p.fit}</div>
+        <div class="card-cat">${cat[p.cat]}</div>
+        <div class="card-name">${lang === 'ja' ? p.name : p.nameEn}</div>
+        <div class="card-fit">${lang === 'ja' ? p.fit : p.fitEn}</div>
         <div class="card-price"><span class="card-price-num num">¥${p.price.toLocaleString()}</span></div>
         <div class="card-meta num">
-          <span>品番 ${p.partNo}</span>
+          <span>${partNoLabel}${p.partNo}</span>
         </div>
       </div>
     </a>`;
@@ -379,13 +407,15 @@ function applyFilters() { page = 1; render(); }
 
 document.querySelectorAll('.qtag').forEach(t => {
   t.addEventListener('click', () => {
-    document.querySelectorAll('.qtag').forEach(x => x.classList.remove('on'));
-    t.classList.add('on');
-    quickFilter = t.dataset.q;
+    const q = t.dataset.q;
+    document.querySelectorAll(`.qtag[data-q="${q}"]`).forEach(x => x.classList.add('on'));
+    document.querySelectorAll(`.qtag:not([data-q="${q}"])`).forEach(x => x.classList.remove('on'));
+    quickFilter = q;
     applyFilters();
   });
 });
 
+window.addEventListener('langchange', render);
 loadParts().then(data => { ALL_PARTS = data; render(); });
 </script>
 </body>

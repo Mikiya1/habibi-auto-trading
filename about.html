@@ -30,6 +30,9 @@ a { text-decoration: none; color: inherit; }
 :lang(ja) { font-feature-settings: "palt"; }
 .num { font-variant-numeric: tabular-nums lining-nums; }
 ::selection { background: var(--red); color: #fff; }
+.en { display: none; }
+body.lang-en .ja { display: none; }
+body.lang-en .en { display: revert; }
 
 .header {
   position: sticky; top: 0; z-index: 200;
@@ -44,8 +47,10 @@ a { text-decoration: none; color: inherit; }
 .h-nav a { font-size: 12px; font-weight: 600; color: var(--mid); transition: color 0.2s; }
 .h-nav a:hover { color: var(--ink); }
 .h-nav a.active { color: var(--red); }
-.h-right { margin-left: auto; }
-.h-cta { font-size: 12px; font-weight: 700; background: var(--red); color: #fff; padding: 10px 22px; border-radius: 100px; transition: background 0.25s; }
+.h-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+.lang-btn { font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--mid); background: none; border: 1px solid var(--line); border-radius: 100px; padding: 6px 13px; cursor: pointer; transition: all 0.25s; }
+.lang-btn:hover { color: var(--ink); border-color: var(--ink); }
+.h-cta { font-size: 12px; font-weight: 700; background: var(--red); color: #fff; padding: 10px 22px; border-radius: 100px; transition: background 0.25s; white-space: nowrap; }
 .h-cta:hover { background: var(--red-d); }
 
 .page-head { background: var(--night); padding: clamp(48px,7vw,84px) clamp(20px,4vw,56px); position: relative; overflow: hidden; }
@@ -121,98 +126,119 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
 <header class="header">
   <a href="index.html" class="h-logo">Habibi&nbsp;<span class="mark">Auto Trading</span></a>
   <nav class="h-nav">
-    <a href="index.html#services">事業内容</a>
-    <a href="used_car_site.html">在庫車両</a>
-    <a href="parts.html">部品在庫</a>
-    <a href="about.html" class="active">会社概要</a>
-    <a href="index.html#contact">お問い合わせ</a>
+    <a href="index.html#services" class="ja">事業内容</a><a href="index.html#services" class="en">Services</a>
+    <a href="used_car_site.html" class="ja">在庫車両</a><a href="used_car_site.html" class="en">Vehicles</a>
+    <a href="parts.html" class="ja">部品在庫</a><a href="parts.html" class="en">Parts</a>
+    <a href="about.html" class="active ja">会社概要</a><a href="about.html" class="active en">About</a>
+    <a href="index.html#contact" class="ja">お問い合わせ</a><a href="index.html#contact" class="en">Contact</a>
   </nav>
   <div class="h-right">
-    <a href="index.html#contact" class="h-cta">お問い合わせ</a>
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">EN</button>
+    <a href="index.html#contact" class="h-cta ja">お問い合わせ</a>
+    <a href="index.html#contact" class="h-cta en">Contact Us</a>
   </div>
 </header>
 
 <div class="page-head">
   <div class="page-head-inner">
     <div class="eyebrow">Company</div>
-    <h1 class="page-title">会社<em>概要</em></h1>
-    <p class="page-sub">日本の中古車を、信頼とともに世界へ。私たちの事業と体制についてご紹介します。</p>
+    <h1 class="page-title ja">会社<em>概要</em></h1>
+    <h1 class="page-title en">About <em>Us</em></h1>
+    <p class="page-sub ja">日本の中古車を、信頼とともに世界へ。私たちの事業と体制についてご紹介します。</p>
+    <p class="page-sub en">Japan's used cars, delivered with trust. An introduction to our business and structure.</p>
   </div>
 </div>
 
 <div class="wrap">
 
-  <p class="statement">
+  <p class="statement ja">
     Habibi Auto Trading は、日本全国のオークションネットワークを基盤に、<em>中古車の輸出・国内販売・買取調達</em>を一貫して手がける中古車専門商社です。データに基づく仕入れと、現場で培った知見を掛け合わせ、日本車の価値を正しく世界へ届けています。
+  </p>
+  <p class="statement en">
+    Habibi Auto Trading is a specialized used-car trading company built on a nationwide auction network, handling <em>export, domestic sales, and vehicle procurement</em> end to end. We combine data-driven sourcing with hands-on expertise to deliver the true value of Japanese vehicles to the world.
   </p>
 
   <div class="sec-block">
-    <h2 class="sec-block-title">基本情報</h2>
+    <h2 class="sec-block-title ja">基本情報</h2>
+    <h2 class="sec-block-title en">Company Information</h2>
     <div class="info-table">
       <div class="info-row">
-        <div class="info-key">会社名</div>
+        <div class="info-key ja">会社名</div><div class="info-key en">Company Name</div>
         <div class="info-val">Habibi Auto Trading 合同会社</div>
       </div>
       <div class="info-row">
-        <div class="info-key">所在地</div>
-        <div class="info-val">千葉県<span class="sub">詳細はお問い合わせください</span></div>
+        <div class="info-key ja">所在地</div><div class="info-key en">Location</div>
+        <div class="info-val ja">千葉県<span class="sub">詳細はお問い合わせください</span></div>
+        <div class="info-val en">Chiba, Japan<span class="sub">Details available on request</span></div>
       </div>
       <div class="info-row">
-        <div class="info-key">設立</div>
-        <div class="info-val num">2026年</div>
+        <div class="info-key ja">設立</div><div class="info-key en">Founded</div>
+        <div class="info-val num">2026</div>
       </div>
       <div class="info-row">
-        <div class="info-key">代表社員</div>
+        <div class="info-key ja">代表社員</div><div class="info-key en">Representative</div>
         <div class="info-val"><span class="name-em">Mikiya Nakagawa</span></div>
       </div>
       <div class="info-row">
-        <div class="info-key">業務執行社員</div>
+        <div class="info-key ja">業務執行社員</div><div class="info-key en">Executive Partner</div>
         <div class="info-val">Kevin</div>
       </div>
       <div class="info-row">
-        <div class="info-key">事業内容</div>
-        <div class="info-val">中古車輸出／国内販売／買取・オークション調達</div>
+        <div class="info-key ja">事業内容</div><div class="info-key en">Business</div>
+        <div class="info-val ja">中古車輸出／国内販売／買取・オークション調達</div>
+        <div class="info-val en">Used Car Export / Domestic Sales / Procurement &amp; Appraisal</div>
       </div>
       <div class="info-row">
         <div class="info-key">Email</div>
         <div class="info-val">habibicars.tokyo@gmail.com</div>
       </div>
       <div class="info-row">
-        <div class="info-key">営業時間</div>
-        <div class="info-val num">平日 9:00〜18:00（JST）</div>
+        <div class="info-key ja">営業時間</div><div class="info-key en">Hours</div>
+        <div class="info-val num ja">平日 9:00〜18:00（JST）</div>
+        <div class="info-val num en">Mon–Fri 9:00–18:00 (JST)</div>
       </div>
     </div>
   </div>
 
   <div class="sec-block">
-    <h2 class="sec-block-title">事業内容</h2>
+    <h2 class="sec-block-title ja">事業内容</h2>
+    <h2 class="sec-block-title en">What We Do</h2>
     <div class="biz-grid">
       <div class="biz-card">
         <div class="biz-idx num">01</div>
-        <div class="biz-name">中古車輸出</div>
-        <div class="biz-desc">JUオークションで仕入れた車両を、海外バイヤーネットワークを通じてアフリカ・中東・東南アジアなど世界60カ国以上へ輸出。</div>
+        <div class="biz-name ja">中古車輸出</div>
+        <div class="biz-name en">Used Car Export</div>
+        <div class="biz-desc ja">JUオークションで仕入れた車両を、海外バイヤーネットワークを通じてアフリカ・中東・東南アジアなど世界60カ国以上へ輸出。</div>
+        <div class="biz-desc en">Vehicles sourced at JU auctions are exported to 60+ countries across Africa, the Middle East, and Southeast Asia through our overseas buyer network.</div>
       </div>
       <div class="biz-card">
         <div class="biz-idx num">02</div>
-        <div class="biz-name">国内販売</div>
-        <div class="biz-desc">カーセンサー・ヤフオクを活用し、国内向けにも販売。個人のお客様・業者様どちらにも柔軟に対応します。</div>
+        <div class="biz-name ja">国内販売</div>
+        <div class="biz-name en">Domestic Sales</div>
+        <div class="biz-desc ja">カーセンサー・ヤフオクを活用し、国内向けにも販売。個人のお客様・業者様どちらにも柔軟に対応します。</div>
+        <div class="biz-desc en">We also sell domestically via CarSensor and Yahoo Auctions, flexibly serving both private buyers and dealers.</div>
       </div>
       <div class="biz-card">
         <div class="biz-idx num">03</div>
-        <div class="biz-name">買取・調達</div>
-        <div class="biz-desc">JU系オークションデータを分析し、利益最大化できる車両を戦略的に仕入れ。個人様からの買取査定も承ります。</div>
+        <div class="biz-name ja">買取・調達</div>
+        <div class="biz-name en">Procurement &amp; Appraisal</div>
+        <div class="biz-desc ja">JU系オークションデータを分析し、利益最大化できる車両を戦略的に仕入れ。個人様からの買取査定も承ります。</div>
+        <div class="biz-desc en">We analyze JU auction data to strategically source the most profitable vehicles, and offer appraisals to individual sellers.</div>
       </div>
     </div>
   </div>
 
   <div class="sec-block" style="margin-bottom:0">
-    <h2 class="sec-block-title">アクセス</h2>
+    <h2 class="sec-block-title ja">アクセス</h2>
+    <h2 class="sec-block-title en">Access</h2>
     <div class="access-box">
       <div>
         <div class="access-label">Location</div>
-        <div class="access-text">千葉県<span class="sub">詳細な住所・最寄り駅などはお問い合わせの際にご案内いたします</span></div>
+        <div class="access-text ja">千葉県<span class="sub">詳細な住所・最寄り駅などはお問い合わせの際にご案内いたします</span></div>
+        <div class="access-text en">Chiba, Japan<span class="sub">Full address and access details provided upon inquiry</span></div>
       </div>
-      <a href="index.html#contact" class="access-btn">お問い合わせはこちら</a>
+      <a href="index.html#contact" class="access-btn ja">お問い合わせはこちら</a>
+      <a href="index.html#contact" class="access-btn en">Contact Us</a>
     </div>
   </div>
 
@@ -221,10 +247,12 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">Habibi <span class="mark">Auto Trading</span></div>
-    <a href="index.html" class="footer-back">← トップページへ戻る</a>
+    <a href="index.html" class="footer-back ja">← トップページへ戻る</a>
+    <a href="index.html" class="footer-back en">← Back to Home</a>
     <div class="footer-note num">© 2026 Habibi Auto Trading 合同会社</div>
   </div>
 </footer>
 
+<script src="lang.js"></script>
 </body>
 </html>
