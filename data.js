@@ -30,7 +30,7 @@ const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
    window.emailjs is provided by the EmailJS CDN script, which must be
    included BEFORE this file: <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script> */
 const EMAILJS_SERVICE_ID = "service_q4qo1jj";
-const EMAILJS_TEMPLATE_ID = "template_jg6cfn8";
+const EMAILJS_TEMPLATE_ID = "template_i8qks6n";
 const EMAILJS_PUBLIC_KEY = "4nJvxT5HgbZYIfDKF";
 if (window.emailjs) window.emailjs.init(EMAILJS_PUBLIC_KEY);
 
