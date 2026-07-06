@@ -31,6 +31,11 @@ a { text-decoration: none; color: inherit; }
 :lang(ja) { font-feature-settings: "palt"; }
 .num { font-variant-numeric: tabular-nums lining-nums; }
 ::selection { background: var(--red); color: #fff; }
+.en { display: none; }
+body.lang-en .ja { display: none; }
+body.lang-en .en { display: revert; }
+.lang-btn { font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--mid); background: none; border: 1px solid var(--line); border-radius: 100px; padding: 6px 13px; cursor: pointer; transition: all 0.25s; }
+.lang-btn:hover { color: var(--ink); border-color: var(--ink); }
 
 /* ===== HEADER ===== */
 .header {
@@ -163,63 +168,67 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
 <header class="header">
   <a href="index.html" class="h-logo">Habibi&nbsp;<span class="mark">Auto Trading</span></a>
   <nav class="h-nav">
-    <a href="index.html#services">事業内容</a>
-    <a href="index.html#flow">取引の流れ</a>
-    <a href="used_car_site.html" class="active">在庫車両</a>
-    <a href="parts.html">部品在庫</a>
-    <a href="index.html#regions">輸出エリア</a>
-    <a href="about.html">会社概要</a>
-    <a href="index.html#contact">お問い合わせ</a>
+    <a href="index.html#services" class="ja">事業内容</a><a href="index.html#services" class="en">Services</a>
+    <a href="index.html#flow" class="ja">取引の流れ</a><a href="index.html#flow" class="en">Process</a>
+    <a href="used_car_site.html" class="active ja">在庫車両</a><a href="used_car_site.html" class="active en">Vehicles</a>
+    <a href="parts.html" class="ja">部品在庫</a><a href="parts.html" class="en">Parts</a>
+    <a href="index.html#regions" class="ja">輸出エリア</a><a href="index.html#regions" class="en">Regions</a>
+    <a href="about.html" class="ja">会社概要</a><a href="about.html" class="en">About</a>
+    <a href="index.html#contact" class="ja">お問い合わせ</a><a href="index.html#contact" class="en">Contact</a>
   </nav>
   <div class="h-right">
-    <a href="index.html#contact" class="h-cta">お問い合わせ</a>
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">EN</button>
+    <a href="index.html#contact" class="h-cta ja">お問い合わせ</a>
+    <a href="index.html#contact" class="h-cta en">Contact Us</a>
   </div>
 </header>
 
 <div class="page-head">
   <div class="page-head-inner">
     <div class="eyebrow">Inventory</div>
-    <h1 class="page-title">在庫<em>車両一覧</em></h1>
-    <p class="page-sub">輸出向け・国内向けともに随時更新中。気になる車両はお気軽にお問い合わせください。</p>
+    <h1 class="page-title ja">在庫<em>車両一覧</em></h1>
+    <h1 class="page-title en">Vehicle <em>Inventory</em></h1>
+    <p class="page-sub ja">輸出向け・国内向けともに随時更新中。気になる車両はお気軽にお問い合わせください。</p>
+    <p class="page-sub en">Updated regularly with both export and domestic vehicles. Feel free to inquire about any listing.</p>
   </div>
 </div>
 
 <div class="toolbar">
   <div class="toolbar-inner">
-    <div class="tb-count"><strong class="num" id="count">0</strong> 台の車両</div>
+    <div class="tb-count"><strong class="num" id="count">0</strong> <span class="ja">台の車両</span><span class="en">vehicles</span></div>
     <div class="tb-spacer"></div>
     <select class="tb-select" id="modelSel" onchange="applyFilters()">
-      <option value="">すべての車種</option>
-      <option>ハイエース</option>
-      <option>ランドクルーザー</option>
-      <option>プラド</option>
-      <option>アルファード</option>
-      <option>プリウス</option>
-      <option>ノア</option>
-      <option>ヴィッツ</option>
-      <option>プロボックス</option>
+      <option value="" class="ja">すべての車種</option><option value="" class="en">All Models</option>
+      <option class="ja">ハイエース</option><option class="en">ハイエース</option>
+      <option class="ja">ランドクルーザー</option><option class="en">ランドクルーザー</option>
+      <option class="ja">プラド</option><option class="en">プラド</option>
+      <option class="ja">アルファード</option><option class="en">アルファード</option>
+      <option class="ja">プリウス</option><option class="en">プリウス</option>
+      <option class="ja">ノア</option><option class="en">ノア</option>
+      <option class="ja">ヴィッツ</option><option class="en">ヴィッツ</option>
+      <option class="ja">プロボックス</option><option class="en">プロボックス</option>
     </select>
     <select class="tb-select" id="sortSel" onchange="applyFilters()">
-      <option value="new">新着順</option>
-      <option value="price_asc">価格が安い順</option>
-      <option value="price_desc">価格が高い順</option>
-      <option value="km_asc">走行距離が少ない順</option>
-      <option value="year_desc">年式が新しい順</option>
+      <option value="new" class="ja">新着順</option><option value="new" class="en">Newest</option>
+      <option value="price_asc" class="ja">価格が安い順</option><option value="price_asc" class="en">Price: Low to High</option>
+      <option value="price_desc" class="ja">価格が高い順</option><option value="price_desc" class="en">Price: High to Low</option>
+      <option value="km_asc" class="ja">走行距離が少ない順</option><option value="km_asc" class="en">Mileage: Low to High</option>
+      <option value="year_desc" class="ja">年式が新しい順</option><option value="year_desc" class="en">Year: Newest First</option>
     </select>
   </div>
 </div>
 
 <div class="quick-row">
   <div class="quick-inner" id="qtags">
-    <span class="qtag on" data-q="">すべて</span>
-    <span class="qtag" data-q="export">輸出向け</span>
-    <span class="qtag" data-q="under10">10万km以下</span>
-    <span class="qtag" data-q="under100">〜100万円</span>
-    <span class="qtag" data-q="100-300">100〜300万円</span>
-    <span class="qtag" data-q="over300">300万円〜</span>
-    <span class="qtag" data-q="diesel">ディーゼル</span>
-    <span class="qtag" data-q="4wd">4WD</span>
-    <span class="qtag" data-q="available">在庫ありのみ</span>
+    <span class="qtag on ja" data-q="">すべて</span><span class="qtag on en" data-q="">All</span>
+    <span class="qtag ja" data-q="export">輸出向け</span><span class="qtag en" data-q="export">Export</span>
+    <span class="qtag ja" data-q="under10">10万km以下</span><span class="qtag en" data-q="under10">Under 100k km</span>
+    <span class="qtag ja" data-q="under100">〜100万円</span><span class="qtag en" data-q="under100">Under ¥1M</span>
+    <span class="qtag ja" data-q="100-300">100〜300万円</span><span class="qtag en" data-q="100-300">¥1M–3M</span>
+    <span class="qtag ja" data-q="over300">300万円〜</span><span class="qtag en" data-q="over300">¥3M+</span>
+    <span class="qtag ja" data-q="diesel">ディーゼル</span><span class="qtag en" data-q="diesel">Diesel</span>
+    <span class="qtag ja" data-q="4wd">4WD</span><span class="qtag en" data-q="4wd">4WD</span>
+    <span class="qtag ja" data-q="available">在庫ありのみ</span><span class="qtag en" data-q="available">In Stock Only</span>
   </div>
 </div>
 
@@ -227,8 +236,10 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
   <div class="main-inner">
     <div class="grid" id="grid"></div>
     <div class="empty" id="empty" style="display:none">
-      <div class="empty-title">該当する車両が見つかりませんでした</div>
-      <p>条件を変えて再度お試しください。</p>
+      <div class="empty-title ja">該当する車両が見つかりませんでした</div>
+      <div class="empty-title en">No matching vehicles found</div>
+      <p class="ja">条件を変えて再度お試しください。</p>
+      <p class="en">Please try different search criteria.</p>
     </div>
     <div class="pagination" id="pagination"></div>
   </div>
@@ -237,25 +248,27 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">Habibi <span class="mark">Auto Trading</span></div>
-    <a href="index.html" class="footer-back">← トップページへ戻る</a>
+    <a href="index.html" class="footer-back ja">← トップページへ戻る</a>
+    <a href="index.html" class="footer-back en">← Back to Home</a>
     <div class="footer-note num">© 2026 Habibi Auto Trading 合同会社</div>
   </div>
 </footer>
 
+<script src="lang.js"></script>
 <script>
 const CARS = [
-  { id: 1,  name: "ハイエース バン",        grade: "DX GL パッケージ 標準ボディ",  year: 2019, km: 8.2,  price: 189, fuel: "ディーゼル", trans: "AT",  drive: "2WD", status: "available", export: true  },
-  { id: 2,  name: "ランドクルーザー プラド", grade: "TX Lパッケージ 4WD",           year: 2018, km: 6.1,  price: 348, fuel: "ガソリン",   trans: "AT",  drive: "4WD", status: "available", export: true  },
-  { id: 3,  name: "ランドクルーザー プラド", grade: "TX 4WD 走行22万km",            year: 2014, km: 22.4, price: 138, fuel: "ガソリン",   trans: "AT",  drive: "4WD", status: "available", export: true  },
-  { id: 4,  name: "アルファード",            grade: "2.5S Cパッケージ",             year: 2020, km: 4.5,  price: 420, fuel: "ガソリン",   trans: "CVT", drive: "2WD", status: "reserved",  export: false },
-  { id: 5,  name: "プリウス",                grade: "S 1.8L ハイブリッド",          year: 2017, km: 11.3, price: 98,  fuel: "HV",        trans: "CVT", drive: "2WD", status: "available", export: false },
-  { id: 6,  name: "ノア",                    grade: "Si W×B III 7人乗り",          year: 2021, km: 3.8,  price: 265, fuel: "ガソリン",   trans: "CVT", drive: "2WD", status: "available", export: false },
-  { id: 7,  name: "ハイエース バン",         grade: "スーパーGL ダークプライム",    year: 2022, km: 2.1,  price: 368, fuel: "ディーゼル", trans: "AT",  drive: "2WD", status: "available", export: true  },
-  { id: 8,  name: "プロボックス",            grade: "DX 1.5L",                      year: 2016, km: 18.7, price: 55,  fuel: "ガソリン",   trans: "AT",  drive: "2WD", status: "sold",      export: false },
-  { id: 9,  name: "ランドクルーザー 200",    grade: "ZX 4WD フルオプション",        year: 2019, km: 5.5,  price: 680, fuel: "ディーゼル", trans: "AT",  drive: "4WD", status: "available", export: true  },
-  { id: 10, name: "ヴィッツ",               grade: "F 1.0L",                        year: 2018, km: 7.2,  price: 68,  fuel: "ガソリン",   trans: "CVT", drive: "2WD", status: "available", export: false },
-  { id: 11, name: "ノア ハイブリッド",       grade: "G 1.8HV 8人乗り",             year: 2020, km: 6.4,  price: 248, fuel: "HV",        trans: "CVT", drive: "2WD", status: "available", export: false },
-  { id: 12, name: "ランクル プラド",         grade: "TZ-G ディーゼル 4WD",         year: 2022, km: 1.8,  price: 498, fuel: "ディーゼル", trans: "AT",  drive: "4WD", status: "available", export: true  },
+  { id: 1,  name: "ハイエース バン",        nameEn: "Hiace Van",              grade: "DX GL パッケージ 標準ボディ",  gradeEn: "DX GL Package, Standard Body", year: 2019, km: 8.2,  price: 189, fuel: "ディーゼル", fuelEn: "Diesel", trans: "AT",  drive: "2WD", status: "available", export: true  },
+  { id: 2,  name: "ランドクルーザー プラド", nameEn: "Land Cruiser Prado",     grade: "TX Lパッケージ 4WD",           gradeEn: "TX L Package, 4WD",            year: 2018, km: 6.1,  price: 348, fuel: "ガソリン",   fuelEn: "Gasoline", trans: "AT",  drive: "4WD", status: "available", export: true  },
+  { id: 3,  name: "ランドクルーザー プラド", nameEn: "Land Cruiser Prado",     grade: "TX 4WD 走行22万km",            gradeEn: "TX 4WD, 224,000km",             year: 2014, km: 22.4, price: 138, fuel: "ガソリン",   fuelEn: "Gasoline", trans: "AT",  drive: "4WD", status: "available", export: true  },
+  { id: 4,  name: "アルファード",            nameEn: "Alphard",                grade: "2.5S Cパッケージ",             gradeEn: "2.5S C Package",                year: 2020, km: 4.5,  price: 420, fuel: "ガソリン",   fuelEn: "Gasoline", trans: "CVT", drive: "2WD", status: "reserved",  export: false },
+  { id: 5,  name: "プリウス",                nameEn: "Prius",                  grade: "S 1.8L ハイブリッド",          gradeEn: "S 1.8L Hybrid",                 year: 2017, km: 11.3, price: 98,  fuel: "HV",        fuelEn: "Hybrid", trans: "CVT", drive: "2WD", status: "available", export: false },
+  { id: 6,  name: "ノア",                    nameEn: "Noah",                   grade: "Si W×B III 7人乗り",          gradeEn: "Si W×B III, 7-Seater",          year: 2021, km: 3.8,  price: 265, fuel: "ガソリン",   fuelEn: "Gasoline", trans: "CVT", drive: "2WD", status: "available", export: false },
+  { id: 7,  name: "ハイエース バン",         nameEn: "Hiace Van",              grade: "スーパーGL ダークプライム",    gradeEn: "Super GL Dark Prime",           year: 2022, km: 2.1,  price: 368, fuel: "ディーゼル", fuelEn: "Diesel", trans: "AT",  drive: "2WD", status: "available", export: true  },
+  { id: 8,  name: "プロボックス",            nameEn: "Probox",                 grade: "DX 1.5L",                      gradeEn: "DX 1.5L",                       year: 2016, km: 18.7, price: 55,  fuel: "ガソリン",   fuelEn: "Gasoline", trans: "AT",  drive: "2WD", status: "sold",      export: false },
+  { id: 9,  name: "ランドクルーザー 200",    nameEn: "Land Cruiser 200",       grade: "ZX 4WD フルオプション",        gradeEn: "ZX 4WD, Fully Loaded",          year: 2019, km: 5.5,  price: 680, fuel: "ディーゼル", fuelEn: "Diesel", trans: "AT",  drive: "4WD", status: "available", export: true  },
+  { id: 10, name: "ヴィッツ",               nameEn: "Vitz",                    grade: "F 1.0L",                        gradeEn: "F 1.0L",                        year: 2018, km: 7.2,  price: 68,  fuel: "ガソリン",   fuelEn: "Gasoline", trans: "CVT", drive: "2WD", status: "available", export: false },
+  { id: 11, name: "ノア ハイブリッド",       nameEn: "Noah Hybrid",             grade: "G 1.8HV 8人乗り",             gradeEn: "G 1.8HV, 8-Seater",             year: 2020, km: 6.4,  price: 248, fuel: "HV",        fuelEn: "Hybrid", trans: "CVT", drive: "2WD", status: "available", export: false },
+  { id: 12, name: "ランクル プラド",         nameEn: "Land Cruiser Prado",     grade: "TZ-G ディーゼル 4WD",         gradeEn: "TZ-G Diesel 4WD",               year: 2022, km: 1.8,  price: 498, fuel: "ディーゼル", fuelEn: "Diesel", trans: "AT",  drive: "4WD", status: "available", export: true  },
 ];
 
 let quickFilter = '';
@@ -263,10 +276,11 @@ let page = 1;
 const PER = 12;
 
 const STATUS = {
-  available: ['available', '在庫あり'],
-  reserved:  ['reserved',  '商談中'],
-  sold:      ['sold',      '売約済み'],
+  ja: { available: ['available', '在庫あり'], reserved: ['reserved', '商談中'], sold: ['sold', '売約済み'] },
+  en: { available: ['available', 'Available'], reserved: ['reserved', 'Reserved'], sold: ['sold', 'Sold'] }
 };
+
+function curLang() { return window.currentLang || 'ja'; }
 
 function getFiltered() {
   let list = [...CARS];
@@ -291,6 +305,8 @@ function getFiltered() {
 }
 
 function render() {
+  const lang = curLang();
+  const statusMap = STATUS[lang];
   const list = getFiltered();
   const grid = document.getElementById('grid');
   const start = (page - 1) * PER;
@@ -299,23 +315,32 @@ function render() {
   document.getElementById('count').textContent = list.length;
   document.getElementById('empty').style.display = list.length ? 'none' : 'block';
 
+  const yearLabel = lang === 'ja' ? '年式' : '';
+  const kmLabel = lang === 'ja' ? '走行 ' : '';
+  const kmUnit = lang === 'ja' ? '万km' : 'k km';
+  const priceUnit = lang === 'ja' ? '万円（税込）' : '10k yen (tax incl.)';
+  const exportLabel = lang === 'ja' ? '輸出向け' : 'Export';
+
   grid.innerHTML = pageItems.map(c => {
-    const [cls, label] = STATUS[c.status];
+    const [cls, label] = statusMap[c.status];
+    const name = lang === 'ja' ? c.name : c.nameEn;
+    const grade = lang === 'ja' ? c.grade : c.gradeEn;
+    const fuel = lang === 'ja' ? c.fuel : c.fuelEn;
     return `
     <a class="card" href="detail.html?id=${c.id}">
       <div class="card-thumb">
         <span class="badge ${cls}">${label}</span>
-        ${c.export ? '<span class="badge-export">輸出向け</span>' : ''}
+        ${c.export ? `<span class="badge-export">${exportLabel}</span>` : ''}
         <span class="card-thumb-label">Photo</span>
       </div>
       <div class="card-body">
-        <div class="card-name">${c.name}</div>
-        <div class="card-grade">${c.grade}</div>
-        <div class="card-price"><span class="card-price-num num">${c.price.toLocaleString()}</span><span class="card-price-unit">万円（税込）</span></div>
+        <div class="card-name">${name}</div>
+        <div class="card-grade">${grade}</div>
+        <div class="card-price"><span class="card-price-num num">${c.price.toLocaleString()}</span><span class="card-price-unit">${priceUnit}</span></div>
         <div class="card-meta num">
-          <span>${c.year}年式</span>
-          <span>走行 ${c.km}万km</span>
-          <span class="${c.fuel === 'ディーゼル' ? 'hl' : ''}">${c.fuel}</span>
+          <span>${c.year}${yearLabel}</span>
+          <span>${kmLabel}${c.km}${kmUnit}</span>
+          <span class="${c.fuel === 'ディーゼル' ? 'hl' : ''}">${fuel}</span>
           <span>${c.trans}</span>
           <span class="${c.drive === '4WD' ? 'hl' : ''}">${c.drive}</span>
         </div>
@@ -347,13 +372,15 @@ function applyFilters() { page = 1; render(); }
 
 document.querySelectorAll('.qtag').forEach(t => {
   t.addEventListener('click', () => {
-    document.querySelectorAll('.qtag').forEach(x => x.classList.remove('on'));
-    t.classList.add('on');
-    quickFilter = t.dataset.q;
+    const q = t.dataset.q;
+    document.querySelectorAll(`.qtag[data-q="${q}"]`).forEach(x => x.classList.add('on'));
+    document.querySelectorAll(`.qtag:not([data-q="${q}"])`).forEach(x => x.classList.remove('on'));
+    quickFilter = q;
     applyFilters();
   });
 });
 
+window.addEventListener('langchange', render);
 render();
 </script>
 </body>
