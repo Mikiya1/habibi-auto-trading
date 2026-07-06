@@ -26,6 +26,14 @@ const SUPABASE_KEY = "sb_publishable_5PGFBcCnobPJrf3U_PbrAw_Fuu8gmBT";
 // included BEFORE this file: <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+/* ===== EmailJS (email notification on new inquiries) =====
+   window.emailjs is provided by the EmailJS CDN script, which must be
+   included BEFORE this file: <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script> */
+const EMAILJS_SERVICE_ID = "service_q4qo1jj";
+const EMAILJS_TEMPLATE_ID = "template_jg6cfn8";
+const EMAILJS_PUBLIC_KEY = "4nJvxT5HgbZYIfDKF";
+if (window.emailjs) window.emailjs.init(EMAILJS_PUBLIC_KEY);
+
 /* ===== camelCase <-> snake_case field mapping ===== */
 const CAR_FIELD_MAP = {
   nameEn: 'name_en', gradeEn: 'grade_en', makerEn: 'maker_en', fuelEn: 'fuel_en',
@@ -134,6 +142,22 @@ async function addInquiry({ kind, refId, refLabel, name, email, phone, vin, inqu
     message: message || null,
   });
   if (error) throw error;
+
+  // Best-effort email notification — failure here should not break the
+  // contact form flow, since the inquiry is already safely saved above.
+  if (window.emailjs) {
+    try {
+      await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        from_name: name || '(no name)',
+        from_email: email || '(no email)',
+        inquiry_type: inquiryType || kind || 'general',
+        ref_label: refLabel || '—',
+        message: message || '(no message)',
+      });
+    } catch (e) {
+      console.error('EmailJS notification failed:', e);
+    }
+  }
 }
 async function listInquiries() {
   const { data, error } = await _sb.from('inquiries').select('*').order('created_at', { ascending: false });
