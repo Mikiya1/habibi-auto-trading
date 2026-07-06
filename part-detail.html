@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>部品詳細 — Habibi Auto Trading</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red:    #9e2b25;
+  --red-d:  #7a1f1a;
+  --gold:   #b8923f;
+  --ink:    #161412;
+  --mid:    #6f6862;
+  --faint:  #a39b94;
+  --line:   #e6e1da;
+  --cream:  #f6f3ee;
+  --paper:  #fbf9f5;
+  --white:  #ffffff;
+  --night:  #14110f;
+  --disp:   'Fraunces', serif;
+  --sans:   'Manrope', 'Noto Sans JP', sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); color: var(--ink); background: var(--paper); font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+a { text-decoration: none; color: inherit; }
+:lang(ja) { font-feature-settings: "palt"; }
+.num { font-variant-numeric: tabular-nums lining-nums; }
+::selection { background: var(--red); color: #fff; }
+
+.header {
+  position: sticky; top: 0; z-index: 200;
+  display: flex; align-items: center;
+  padding: 0 clamp(20px, 4vw, 56px); height: 64px;
+  background: rgba(251,249,245,0.88); backdrop-filter: blur(16px) saturate(1.2);
+  border-bottom: 1px solid var(--line);
+}
+.h-logo { font-family: var(--disp); font-size: 21px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+.h-logo .mark { color: var(--gold); font-style: italic; }
+.h-nav { display: flex; gap: 30px; margin-left: 48px; }
+.h-nav a { font-size: 12px; font-weight: 600; color: var(--mid); transition: color 0.2s; }
+.h-nav a:hover { color: var(--ink); }
+.h-nav a.active { color: var(--red); }
+.h-right { margin-left: auto; }
+.h-cta { font-size: 12px; font-weight: 700; background: var(--red); color: #fff; padding: 10px 22px; border-radius: 100px; transition: background 0.25s; }
+.h-cta:hover { background: var(--red-d); }
+
+.crumb { padding: 16px clamp(20px,4vw,56px); border-bottom: 1px solid var(--line); background: var(--white); }
+.crumb-inner { max-width: 1240px; margin: 0 auto; font-size: 12px; color: var(--faint); display: flex; gap: 8px; align-items: center; }
+.crumb a { color: var(--red); font-weight: 600; }
+.crumb a:hover { text-decoration: underline; }
+
+.wrap { max-width: 1240px; margin: 0 auto; padding: clamp(28px,4vw,48px) clamp(20px,4vw,56px) 80px; }
+.layout { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(28px,4vw,56px); align-items: start; }
+
+.part-head { margin-bottom: 24px; }
+.part-flags { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+.flag { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; padding: 5px 14px; border-radius: 100px; }
+.flag.new    { background: #fbf0ee; color: var(--red); border: 1px solid #f0d4d0; }
+.flag.used   { background: var(--cream); color: var(--mid); border: 1px solid var(--line); }
+.flag.refurb { background: #fbf4e6; color: #a4710f; border: 1px solid #ecd9ad; }
+.flag.cat    { background: var(--night); color: var(--gold); }
+.part-title { font-family: var(--disp); font-size: clamp(28px,4vw,40px); font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
+.part-fit { font-size: 14px; color: var(--mid); margin-top: 8px; }
+.part-code { font-size: 11px; color: var(--faint); margin-top: 4px; letter-spacing: 0.04em; }
+
+.gallery { margin-bottom: 32px; }
+.main-photo {
+  aspect-ratio: 4/3; border-radius: 6px; overflow: hidden; position: relative;
+  background: linear-gradient(135deg, #ece7e0, #ddd6cc);
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line); margin-bottom: 10px;
+}
+.main-photo-label { font-family: var(--disp); font-size: 16px; font-style: italic; color: rgba(22,20,18,0.26); }
+.thumbs { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.thumb {
+  aspect-ratio: 4/3; border-radius: 4px; overflow: hidden;
+  background: linear-gradient(135deg, #ece7e0, #ddd6cc);
+  border: 1px solid var(--line); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: rgba(22,20,18,0.3); transition: all 0.2s;
+}
+.thumb.active { border-color: var(--red); border-width: 2px; }
+
+.spec-sec { margin-bottom: 32px; }
+.spec-sec-title { font-family: var(--disp); font-size: 22px; font-weight: 600; margin-bottom: 18px; display: flex; align-items: center; gap: 16px; }
+.spec-sec-title::after { content:''; flex:1; height:1px; background: var(--line); }
+.spec-rows { display: flex; flex-direction: column; }
+.spec-row { display: grid; grid-template-columns: 150px 1fr; gap: 24px; padding: 13px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+.spec-row:first-child { border-top: 1px solid var(--line); }
+.spec-key { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); }
+.spec-val { font-size: 14px; color: var(--ink); font-variant-numeric: lining-nums; }
+.comment-box { font-size: 14px; color: var(--mid); line-height: 1.95; }
+
+.sidebar { position: sticky; top: 88px; display: flex; flex-direction: column; gap: 20px; }
+.price-card { background: var(--night); border-radius: 6px; padding: 30px 28px; position: relative; overflow: hidden; }
+.price-card::before { content:''; position:absolute; inset:0; background: radial-gradient(100% 100% at 100% 0%, rgba(158,43,37,0.25), transparent 55%); }
+.price-label { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; position: relative; }
+.price-main { display: flex; align-items: baseline; gap: 6px; position: relative; }
+.price-num { font-family: var(--disp); font-size: 40px; font-weight: 500; color: #fff; line-height: 1; font-variant-numeric: lining-nums; }
+.stock-row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.12); position: relative; }
+.stock-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(255,255,255,0.45); }
+.stock-val { font-family: var(--disp); font-size: 18px; font-weight: 500; color: var(--gold); font-variant-numeric: lining-nums; }
+
+.inq-card { background: var(--white); border: 1px solid var(--line); border-radius: 6px; padding: 28px; }
+.inq-title { font-family: var(--disp); font-size: 20px; font-weight: 600; margin-bottom: 22px; }
+.fg { margin-bottom: 15px; }
+.fl { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); display: block; margin-bottom: 7px; }
+.fl .req { color: var(--red); }
+.fi, .fs, .ft { width: 100%; border: 1px solid var(--line); padding: 11px 13px; font-size: 13px; font-family: var(--sans); outline: none; border-radius: 4px; transition: all 0.2s; background: var(--paper); color: var(--ink); }
+.fi:focus, .fs:focus, .ft:focus { border-color: var(--red); background: #fff; box-shadow: 0 0 0 3px rgba(158,43,37,0.07); }
+.ft { resize: vertical; min-height: 84px; line-height: 1.7; }
+.submit-btn { width: 100%; background: var(--red); color: #fff; border: none; padding: 14px; font-size: 12px; font-weight: 700; letter-spacing: 0.05em; cursor: pointer; border-radius: 100px; transition: all 0.25s; font-family: var(--sans); margin-top: 4px; }
+.submit-btn:hover { background: var(--red-d); transform: translateY(-1px); }
+.wa-btn { width: 100%; background: var(--white); border: 1px solid #25d366; color: #1a9e4b; padding: 12px; font-size: 12px; font-weight: 700; cursor: pointer; border-radius: 100px; margin-top: 9px; font-family: var(--sans); transition: all 0.25s; }
+.wa-btn:hover { background: #25d366; color: #fff; }
+.form-success { display: none; border: 1px solid #b6dcc0; background: #f0f8f2; padding: 13px; text-align: center; color: #1f7a3d; font-size: 12px; margin-top: 12px; border-radius: 4px; }
+
+footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; margin-top: 80px; }
+.footer-inner { max-width: 1240px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.footer-brand { font-family: var(--disp); font-size: 20px; font-weight: 600; color: #fff; }
+.footer-brand .mark { color: var(--gold); font-style: italic; }
+.footer-note { font-size: 11px; color: rgba(255,255,255,0.3); }
+.footer-back { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); transition: color 0.2s; }
+.footer-back:hover { color: #fff; }
+
+.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--ink); color: #fff; padding: 13px 28px; font-size: 13px; opacity: 0; pointer-events: none; z-index: 9999; border-radius: 100px; transition: all 0.3s; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 960px) {
+  .h-nav { display: none; }
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: static; }
+  .spec-row { grid-template-columns: 120px 1fr; gap: 14px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="index.html" class="h-logo">Habibi&nbsp;<span class="mark">Auto Trading</span></a>
+  <nav class="h-nav">
+    <a href="index.html#services">事業内容</a>
+    <a href="used_car_site.html">在庫車両</a>
+    <a href="parts.html" class="active">部品在庫</a>
+    <a href="about.html">会社概要</a>
+    <a href="index.html#contact">お問い合わせ</a>
+  </nav>
+  <div class="h-right">
+    <a href="index.html#contact" class="h-cta">お問い合わせ</a>
+  </div>
+</header>
+
+<div class="crumb">
+  <div class="crumb-inner">
+    <a href="parts.html">部品在庫一覧</a>
+    <span>/</span>
+    <span id="bc-name">—</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="layout">
+
+    <div>
+      <div class="part-head">
+        <div class="part-flags" id="flags"></div>
+        <h1 class="part-title" id="d-name">—</h1>
+        <p class="part-fit" id="d-fit">—</p>
+        <p class="part-code num" id="d-code">—</p>
+      </div>
+
+      <div class="gallery">
+        <div class="main-photo"><span class="main-photo-label">Photo</span></div>
+        <div class="thumbs" id="thumbs"></div>
+      </div>
+
+      <div class="spec-sec">
+        <h2 class="spec-sec-title">部品情報</h2>
+        <div class="spec-rows" id="specRows"></div>
+      </div>
+
+      <div class="spec-sec">
+        <h2 class="spec-sec-title">商品説明</h2>
+        <p class="comment-box" id="d-desc">—</p>
+      </div>
+    </div>
+
+    <aside class="sidebar">
+      <div class="price-card">
+        <div class="price-label">販売価格（税込）</div>
+        <div class="price-main">
+          <span class="price-num num" id="rc-price">—</span>
+        </div>
+        <div class="stock-row">
+          <div class="stock-label">在庫数</div>
+          <div class="stock-val num" id="rc-stock">—</div>
+        </div>
+      </div>
+
+      <div class="inq-card">
+        <div class="inq-title">この部品について問い合わせる</div>
+        <div class="fg"><label class="fl">お名前<span class="req"> *</span></label><input type="text" class="fi" id="f-name" placeholder="田中 太郎"></div>
+        <div class="fg"><label class="fl">Email<span class="req"> *</span></label><input type="email" class="fi" id="f-email" placeholder="your@email.com"></div>
+        <div class="fg"><label class="fl">車台番号・型式（適合確認用）</label><input type="text" class="fi" id="f-vin" placeholder="任意"></div>
+        <div class="fg"><label class="fl">メッセージ</label><textarea class="ft" id="f-msg" placeholder="ご質問・ご要望をご記入ください"></textarea></div>
+        <button class="submit-btn" onclick="submitForm()">送信する</button>
+        <button class="wa-btn" onclick="openWhatsApp()">WhatsAppで問い合わせ</button>
+        <div class="form-success" id="successMsg">お問い合わせを受け付けました。担当者よりご連絡いたします。</div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Habibi <span class="mark">Auto Trading</span></div>
+    <a href="parts.html" class="footer-back">← 部品在庫一覧へ戻る</a>
+    <div class="footer-note num">© 2026 Habibi Auto Trading 合同会社</div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const PARTS_DATA = [
+  { id: 101, name: "エンジンASSY 2KD-FTV", cat: "engine", catLabel: "エンジン関連", fit: "ハイエース 200系（2013-2019）", partNo: "19000-30D50", price: 185000, condition: "used", stock: 2, desc: "走行8万km時取り外し。始動良好、圧縮圧力正常。実働確認済みです。取り外し時の写真もご用意可能です。" },
+  { id: 102, name: "オルタネーター", cat: "electrical", catLabel: "電装品", fit: "プリウス ZVW30系", partNo: "27060-37160", price: 12000, condition: "refurb", stock: 5, desc: "リビルト品。6ヶ月保証付き。発電量テスト済みです。" },
+  { id: 103, name: "フロントバンパー", cat: "body", catLabel: "外装・ボディ", fit: "ランドクルーザー プラド 150系（前期）", partNo: "52119-60934", price: 28000, condition: "used", stock: 1, desc: "小傷ありだが割れ・歪みなし。色：ホワイトパールクリスタルシャイン。" },
+  { id: 104, name: "純正アルミホイール 18インチ 4本セット", cat: "wheel", catLabel: "ホイール・タイヤ", fit: "ランドクルーザー 200系", partNo: "—", price: 68000, condition: "used", stock: 1, desc: "4本セット。タイヤ溝残り約60%。センターキャップ付属。" },
+  { id: 105, name: "ヘッドライト（左右セット）", cat: "electrical", catLabel: "電装品", fit: "アルファード AGH30系", partNo: "81145-58560", price: 42000, condition: "used", stock: 2, desc: "LEDタイプ。点灯確認済み、レンズクラックなし。左右セット価格です。" },
+  { id: 106, name: "ショックアブソーバー（フロント）", cat: "suspension", catLabel: "足回り", fit: "ハイエース 200系 全般", partNo: "48510-29835", price: 9800, condition: "new", stock: 8, desc: "新品社外品。左右1本ずつの価格です。" },
+  { id: 107, name: "リアシート一式", cat: "interior", catLabel: "内装", fit: "ノア ZRR80系", partNo: "—", price: 35000, condition: "used", stock: 1, desc: "ファブリック地、破れ・シミなし。7人乗り3列目含みます。" },
+  { id: 108, name: "ラジエーター", cat: "engine", catLabel: "エンジン関連", fit: "ヴィッツ KSP90系", partNo: "16400-21200", price: 8500, condition: "refurb", stock: 4, desc: "リビルト品。圧力テスト済み、水漏れなしです。" },
+  { id: 109, name: "ドアミラー（右）", cat: "electrical", catLabel: "電装品", fit: "プロボックス NCP51系", partNo: "87910-52660", price: 4500, condition: "used", stock: 3, desc: "電動格納式。ウィンカー内蔵、動作確認済みです。" },
+  { id: 110, name: "マフラー（純正）", cat: "engine", catLabel: "エンジン関連", fit: "ランクル プラド 150系（ディーゼル）", partNo: "17410-30E10", price: 22000, condition: "used", stock: 1, desc: "腐食少なめ。取り付け金具付属です。" },
+  { id: 111, name: "テールランプ（左右セット）", cat: "body", catLabel: "外装・ボディ", fit: "ハイエース 200系（後期）", partNo: "81551-26580", price: 15000, condition: "new", stock: 6, desc: "社外新品LEDテール。左右セット。防水パッキン付属です。" },
+  { id: 112, name: "バッテリー 80D26L", cat: "electrical", catLabel: "電装品", fit: "汎用（多くのトヨタ車に適合）", partNo: "80D26L", price: 9800, condition: "new", stock: 12, desc: "新品バッテリー。1年保証付きです。" },
+];
+
+const COND_LABEL = { new: ["新品","new"], used: ["中古（良品）","used"], refurb: ["リビルト品","refurb"] };
+
+const params = new URLSearchParams(location.search);
+const partId = parseInt(params.get('id')) || PARTS_DATA[0].id;
+const part = PARTS_DATA.find(p => p.id === partId) || PARTS_DATA[0];
+
+function init() {
+  document.title = `${part.name} — Habibi Auto Trading`;
+  document.getElementById('bc-name').textContent = part.name;
+  document.getElementById('d-name').textContent = part.name;
+  document.getElementById('d-fit').textContent = `適合: ${part.fit}`;
+  document.getElementById('d-code').textContent = `品番 ${part.partNo}`;
+  document.getElementById('d-desc').textContent = part.desc;
+
+  const [condLabel, condCls] = COND_LABEL[part.condition];
+  document.getElementById('flags').innerHTML =
+    `<span class="flag ${condCls}">${condLabel}</span><span class="flag cat">${part.catLabel}</span>`;
+
+  document.getElementById('rc-price').textContent = '¥' + part.price.toLocaleString();
+  document.getElementById('rc-stock').textContent = part.stock > 0 ? `${part.stock} 点` : '在庫切れ';
+
+  const specs = [
+    ['カテゴリ', part.catLabel], ['適合車種', part.fit], ['品番', part.partNo],
+    ['状態', condLabel], ['在庫数', `${part.stock} 点`],
+  ];
+  document.getElementById('specRows').innerHTML = specs.map(([k,v]) =>
+    `<div class="spec-row"><div class="spec-key">${k}</div><div class="spec-val num">${v}</div></div>`).join('');
+
+  document.getElementById('thumbs').innerHTML = [1,2,3,4].map((n,i) =>
+    `<div class="thumb ${i===0?'active':''}" onclick="setThumb(this)">${n}</div>`).join('');
+}
+
+function setThumb(el) {
+  document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function submitForm() {
+  const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  if (!name || !email) { showToast('お名前とメールアドレスは必須です'); return; }
+  document.getElementById('successMsg').style.display = 'block';
+  showToast('お問い合わせを送信しました');
+}
+function openWhatsApp() {
+  const msg = encodeURIComponent(`【部品問い合わせ】${part.name}（品番: ${part.partNo}）について詳細をお聞きしたいです。`);
+  window.open('https://wa.me/818012345678?text=' + msg, '_blank');
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+init();
+</script>
+</body>
+</html>

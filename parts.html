@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>部品在庫 — Habibi Auto Trading</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red:    #9e2b25;
+  --red-d:  #7a1f1a;
+  --gold:   #b8923f;
+  --ink:    #161412;
+  --ink-2:  #2b2724;
+  --mid:    #6f6862;
+  --faint:  #a39b94;
+  --line:   #e6e1da;
+  --cream:  #f6f3ee;
+  --paper:  #fbf9f5;
+  --white:  #ffffff;
+  --night:  #14110f;
+  --disp:   'Fraunces', serif;
+  --sans:   'Manrope', 'Noto Sans JP', sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); color: var(--ink); background: var(--paper); font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+a { text-decoration: none; color: inherit; }
+:lang(ja) { font-feature-settings: "palt"; }
+.num { font-variant-numeric: tabular-nums lining-nums; }
+::selection { background: var(--red); color: #fff; }
+
+/* HEADER (shared) */
+.header {
+  position: sticky; top: 0; z-index: 200;
+  display: flex; align-items: center;
+  padding: 0 clamp(20px, 4vw, 56px); height: 64px;
+  background: rgba(251,249,245,0.88); backdrop-filter: blur(16px) saturate(1.2);
+  border-bottom: 1px solid var(--line);
+}
+.h-logo { font-family: var(--disp); font-size: 21px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+.h-logo .mark { color: var(--gold); font-style: italic; }
+.h-nav { display: flex; gap: 30px; margin-left: 48px; }
+.h-nav a { font-size: 12px; font-weight: 600; color: var(--mid); transition: color 0.2s; }
+.h-nav a:hover { color: var(--ink); }
+.h-nav a.active { color: var(--red); }
+.h-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+.h-cta { font-size: 12px; font-weight: 700; background: var(--red); color: #fff; padding: 10px 22px; border-radius: 100px; transition: all 0.25s; white-space: nowrap; }
+.h-cta:hover { background: var(--red-d); }
+
+/* PAGE HEAD */
+.page-head { background: var(--night); padding: clamp(48px,7vw,84px) clamp(20px,4vw,56px); position: relative; overflow: hidden; }
+.page-head::before { content:''; position:absolute; inset:0; background: radial-gradient(90% 100% at 85% 0%, rgba(158,43,37,0.2), transparent 55%); }
+.page-head-inner { max-width: 1240px; margin: 0 auto; position: relative; }
+.eyebrow { display: inline-flex; align-items: center; gap: 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+.eyebrow::before { content:''; width: 28px; height: 1px; background: var(--gold); }
+.page-title { font-family: var(--disp); font-size: clamp(34px,5vw,58px); font-weight: 500; color: #fff; line-height: 1.05; letter-spacing: -0.02em; }
+.page-title em { font-style: italic; font-weight: 400; color: var(--gold); }
+.page-sub { font-size: 14px; color: rgba(255,255,255,0.45); margin-top: 16px; max-width: 520px; }
+
+/* TOOLBAR */
+.toolbar {
+  background: var(--white); border-bottom: 1px solid var(--line);
+  padding: 0 clamp(20px,4vw,56px); position: sticky; top: 64px; z-index: 100;
+}
+.toolbar-inner { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; gap: 14px; height: 60px; flex-wrap: nowrap; overflow-x: auto; }
+.tb-count { font-size: 13px; color: var(--mid); white-space: nowrap; }
+.tb-count strong { font-family: var(--disp); font-size: 19px; font-weight: 600; color: var(--ink); }
+.tb-spacer { flex: 1; }
+.tb-search {
+  font-family: var(--sans); font-size: 13px; color: var(--ink);
+  border: 1px solid var(--line); border-radius: 100px; padding: 8px 16px;
+  background: var(--paper); outline: none; min-width: 200px; transition: border-color 0.2s;
+}
+.tb-search:focus { border-color: var(--red); background: #fff; }
+.tb-select {
+  font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--ink);
+  border: 1px solid var(--line); border-radius: 100px; padding: 8px 16px;
+  background: var(--white); cursor: pointer; outline: none; white-space: nowrap;
+}
+.tb-select:focus { border-color: var(--red); }
+
+/* QUICK FILTERS */
+.quick-row { background: var(--white); padding: 14px clamp(20px,4vw,56px) 18px; border-bottom: 1px solid var(--line); }
+.quick-inner { max-width: 1240px; margin: 0 auto; display: flex; gap: 8px; flex-wrap: wrap; }
+.qtag {
+  font-size: 12px; font-weight: 600; color: var(--mid);
+  border: 1px solid var(--line); border-radius: 100px; padding: 7px 17px;
+  cursor: pointer; transition: all 0.2s; background: var(--white); user-select: none;
+}
+.qtag:hover { border-color: var(--red); color: var(--red); }
+.qtag.on { background: var(--red); border-color: var(--red); color: #fff; }
+
+/* MAIN */
+.main { padding: clamp(32px,4vw,48px) clamp(20px,4vw,56px) 80px; }
+.main-inner { max-width: 1240px; margin: 0 auto; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: clamp(16px,2vw,22px); }
+.card {
+  display: block; color: inherit; border: 1px solid var(--line); border-radius: 4px;
+  background: var(--white); overflow: hidden;
+  transition: transform 0.3s cubic-bezier(.2,.7,.2,1), box-shadow 0.3s, border-color 0.3s;
+}
+.card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -22px rgba(22,20,18,0.3); border-color: transparent; }
+.card-thumb {
+  aspect-ratio: 4/3; position: relative;
+  background: linear-gradient(135deg, #ece7e0, #ddd6cc);
+  display: flex; align-items: center; justify-content: center;
+  border-bottom: 1px solid var(--line);
+}
+.card-thumb-label { font-family: var(--disp); font-size: 12px; font-style: italic; color: rgba(22,20,18,0.26); }
+.badge {
+  position: absolute; top: 11px; left: 11px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 100px; color: #fff;
+}
+.badge.new  { background: var(--red); }
+.badge.used { background: #6f6862; }
+.badge.refurb { background: var(--gold); color: var(--night); }
+.stock-flag {
+  position: absolute; top: 11px; right: 11px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.03em;
+  background: rgba(20,17,15,0.78); color: #fff; padding: 4px 10px; border-radius: 100px;
+  backdrop-filter: blur(4px);
+}
+.stock-flag.low { background: rgba(158,43,37,0.85); }
+.card-body { padding: 15px 16px 17px; }
+.card-cat { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+.card-name { font-family: var(--disp); font-size: 17px; font-weight: 600; line-height: 1.25; margin-bottom: 3px; }
+.card-fit { font-size: 11px; color: var(--mid); margin-bottom: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 11px; }
+.card-price-num { font-family: var(--disp); font-size: 21px; font-weight: 600; color: var(--red); line-height: 1; font-variant-numeric: lining-nums; }
+.card-price-unit { font-size: 11px; color: var(--faint); }
+.card-meta { display: flex; flex-wrap: wrap; gap: 5px 12px; padding-top: 11px; border-top: 1px solid var(--line); }
+.card-meta span { font-size: 10px; color: var(--mid); font-variant-numeric: lining-nums; }
+
+/* EMPTY */
+.empty { text-align: center; padding: 80px 20px; color: var(--mid); }
+.empty-title { font-family: var(--disp); font-size: 24px; color: var(--ink); margin-bottom: 8px; }
+
+/* PAGINATION */
+.pagination { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 56px; }
+.pg {
+  min-width: 38px; height: 38px; border: 1px solid var(--line);
+  background: var(--white); border-radius: 100px; font-size: 13px; font-weight: 600;
+  cursor: pointer; color: var(--ink); padding: 0 13px;
+  transition: all 0.2s; font-family: var(--sans); font-variant-numeric: lining-nums;
+}
+.pg:hover:not(:disabled) { border-color: var(--red); color: var(--red); }
+.pg.active { background: var(--red); color: #fff; border-color: var(--red); }
+.pg:disabled { opacity: 0.35; cursor: default; }
+
+/* NOTICE BANNER */
+.notice {
+  max-width: 1240px; margin: 0 auto clamp(24px,3vw,36px);
+  background: var(--cream); border: 1px solid var(--line); border-radius: 6px;
+  padding: 18px 22px; display: flex; gap: 14px; align-items: flex-start;
+  font-size: 12px; color: var(--mid); line-height: 1.8;
+}
+.notice-icon { color: var(--gold); font-family: var(--disp); font-style: italic; font-weight: 600; font-size: 15px; flex-shrink: 0; }
+
+/* FOOTER */
+footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
+.footer-inner { max-width: 1240px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.footer-brand { font-family: var(--disp); font-size: 20px; font-weight: 600; color: #fff; }
+.footer-brand .mark { color: var(--gold); font-style: italic; }
+.footer-note { font-size: 11px; color: rgba(255,255,255,0.3); }
+.footer-back { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); transition: color 0.2s; }
+.footer-back:hover { color: #fff; }
+
+@media (max-width: 900px) {
+  .h-nav { display: none; }
+  .toolbar { top: 64px; }
+  .tb-search { min-width: 140px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="index.html" class="h-logo">Habibi&nbsp;<span class="mark">Auto Trading</span></a>
+  <nav class="h-nav">
+    <a href="index.html#services">事業内容</a>
+    <a href="used_car_site.html">在庫車両</a>
+    <a href="parts.html" class="active">部品在庫</a>
+    <a href="about.html">会社概要</a>
+    <a href="index.html#contact">お問い合わせ</a>
+  </nav>
+  <div class="h-right">
+    <a href="index.html#contact" class="h-cta">お問い合わせ</a>
+  </div>
+</header>
+
+<div class="page-head">
+  <div class="page-head-inner">
+    <div class="eyebrow">Parts Inventory</div>
+    <h1 class="page-title">部品<em>在庫一覧</em></h1>
+    <p class="page-sub">解体車両からのリユースパーツ・新品パーツを取り扱っています。適合車種・型式でお探しください。</p>
+  </div>
+</div>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="tb-count"><strong class="num" id="count">0</strong> 点の部品</div>
+    <div class="tb-spacer"></div>
+    <input type="text" class="tb-search" id="searchInput" placeholder="部品名・型式・適合車種で検索" oninput="applyFilters()">
+    <select class="tb-select" id="catSel" onchange="applyFilters()">
+      <option value="">すべてのカテゴリ</option>
+      <option value="engine">エンジン関連</option>
+      <option value="body">外装・ボディ</option>
+      <option value="interior">内装</option>
+      <option value="electrical">電装品</option>
+      <option value="wheel">ホイール・タイヤ</option>
+      <option value="suspension">足回り</option>
+      <option value="other">その他</option>
+    </select>
+    <select class="tb-select" id="condSel" onchange="applyFilters()">
+      <option value="">状態を問わず</option>
+      <option value="new">新品</option>
+      <option value="used">中古（良品）</option>
+      <option value="refurb">リビルト品</option>
+    </select>
+    <select class="tb-select" id="sortSel" onchange="applyFilters()">
+      <option value="new">新着順</option>
+      <option value="price_asc">価格が安い順</option>
+      <option value="price_desc">価格が高い順</option>
+    </select>
+  </div>
+</div>
+
+<div class="quick-row">
+  <div class="quick-inner" id="qtags">
+    <span class="qtag on" data-q="">すべて</span>
+    <span class="qtag" data-q="engine">エンジン関連</span>
+    <span class="qtag" data-q="body">外装・ボディ</span>
+    <span class="qtag" data-q="electrical">電装品</span>
+    <span class="qtag" data-q="wheel">ホイール・タイヤ</span>
+    <span class="qtag" data-q="new">新品のみ</span>
+    <span class="qtag" data-q="under10">1万円以下</span>
+    <span class="qtag" data-q="instock">在庫ありのみ</span>
+  </div>
+</div>
+
+<main class="main">
+  <div class="main-inner">
+    <div class="notice">
+      <span class="notice-icon">i</span>
+      <span>掲載部品は解体車両からの取り外しパーツを含みます。適合確認のため、ご購入前に車台番号・型式をお知らせください。在庫は随時更新されます。</span>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty" style="display:none">
+      <div class="empty-title">該当する部品が見つかりませんでした</div>
+      <p>検索条件を変えて再度お試しください。</p>
+    </div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Habibi <span class="mark">Auto Trading</span></div>
+    <a href="index.html" class="footer-back">← トップページへ戻る</a>
+    <div class="footer-note num">© 2026 Habibi Auto Trading 合同会社</div>
+  </div>
+</footer>
+
+<script>
+/*
+  ===== 部品データ =====
+  現在はローカル配列によるモックデータです。
+  将来的に在庫管理システム（在庫DB・スプレッドシート等）とAPI連携する際は、
+  loadParts() 関数の中身を fetch('/api/parts') 等に差し替えるだけで
+  以下の描画ロジックはそのまま利用できる設計にしています。
+*/
+const PARTS_DATA = [
+  { id: 101, name: "エンジンASSY 2KD-FTV", cat: "engine", fit: "ハイエース 200系（2013-2019）", partNo: "19000-30D50", price: 185000, condition: "used",   stock: 2,  desc: "走行8万km時取り外し。始動良好、圧縮圧力正常。実働確認済み。" },
+  { id: 102, name: "オルタネーター", cat: "electrical", fit: "プリウス ZVW30系", partNo: "27060-37160", price: 12000, condition: "refurb", stock: 5,  desc: "リビルト品。6ヶ月保証付き。" },
+  { id: 103, name: "フロントバンパー", cat: "body", fit: "ランドクルーザー プラド 150系（前期）", partNo: "52119-60934", price: 28000, condition: "used", stock: 1,  desc: "小傷ありだが割れ・歪みなし。色：ホワイトパールクリスタルシャイン。" },
+  { id: 104, name: "純正アルミホイール 18インチ 4本セット", cat: "wheel", fit: "ランドクルーザー 200系", partNo: "—", price: 68000, condition: "used", stock: 1,  desc: "4本セット。タイヤ溝残り約60%。センターキャップ付属。" },
+  { id: 105, name: "ヘッドライト（左右セット）", cat: "electrical", fit: "アルファード AGH30系", partNo: "81145-58560", price: 42000, condition: "used", stock: 2,  desc: "LEDタイプ。点灯確認済み、レンズクラックなし。左右セット価格。" },
+  { id: 106, name: "ショックアブソーバー（フロント）", cat: "suspension", fit: "ハイエース 200系 全般", partNo: "48510-29835", price: 9800, condition: "new", stock: 8,  desc: "新品社外品。左右1本ずつの価格。" },
+  { id: 107, name: "リアシート一式", cat: "interior", fit: "ノア ZRR80系", partNo: "—", price: 35000, condition: "used", stock: 1,  desc: "ファブリック地、破れ・シミなし。7人乗り3列目含む。" },
+  { id: 108, name: "ラジエーター", cat: "engine", fit: "ヴィッツ KSP90系", partNo: "16400-21200", price: 8500, condition: "refurb", stock: 4,  desc: "リビルト品。圧力テスト済み、水漏れなし。" },
+  { id: 109, name: "ドアミラー（右）", cat: "electrical", fit: "プロボックス NCP51系", partNo: "87910-52660", price: 4500, condition: "used", stock: 3,  desc: "電動格納式。ウィンカー内蔵、動作確認済み。" },
+  { id: 110, name: "マフラー（純正）", cat: "engine", fit: "ランクル プラド 150系（ディーゼル）", partNo: "17410-30E10", price: 22000, condition: "used", stock: 1,  desc: "腐食少なめ。取り付け金具付属。" },
+  { id: 111, name: "テールランプ（左右セット）", cat: "body", fit: "ハイエース 200系（後期）", partNo: "81551-26580", price: 15000, condition: "new", stock: 6,  desc: "社外新品LEDテール。左右セット。防水パッキン付属。" },
+  { id: 112, name: "バッテリー 80D26L", cat: "electrical", fit: "汎用（多くのトヨタ車に適合）", partNo: "80D26L", price: 9800, condition: "new", stock: 12, desc: "新品バッテリー。1年保証付き。" },
+];
+
+function loadParts() {
+  // 将来的に fetch('/api/parts').then(r => r.json()) へ差し替え可能
+  return Promise.resolve(PARTS_DATA);
+}
+
+const CAT_LABEL = { engine:"エンジン関連", body:"外装・ボディ", interior:"内装", electrical:"電装品", wheel:"ホイール・タイヤ", suspension:"足回り", other:"その他" };
+const COND_LABEL = { new:["新品","new"], used:["中古（良品）","used"], refurb:["リビルト品","refurb"] };
+
+let ALL_PARTS = [];
+let quickFilter = '';
+let page = 1;
+const PER = 12;
+
+function getFiltered() {
+  let list = [...ALL_PARTS];
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  if (q) list = list.filter(p => (p.name + p.fit + p.partNo).toLowerCase().includes(q));
+
+  const cat = document.getElementById('catSel').value;
+  if (cat) list = list.filter(p => p.cat === cat);
+
+  const cond = document.getElementById('condSel').value;
+  if (cond) list = list.filter(p => p.condition === cond);
+
+  if (quickFilter && CAT_LABEL[quickFilter]) list = list.filter(p => p.cat === quickFilter);
+  if (quickFilter === 'new')      list = list.filter(p => p.condition === 'new');
+  if (quickFilter === 'under10')  list = list.filter(p => p.price <= 10000);
+  if (quickFilter === 'instock')  list = list.filter(p => p.stock > 0);
+
+  const sort = document.getElementById('sortSel').value;
+  if (sort === 'price_asc')  list.sort((a,b) => a.price - b.price);
+  if (sort === 'price_desc') list.sort((a,b) => b.price - a.price);
+  return list;
+}
+
+function render() {
+  const list = getFiltered();
+  const grid = document.getElementById('grid');
+  const start = (page - 1) * PER;
+  const pageItems = list.slice(start, start + PER);
+
+  document.getElementById('count').textContent = list.length;
+  document.getElementById('empty').style.display = list.length ? 'none' : 'block';
+
+  grid.innerHTML = pageItems.map(p => {
+    const [condLabel, condCls] = COND_LABEL[p.condition];
+    const low = p.stock > 0 && p.stock <= 2;
+    return `
+    <a class="card" href="part-detail.html?id=${p.id}">
+      <div class="card-thumb">
+        <span class="badge ${condCls}">${condLabel}</span>
+        <span class="stock-flag ${low ? 'low' : ''}">${p.stock > 0 ? '在庫 ' + p.stock : '在庫切れ'}</span>
+        <span class="card-thumb-label">Photo</span>
+      </div>
+      <div class="card-body">
+        <div class="card-cat">${CAT_LABEL[p.cat]}</div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-fit">${p.fit}</div>
+        <div class="card-price"><span class="card-price-num num">¥${p.price.toLocaleString()}</span></div>
+        <div class="card-meta num">
+          <span>品番 ${p.partNo}</span>
+        </div>
+      </div>
+    </a>`;
+  }).join('');
+
+  renderPagination(list.length);
+}
+
+function renderPagination(total) {
+  const pages = Math.ceil(total / PER);
+  const el = document.getElementById('pagination');
+  if (pages <= 1) { el.innerHTML = ''; return; }
+  let html = `<button class="pg" onclick="goPage(${page-1})" ${page===1?'disabled':''}>←</button>`;
+  for (let i = 1; i <= pages; i++) html += `<button class="pg num ${i===page?'active':''}" onclick="goPage(${i})">${i}</button>`;
+  html += `<button class="pg" onclick="goPage(${page+1})" ${page===pages?'disabled':''}>→</button>`;
+  el.innerHTML = html;
+}
+
+function goPage(n) {
+  const pages = Math.ceil(getFiltered().length / PER);
+  if (n < 1 || n > pages) return;
+  page = n; render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function applyFilters() { page = 1; render(); }
+
+document.querySelectorAll('.qtag').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.qtag').forEach(x => x.classList.remove('on'));
+    t.classList.add('on');
+    quickFilter = t.dataset.q;
+    applyFilters();
+  });
+});
+
+loadParts().then(data => { ALL_PARTS = data; render(); });
+</script>
+</body>
+</html>
