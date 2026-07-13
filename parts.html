@@ -116,6 +116,7 @@ body.lang-en .en { display: revert; }
   border-bottom: 1px solid var(--line);
 }
 .card-thumb-label { font-family: var(--disp); font-size: 12px; font-style: italic; color: rgba(22,20,18,0.26); }
+.card-thumb .part-icon { width: 44%; color: rgba(22,20,18,0.32); }
 .badge {
   position: absolute; top: 11px; left: 11px;
   font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
@@ -283,6 +284,7 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="data.js"></script>
+<script src="vehicle-icons.js"></script>
 <script>
 /*
   ===== 部品データ =====
@@ -352,7 +354,7 @@ function render() {
       <div class="card-thumb">
         <span class="badge ${condCls}">${condLabel}</span>
         <span class="stock-flag ${low ? 'low' : ''}">${p.stock > 0 ? stockLabel + p.stock : outLabel}</span>
-        <span class="card-thumb-label">Photo</span>
+        <span class="part-icon">${partIconFor(p.cat)}</span>
       </div>
       <div class="card-body">
         <div class="card-cat">${cat[p.cat]}</div>

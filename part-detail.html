@@ -80,6 +80,7 @@ body.lang-en .en { display: revert; }
   border: 1px solid var(--line); margin-bottom: 10px;
 }
 .main-photo-label { font-family: var(--disp); font-size: 16px; font-style: italic; color: rgba(22,20,18,0.26); }
+.main-photo .part-icon-lg { width: 32%; max-width: 220px; color: rgba(22,20,18,0.3); }
 .thumbs { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
 .thumb {
   aspect-ratio: 4/3; border-radius: 4px; overflow: hidden;
@@ -181,7 +182,7 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; margin-to
       </div>
 
       <div class="gallery">
-        <div class="main-photo"><span class="main-photo-label">Photo</span></div>
+        <div class="main-photo"><span class="part-icon-lg" id="mainPartIcon"></span></div>
         <div class="thumbs" id="thumbs"></div>
       </div>
 
@@ -242,6 +243,7 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; margin-to
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="data.js"></script>
+<script src="vehicle-icons.js"></script>
 <script>
 const COND_LABEL = {
   ja: { new: ["新品","new"], used: ["中古（良品）","used"], refurb: ["リビルト品","refurb"] },
@@ -270,6 +272,7 @@ function init() {
   document.getElementById('d-fit').textContent = (lang === 'ja' ? '適合: ' : 'Fits: ') + fit;
   document.getElementById('d-code').textContent = (lang === 'ja' ? '品番 ' : 'P/N ') + part.partNo;
   document.getElementById('d-desc').textContent = desc;
+  document.getElementById('mainPartIcon').innerHTML = partIconFor(part.cat);
 
   document.getElementById('flags').innerHTML =
     `<span class="flag ${condCls}">${condLabel}</span><span class="flag cat">${catLabel}</span>`;

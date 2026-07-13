@@ -95,6 +95,17 @@ body.lang-en .en { display: revert; }
 .biz-name { font-family: var(--disp); font-size: 19px; font-weight: 600; margin-bottom: 10px; }
 .biz-desc { font-size: 13px; color: var(--mid); line-height: 1.8; }
 
+.founder-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(16px,2vw,24px); }
+.founder-card { border: 1px solid var(--line); border-radius: 4px; padding: 32px 28px; background: var(--white); }
+.founder-avatar {
+  width: 56px; height: 56px; border-radius: 50%; background: var(--night);
+  color: var(--gold); font-family: var(--disp); font-weight: 600; font-size: 18px;
+  display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+}
+.founder-role { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.founder-name { font-family: var(--disp); font-size: 22px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+.founder-desc { font-size: 13px; color: var(--mid); line-height: 1.8; }
+
 .access-box {
   background: var(--night); border-radius: 6px; padding: clamp(32px,4vw,48px);
   display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: center;
@@ -117,6 +128,7 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
   .h-nav { display: none; }
   .info-row { grid-template-columns: 130px 1fr; gap: 16px; }
   .biz-grid { grid-template-columns: 1fr; }
+  .founder-grid { grid-template-columns: 1fr; }
   .access-box { grid-template-columns: 1fr; text-align: left; }
 }
 </style>
@@ -159,6 +171,29 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
   </p>
 
   <div class="sec-block">
+    <h2 class="sec-block-title ja">創業メンバー</h2>
+    <h2 class="sec-block-title en">Founders</h2>
+    <div class="founder-grid">
+      <div class="founder-card">
+        <div class="founder-avatar">MK</div>
+        <div class="founder-role ja">代表社員</div>
+        <div class="founder-role en">Co-Founder / CEO</div>
+        <div class="founder-name">Mikiya Nakagawa</div>
+        <div class="founder-desc ja">仕入判断・車両評価・海外取引</div>
+        <div class="founder-desc en">Sourcing decisions, vehicle assessment, overseas dealings</div>
+      </div>
+      <div class="founder-card">
+        <div class="founder-avatar">KV</div>
+        <div class="founder-role ja">業務執行社員</div>
+        <div class="founder-role en">Co-Founder / Managing Partner</div>
+        <div class="founder-name">Kevin</div>
+        <div class="founder-desc ja">事業戦略・顧客対応・オペレーション</div>
+        <div class="founder-desc en">Business strategy, client relations, operations</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-block">
     <h2 class="sec-block-title ja">基本情報</h2>
     <h2 class="sec-block-title en">Company Information</h2>
     <div class="info-table">
@@ -174,14 +209,6 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
       <div class="info-row">
         <div class="info-key ja">設立</div><div class="info-key en">Founded</div>
         <div class="info-val num">2026</div>
-      </div>
-      <div class="info-row">
-        <div class="info-key ja">代表社員</div><div class="info-key en">Representative</div>
-        <div class="info-val"><span class="name-em">Mikiya Nakagawa</span></div>
-      </div>
-      <div class="info-row">
-        <div class="info-key ja">業務執行社員</div><div class="info-key en">Executive Partner</div>
-        <div class="info-val">Kevin</div>
       </div>
       <div class="info-row">
         <div class="info-key ja">事業内容</div><div class="info-key en">Business</div>

@@ -88,6 +88,7 @@ body.lang-en .en { display: revert; }
   border: 1px solid var(--line); margin-bottom: 10px;
 }
 .main-photo-label { font-family: var(--disp); font-size: 16px; font-style: italic; color: rgba(22,20,18,0.26); }
+.main-photo .veh-icon-lg { width: 46%; max-width: 300px; color: rgba(22,20,18,0.3); }
 .photo-count {
   position: absolute; bottom: 14px; right: 14px;
   font-size: 11px; font-weight: 600; background: rgba(20,17,15,0.7); color: #fff;
@@ -184,6 +185,7 @@ body.lang-en .en { display: revert; }
   transition: transform 0.3s, box-shadow 0.3s; margin-bottom: 12px;
 }
 .sim-card:hover .sim-thumb { transform: translateY(-3px); box-shadow: 0 14px 30px -16px rgba(22,20,18,0.35); }
+.sim-thumb .veh-icon-sm { width: 55%; color: rgba(22,20,18,0.3); }
 .sim-name { font-family: var(--disp); font-size: 16px; font-weight: 600; line-height: 1.2; }
 .sim-grade { font-size: 11px; color: var(--mid); margin: 2px 0 7px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sim-price { font-family: var(--disp); font-size: 18px; font-weight: 600; color: var(--red); font-variant-numeric: lining-nums; }
@@ -252,7 +254,7 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; margin-to
 
       <div class="gallery">
         <div class="main-photo">
-          <span class="main-photo-label">Photo</span>
+          <span class="veh-icon-lg" id="mainVehIcon"></span>
           <span class="photo-count num" id="photoCount">1 / 5</span>
         </div>
         <div class="thumbs" id="thumbs"></div>
@@ -352,6 +354,7 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; margin-to
 <div class="toast" id="toast"></div>
 
 <script src="lang.js"></script>
+<script src="vehicle-icons.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="data.js"></script>
@@ -380,6 +383,7 @@ function init() {
   document.getElementById('d-grade').textContent = `${grade}（${car.type}）`;
   document.getElementById('d-code').textContent = (lang === 'ja' ? '管理番号 ' : 'Ref. No. ') + `HAB-${String(car.id).padStart(4,'0')}`;
   document.getElementById('d-comment').textContent = lang === 'ja' ? car.comment : car.commentEn;
+  document.getElementById('mainVehIcon').innerHTML = vehicleIconFor(car.name);
 
   const [cls, label] = STATUS[lang][car.status];
   const exportLabel = lang === 'ja' ? '輸出向け' : 'Export';
@@ -419,7 +423,7 @@ function init() {
   const priceUnit = lang === 'ja' ? '万円' : '10k yen';
   document.getElementById('similarGrid').innerHTML = similar.map(c => `
     <a class="sim-card" href="detail.html?id=${c.id}">
-      <div class="sim-thumb">Photo</div>
+      <div class="sim-thumb"><span class="veh-icon-sm">${vehicleIconFor(c.name)}</span></div>
       <div class="sim-name">${lang === 'ja' ? c.name : c.nameEn}</div>
       <div class="sim-grade">${lang === 'ja' ? c.grade : c.gradeEn}</div>
       <div class="sim-price num">${c.price.toLocaleString()}<span> ${priceUnit}</span></div>

@@ -108,6 +108,7 @@ body.lang-en .en { display: revert; }
 }
 .card:hover .card-thumb { transform: translateY(-4px); box-shadow: 0 20px 40px -20px rgba(22,20,18,0.35); }
 .card-thumb-label { font-family: var(--disp); font-size: 13px; font-style: italic; color: rgba(22,20,18,0.26); }
+.card-thumb .veh-icon { width: 62%; height: 62%; color: rgba(22,20,18,0.32); }
 .badge {
   position: absolute; top: 12px; left: 12px;
   font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
@@ -255,6 +256,7 @@ footer { background: #0d0b09; padding: 48px clamp(20px,4vw,56px) 32px; }
 </footer>
 
 <script src="lang.js"></script>
+<script src="vehicle-icons.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="data.js"></script>
@@ -321,7 +323,7 @@ function render() {
       <div class="card-thumb">
         <span class="badge ${cls}">${label}</span>
         ${c.export ? `<span class="badge-export">${exportLabel}</span>` : ''}
-        <span class="card-thumb-label">Photo</span>
+        <span class="veh-icon">${vehicleIconFor(c.name)}</span>
       </div>
       <div class="card-body">
         <div class="card-name">${name}</div>
