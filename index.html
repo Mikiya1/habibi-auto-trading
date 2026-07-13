@@ -217,31 +217,29 @@ body.lang-en :lang(ja) { font-feature-settings: normal; }
 
 /* ===== SERVICES ===== */
 .sec-services { background: var(--white); }
-.services-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; margin-bottom: clamp(48px,6vw,76px); flex-wrap: wrap; }
-.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px,2.5vw,32px); }
+.services-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; margin-bottom: clamp(56px,7vw,88px); flex-wrap: wrap; }
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(32px,4vw,56px); }
 .service {
-  position: relative; padding: 40px 36px 44px;
-  border: 1px solid var(--line); border-radius: 4px;
-  background: var(--white); overflow: hidden;
-  transition: transform 0.4s cubic-bezier(.2,.7,.2,1), box-shadow 0.4s, border-color 0.4s;
+  position: relative; padding-top: 28px;
+  border-top: 1px solid var(--line);
+  transition: padding-top 0.35s cubic-bezier(.2,.7,.2,1);
 }
+.service:hover { padding-top: 34px; }
 .service::before {
-  content:''; position: absolute; left: 0; top: 0; width: 100%; height: 3px;
-  background: linear-gradient(90deg, var(--red), var(--gold)); transform: scaleX(0); transform-origin: left;
-  transition: transform 0.45s cubic-bezier(.2,.7,.2,1);
+  content:''; position: absolute; left: 0; top: -1px; width: 0; height: 1px;
+  background: var(--red); transition: width 0.45s cubic-bezier(.2,.7,.2,1);
 }
-.service:hover { transform: translateY(-6px); box-shadow: 0 24px 50px -20px rgba(22,20,18,0.22); border-color: transparent; }
-.service:hover::before { transform: scaleX(1); }
+.service:hover::before { width: 48px; }
 .service-idx {
-  font-family: var(--disp); font-size: 15px; font-weight: 600; font-style: italic;
-  color: var(--gold); margin-bottom: 28px; letter-spacing: 0.05em;
-  display: flex; align-items: center; gap: 10px;
+  font-family: var(--disp); font-size: 14px; font-weight: 600; font-style: italic;
+  color: var(--gold); margin-bottom: 24px; letter-spacing: 0.05em;
 }
-.service-idx::after { content:''; flex:1; height:1px; background: var(--line); }
-.service-name { font-family: var(--disp); font-size: 27px; font-weight: 600; color: var(--ink); margin-bottom: 16px; line-height: 1.15; }
-.service-desc { font-size: 14px; color: var(--mid); line-height: 1.9; margin-bottom: 30px; }
-.service-chips { display: flex; flex-wrap: wrap; gap: 7px; }
-.chip { font-size: 11px; font-weight: 600; letter-spacing: 0.02em; color: var(--ink-2); background: var(--cream); padding: 6px 13px; border-radius: 100px; }
+.service-name { font-family: var(--disp); font-size: 25px; font-weight: 600; color: var(--ink); margin-bottom: 16px; line-height: 1.15; }
+.service-desc { font-size: 14px; color: var(--mid); line-height: 1.9; margin-bottom: 26px; }
+.service-chips { display: flex; flex-wrap: wrap; gap: 16px; }
+.chip { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; color: var(--faint); padding: 0; }
+.chip::before { content: '·'; margin-right: 6px; color: var(--gold); }
+.chip:first-child::before { content: none; margin: 0; }
 
 /* ===== FLOW ===== */
 .sec-flow { background: var(--night); position: relative; overflow: hidden; }
@@ -329,13 +327,18 @@ body.lang-en :lang(ja) { font-feature-settings: normal; }
 .sec-contact { background: var(--paper); }
 .contact-layout { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(40px,6vw,90px); align-items: start; }
 .contact-headline { font-family: var(--disp); font-size: clamp(20px,2.2vw,26px); font-weight: 600; color: var(--ink); line-height: 1.35; margin-bottom: 18px; }
-.contact-sub { font-size: 14px; color: var(--mid); line-height: 1.9; margin-bottom: 40px; }
+.contact-sub { font-size: 14px; color: var(--mid); line-height: 1.9; margin-bottom: 28px; }
+.contact-quicklinks { display: flex; gap: 28px; margin-bottom: 40px; flex-wrap: wrap; }
+.qlink { font-size: 15px; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--line); transition: border-color 0.2s, color 0.2s; }
+.qlink:hover { color: var(--red); border-color: var(--red); }
+.qlink .arr { color: var(--gold); transition: transform 0.2s; }
+.qlink:hover .arr { transform: translate(2px, -2px); }
 .contact-details { display: flex; flex-direction: column; }
 .cd { padding: 18px 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: 120px 1fr; gap: 20px; align-items: baseline; }
 .cd:last-child { border-bottom: 1px solid var(--line); }
 .cd-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
 .cd-value { font-size: 14px; color: var(--ink); font-variant-numeric: lining-nums; }
-.contact-form-box { background: var(--white); border: 1px solid var(--line); border-radius: 6px; padding: clamp(28px,4vw,48px); box-shadow: 0 30px 70px -40px rgba(22,20,18,0.25); }
+.contact-form-box { background: var(--white); border: 1px solid var(--line); border-radius: 6px; padding: clamp(28px,4vw,48px); }
 .contact-form-title { font-family: var(--disp); font-size: 24px; font-weight: 600; margin-bottom: 30px; }
 .fg { margin-bottom: 20px; }
 .fl { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid); display: block; margin-bottom: 9px; }
@@ -365,16 +368,15 @@ body.lang-en :lang(ja) { font-feature-settings: normal; }
 .form-success { display: none; border: 1px solid #b6dcc0; background: #f0f8f2; padding: 15px; text-align: center; color: #1f7a3d; font-size: 13px; margin-top: 14px; border-radius: 4px; }
 
 /* ===== FOOTER ===== */
-footer { background: #0d0b09; padding: clamp(56px,7vw,84px) clamp(20px,4vw,56px) 36px; }
+footer { background: #0d0b09; padding: clamp(48px,6vw,64px) clamp(20px,4vw,56px) 32px; }
 .footer-inner { max-width: 1240px; margin: 0 auto; }
-.footer-top { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr; gap: clamp(32px,5vw,64px); padding-bottom: 52px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 32px; }
-.footer-brand { font-family: var(--disp); font-size: 26px; font-weight: 600; color: #fff; margin-bottom: 18px; }
+.footer-top { padding-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 24px; }
+.footer-brand { font-family: var(--disp); font-size: 24px; font-weight: 600; color: #fff; margin-bottom: 12px; }
 .footer-brand .mark { color: var(--gold); font-style: italic; }
-.footer-tagline { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.85; max-width: 280px; }
-.footer-col-title { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 18px; }
-.footer-links { display: flex; flex-direction: column; gap: 12px; }
-.footer-links a { font-size: 13px; color: rgba(255,255,255,0.45); transition: color 0.2s; width: fit-content; }
-.footer-links a:hover { color: #fff; }
+.footer-tagline { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.8; max-width: 460px; margin-bottom: 22px; }
+.footer-nav { display: flex; flex-wrap: wrap; gap: 22px; }
+.footer-nav a { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); transition: color 0.2s; }
+.footer-nav a:hover { color: #fff; }
 .footer-bottom { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: rgba(255,255,255,0.3); flex-wrap: wrap; gap: 8px; letter-spacing: 0.02em; }
 
 /* ===== REVEAL ===== */
@@ -405,13 +407,11 @@ footer { background: #0d0b09; padding: clamp(56px,7vw,84px) clamp(20px,4vw,56px)
   .region-tag, .region-track { grid-column: 2; }
   .region-track { margin-top: 8px; }
   .contact-layout { grid-template-columns: 1fr; gap: 40px; }
-  .footer-top { grid-template-columns: 1fr 1fr; gap: 36px; }
 }
 @media (max-width: 560px) {
   .fg-row { grid-template-columns: 1fr; }
   .inv-grid { grid-template-columns: 1fr; }
   .flow-content.active { grid-template-columns: 1fr; }
-  .footer-top { grid-template-columns: 1fr; }
   .hero-actions { flex-direction: column; }
   .hero-actions a { width: 100%; justify-content: center; text-align: center; }
 }
@@ -685,6 +685,10 @@ footer { background: #0d0b09; padding: clamp(56px,7vw,84px) clamp(20px,4vw,56px)
         <p class="contact-headline en">Export, domestic sales, or appraisals — we're here to help.</p>
         <p class="contact-sub ja">日本語・英語どちらでも対応可能です。通常24時間以内にご返信いたします。</p>
         <p class="contact-sub en">We respond in both Japanese and English, usually within 24 hours.</p>
+        <div class="contact-quicklinks">
+          <a href="https://wa.me/818012345678" target="_blank" class="qlink">WhatsApp <span class="arr">↗</span></a>
+          <a href="mailto:habibicars.tokyo@gmail.com" class="qlink">Email <span class="arr">↗</span></a>
+        </div>
         <div class="contact-details">
           <div class="cd"><div class="cd-label ja">会社名</div><div class="cd-label en">Company</div><div class="cd-value">Habibi Auto Trading 合同会社</div></div>
           <div class="cd"><div class="cd-label ja">所在地</div><div class="cd-label en">Location</div><div class="cd-value ja">千葉県（詳細はお問い合わせください）</div><div class="cd-value en">Chiba, Japan</div></div>
@@ -720,37 +724,15 @@ footer { background: #0d0b09; padding: clamp(56px,7vw,84px) clamp(20px,4vw,56px)
 <footer>
   <div class="footer-inner">
     <div class="footer-top">
-      <div>
-        <div class="footer-brand">Habibi <span class="mark">Auto Trading</span></div>
-        <p class="footer-tagline ja">日本全国から厳選した中古車を、世界60カ国以上のバイヤーへ届ける中古車専門商社。</p>
-        <p class="footer-tagline en">A specialized used-car trading company delivering quality Japanese vehicles to buyers in 60+ countries.</p>
-      </div>
-      <div>
-        <div class="footer-col-title ja">サービス</div><div class="footer-col-title en">Services</div>
-        <div class="footer-links">
-          <a href="#services" class="ja">中古車輸出</a><a href="#services" class="en">Used Car Export</a>
-          <a href="#services" class="ja">国内販売</a><a href="#services" class="en">Domestic Sales</a>
-          <a href="#services" class="ja">買取・査定</a><a href="#services" class="en">Appraisal</a>
-        </div>
-      </div>
-      <div>
-        <div class="footer-col-title ja">在庫・取引</div><div class="footer-col-title en">Inventory</div>
-        <div class="footer-links">
-          <a href="used_car_site.html" class="ja">在庫一覧</a><a href="used_car_site.html" class="en">All Inventory</a>
-          <a href="parts.html" class="ja">部品在庫</a><a href="parts.html" class="en">Parts</a>
-          <a href="#flow" class="ja">取引の流れ</a><a href="#flow" class="en">Process</a>
-          <a href="#regions" class="ja">輸出エリア</a><a href="#regions" class="en">Regions</a>
-        </div>
-      </div>
-      <div>
-        <div class="footer-col-title ja">会社情報</div><div class="footer-col-title en">Company</div>
-        <div class="footer-links">
-          <a href="about.html" class="ja">会社概要</a><a href="about.html" class="en">About Us</a>
-          <a href="#contact" class="ja">お問い合わせ</a><a href="#contact" class="en">Contact</a>
-          <a href="#" class="ja">プライバシーポリシー</a><a href="#" class="en">Privacy Policy</a>
-          <a href="#" class="ja">特定商取引法に基づく表示</a><a href="#" class="en">Legal Notice</a>
-        </div>
-      </div>
+      <div class="footer-brand">Habibi <span class="mark">Auto Trading</span></div>
+      <p class="footer-tagline ja">日本全国から厳選した中古車を、世界60カ国以上のバイヤーへ届ける中古車専門商社。</p>
+      <p class="footer-tagline en">A specialized used-car trading company delivering quality Japanese vehicles to buyers in 60+ countries.</p>
+      <nav class="footer-nav">
+        <a href="about.html" class="ja">会社概要</a><a href="about.html" class="en">About</a>
+        <a href="used_car_site.html" class="ja">在庫車両</a><a href="used_car_site.html" class="en">Vehicles</a>
+        <a href="parts.html" class="ja">部品在庫</a><a href="parts.html" class="en">Parts</a>
+        <a href="#contact" class="ja">お問い合わせ</a><a href="#contact" class="en">Contact</a>
+      </nav>
     </div>
     <div class="footer-bottom">
       <span class="num">© 2026 Habibi Auto Trading 合同会社. All rights reserved.</span>
