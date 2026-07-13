@@ -1,0 +1,261 @@
+
+*{box-sizing:border-box}
+:root{--wine:#761a2b;--wine-d:#5c1420;--dark:#171817;--cream:#f5f1e9;--line:#d8d1c5;--mid:#777;--faint:#999}
+html{scroll-behavior:smooth}
+body{margin:0;background:#faf9f6;color:var(--dark);font-family:Arial,"Noto Sans JP",sans-serif;font-size:15px;line-height:1.7}
+button,a{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+.num{font-variant-numeric:tabular-nums lining-nums}
+.en{display:none}
+body.lang-en .ja{display:none}
+body.lang-en .en{display:revert}
+
+/* HEADER */
+header{height:84px;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;background:#fff;position:sticky;top:0;z-index:200;border-bottom:1px solid #eee}
+.logo{border:0;background:none;display:flex;align-items:center;gap:12px;text-align:left;color:var(--dark)}
+.logo .mark{width:42px;height:42px;border:1px solid var(--wine);color:var(--wine);display:grid;place-items:center;font:700 25px Georgia;transform:rotate(45deg);flex-shrink:0}
+.logo .mark span{transform:rotate(-45deg);display:block}
+.logo b{display:block;font:700 19px Georgia;letter-spacing:.14em}
+.logo small{display:block;color:var(--wine);font-size:8px;letter-spacing:.28em;margin-top:3px}
+nav.mainnav{display:flex;align-items:center;gap:22px}
+nav.mainnav a{background:none;border:0;font-size:13px;color:#454545}
+nav.mainnav a:hover{color:var(--wine)}
+nav.mainnav .navCta{border:1px solid var(--wine);padding:11px 18px;color:var(--wine)}
+.lang-btn{font-size:11px;font-weight:700;letter-spacing:.1em;color:#777;background:none;border:1px solid var(--line);border-radius:2px;padding:6px 12px}
+.lang-btn:hover{color:var(--wine);border-color:var(--wine)}
+.hamb{display:none;border:0;background:none;font-size:24px}
+
+/* HERO */
+.hero{height:calc(100vh - 84px);min-height:650px;position:relative;color:#fff;background:url('https://images.unsplash.com/photo-1504215680853-026ed2a45def?auto=format&fit=crop&w=2000&q=90') center/cover}
+.heroShade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,15,14,.9) 0%,rgba(15,15,14,.68) 46%,rgba(15,15,14,.15) 85%)}
+.heroContent{position:relative;padding:14vh 8vw;max-width:860px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.28em}
+.eyebrow.wine{color:#e4a9b3}
+h1{font:400 clamp(44px,6.2vw,90px)/1.02 Georgia,serif;letter-spacing:-.03em;margin:26px 0}
+h1 em{font-weight:400;font-style:italic;color:#dba6ae}
+.lead{max-width:600px;line-height:1.9;color:#ddd;font-size:15px}
+.actions{display:flex;gap:12px;margin:38px 0;flex-wrap:wrap}
+.primary,.ghost{border:1px solid var(--wine);padding:16px 25px;display:inline-flex;align-items:center}
+.primary{background:var(--wine);color:#fff}
+.primary span{margin-left:20px}
+.ghost{background:transparent;color:#fff;border-color:#999}
+.heroStats{display:flex;gap:32px;border-top:1px solid #ffffff40;padding-top:24px;font-size:10px;letter-spacing:.08em;color:#bbb;text-transform:uppercase;flex-wrap:wrap}
+.heroStats b{font:400 17px Georgia;color:#fff;margin-right:6px}
+.scroll{position:absolute;right:4vw;bottom:30px;font-size:8px;letter-spacing:.25em;display:flex;gap:15px;align-items:center;color:#fff}
+.scroll i{height:1px;width:50px;background:#fff;display:block}
+
+/* GENERIC SECTIONS */
+.intro,.stock,.parts,.journal{padding:100px 7vw}
+.intro{text-align:center}
+h2{font:400 clamp(32px,4vw,54px)/1.2 Georgia;margin:16px 0}
+.intro>p.desc{color:var(--mid);line-height:1.85;max-width:560px;margin:0 auto}
+.serviceGrid{display:grid;grid-template-columns:repeat(3,1fr);max-width:1100px;margin:64px auto 0;border-top:1px solid var(--line)}
+.serviceGrid article{padding:36px 46px;border-right:1px solid var(--line)}
+.serviceGrid article:last-child{border-right:0}
+.serviceGrid b{font:400 12px Georgia;color:var(--wine)}
+.serviceGrid h3{font:400 22px Georgia;margin:14px 0}
+.serviceGrid p{color:var(--mid);line-height:1.8;font-size:14px}
+
+/* STOCK (dark) */
+.stock{background:#191a19;color:#fff}
+.sectionHead{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px;gap:24px;flex-wrap:wrap}
+.sectionHead p.desc{max-width:440px;color:#999;line-height:1.8;font-size:14px}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:10px;margin-bottom:24px}
+.filters input,.filters select{background:#242524;border:1px solid #3a3a3a;color:#fff;padding:13px;font-size:13px}
+.filters span{font-size:10px;letter-spacing:.16em;align-self:center;white-space:nowrap}
+.vehicleGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.vehicle{background:#242524;cursor:pointer;transition:.25s;display:block}
+.vehicle:hover{transform:translateY(-5px)}
+.vehiclePhoto{height:210px;position:relative;overflow:hidden}
+.vehiclePhoto img{width:100%;height:100%;object-fit:cover;display:block}
+.vstatus,.vcode{position:absolute;top:14px;font-size:9px;letter-spacing:.08em}
+.vstatus{left:14px;background:#fff;color:#222;padding:6px 9px}
+.vstatus.reserved{background:#b88a33;color:#fff}
+.vstatus.sold{background:#555;color:#fff}
+.vcode{right:14px;background:#0009;padding:6px 8px;color:#fff}
+.vehicleBody{padding:20px}
+.vehicleBody p.meta{font-size:10px;letter-spacing:.14em;color:#aaa;margin:0}
+.vehicleBody h3{font:400 20px Georgia;margin:8px 0 16px}
+.vspecs{display:flex;gap:10px;flex-wrap:wrap}
+.vspecs span{font-size:10px;color:#aaa;border-right:1px solid #555;padding-right:10px}
+.vspecs span:last-child{border:0}
+.vprice{border-top:1px solid #3b3b3b;margin-top:18px;padding-top:16px;display:flex;justify-content:space-between;align-items:center}
+.vprice b{font:400 19px Georgia}
+.vprice .vlink{font-size:11px;color:#fff}
+
+/* PARTS (cream) */
+.parts{background:var(--cream)}
+.partGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.partGrid article{background:#fff;padding:18px}
+.partVisual{height:170px;background:#e7e3db;display:grid;place-items:center;color:#777;font-size:60px;margin-bottom:20px}
+.partGrid small{color:var(--wine);letter-spacing:.14em;font-size:10px}
+.partGrid h3{font:400 19px Georgia;margin:6px 0}
+.partGrid p{color:var(--mid);font-size:13px;margin:0 0 14px}
+.partFoot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #eee;padding-top:14px}
+.partFoot b{font:400 16px Georgia}
+.partFoot span{font-size:11px}
+
+/* ABOUT */
+.about{display:grid;grid-template-columns:1fr 1fr;min-height:680px}
+.aboutImage{background:url('https://images.unsplash.com/photo-1551830820-330a71b99659?auto=format&fit=crop&w=1200&q=85') center/cover;position:relative}
+.stamp{position:absolute;right:-45px;top:56px;width:104px;height:104px;background:var(--wine);color:#fff;border-radius:50%;display:grid;place-items:center;text-align:center;font-size:10px;letter-spacing:.13em}
+.stamp b{font:19px Georgia}
+.aboutBody{padding:80px 7vw}
+.aboutBody>p.desc{color:var(--mid);line-height:1.85;font-size:14px}
+.founders{margin:34px 0}
+.founders article{display:flex;gap:15px;align-items:center;margin:16px 0}
+.founders article>span{width:50px;height:50px;background:#eee;border-radius:50%;display:grid;place-items:center;font:15px Georgia;flex-shrink:0}
+.founders small{font-size:8px;letter-spacing:.1em;color:var(--wine)}
+.founders h4{margin:4px 0;font:400 17px Georgia}
+.founders p{font-size:12px;color:var(--mid);margin:0}
+.aboutDl div{display:flex;border-top:1px solid #ddd;padding:12px 0;font-size:12px}
+.aboutDl dt{width:88px;color:#888;margin:0}
+.aboutDl dd{margin:0}
+
+/* CASES (wine) */
+.cases{background:var(--wine);padding:90px 7vw;color:#fff}
+.cases .eyebrow{color:#e4a9b3}
+.caseGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#ffffff33;margin-top:44px}
+.caseGrid article{background:var(--wine);padding:32px}
+.caseGrid b{font-size:9px;letter-spacing:.18em;color:#e4bac1}
+.caseGrid h3{font:400 23px Georgia;margin:12px 0}
+.caseGrid p{line-height:1.7;color:#eadcdf;font-size:14px;margin:0 0 14px}
+.caseGrid span{font-size:10px;color:#d5a8b0}
+
+/* JOURNAL */
+.journal-list article,.journal-list a{display:grid;grid-template-columns:110px 90px 1fr auto;align-items:center;border-top:1px solid var(--line);padding:22px 0;gap:8px}
+.journal-list article:last-child,.journal-list a:last-child{border-bottom:1px solid var(--line)}
+.journal-list time,.journal-list .jcat{font-size:10px;color:#777}
+.journal-list .jcat{color:var(--wine);font-weight:700}
+.journal-list h3{font:400 18px Georgia;margin:0}
+.journal-list .jlink{font-size:11px;background:none;border:0}
+
+/* CONTACT (dark) */
+.contact{text-align:center;padding:110px 7vw;background:#1b1b1a;color:#fff}
+.contact p.desc{color:#bbb;max-width:520px;margin:0 auto}
+.contactBtns{display:flex;justify-content:center;margin:42px auto 22px;max-width:700px;flex-wrap:wrap}
+.contactBtns a{flex:1;min-width:180px;border:1px solid #555;color:#fff;text-decoration:none;padding:20px;text-align:left;position:relative}
+.contactBtns a span{float:right}
+.contact small{color:#888}
+
+/* FOOTER */
+.siteFoot{padding:40px 6vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.siteFoot .logo .mark{border-color:var(--line)}
+.siteFoot p,.siteFoot>span{color:#888;font-size:11px;margin:0}
+
+@media(max-width:900px){
+  header{height:70px}
+  nav.mainnav{display:none;position:absolute;top:70px;left:0;right:0;background:#fff;padding:24px;flex-direction:column;align-items:flex-start;gap:16px;border-bottom:1px solid #eee}
+  nav.mainnav.open{display:flex}
+  .hamb{display:block}
+  .hero{height:auto;min-height:700px}
+  .heroContent{padding:100px 7vw 60px}
+  .heroStats{flex-wrap:wrap}
+  .serviceGrid,.vehicleGrid,.partGrid,.caseGrid{grid-template-columns:1fr}
+  .serviceGrid article{border-right:0;border-bottom:1px solid var(--line)}
+  .sectionHead{display:block}
+  .filters{grid-template-columns:1fr 1fr}
+  .about{grid-template-columns:1fr}
+  .aboutImage{min-height:400px}
+  .stamp{right:20px}
+  .aboutBody{padding:60px 7vw}
+  .journal-list article,.journal-list a{grid-template-columns:1fr;gap:6px}
+  .contactBtns{flex-direction:column}
+  .siteFoot{flex-direction:column;text-align:center}
+}
+@media(max-width:560px){
+  h1{font-size:44px}
+  .actions{flex-direction:column}
+  .filters{grid-template-columns:1fr}
+  .intro,.stock,.parts,.journal{padding:70px 5vw}
+  .aboutBody{padding:50px 6vw}
+  .heroStats{display:none}
+  .vehicleGrid{grid-template-columns:1fr}
+}
+
+/* ===== SHARED SUB-PAGE STYLES ===== */
+.pageHead{background:#191a19;color:#fff;padding:70px 7vw 50px}
+.pageHead .eyebrow{color:#e4a9b3}
+.pageHead h1{font:400 clamp(32px,4.5vw,54px)/1.15 Georgia;margin:14px 0}
+.pageHead p.desc{color:#999;max-width:520px;margin:0}
+
+.toolbar{background:#fff;border-bottom:1px solid #eee;padding:20px 7vw;position:sticky;top:84px;z-index:100}
+.toolbarRow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.toolbarRow input,.toolbarRow select{border:1px solid var(--line);padding:11px 14px;font-size:13px;background:#fff;color:var(--dark)}
+.toolbarCount{font-size:13px;color:var(--mid);margin-right:auto}
+.toolbarCount b{font:400 20px Georgia;color:var(--dark)}
+
+.pageWrap{padding:50px 7vw 100px}
+.pageWrap.dark{background:#191a19;color:#fff}
+
+.pagination{display:flex;justify-content:center;gap:6px;margin-top:44px}
+.pagination button{min-width:36px;height:36px;border:1px solid var(--line);background:#fff;font-size:13px;cursor:pointer}
+.pagination button.active{background:var(--wine);color:#fff;border-color:var(--wine)}
+.pagination button:disabled{opacity:.35;cursor:default}
+
+/* DETAIL LAYOUT */
+.detailLayout{display:grid;grid-template-columns:1.5fr 1fr;gap:50px;align-items:start;max-width:1200px;margin:0 auto}
+.detailPhoto{aspect-ratio:16/10;overflow:hidden;position:relative;margin-bottom:18px}
+.detailPhoto img{width:100%;height:100%;object-fit:cover}
+.detailTitle{font:400 clamp(26px,3.2vw,40px)/1.2 Georgia;margin:10px 0}
+.detailSub{color:var(--mid);font-size:14px;margin-bottom:6px}
+.detailCode{font-size:11px;color:var(--faint)}
+.detailFlags{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.flag{font-size:10px;font-weight:700;letter-spacing:.06em;padding:5px 12px;border:1px solid var(--line)}
+.flag.available{border-color:#2e7d32;color:#2e7d32}
+.flag.reserved{border-color:#b88a33;color:#b88a33}
+.flag.sold{border-color:#888;color:#888}
+.flag.wine{background:var(--wine);color:#fff;border-color:var(--wine)}
+
+.specTable{width:100%;border-collapse:collapse;margin:20px 0 32px}
+.specTable th{text-align:left;font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--wine);text-transform:uppercase;padding:11px 0;width:130px;vertical-align:top;border-top:1px solid var(--line)}
+.specTable td{padding:11px 0;font-size:13px;border-top:1px solid var(--line)}
+.sectionSubtitle{font:400 20px Georgia;margin:0 0 4px;padding-top:8px}
+
+.priceBox{background:#191a19;color:#fff;padding:30px 26px;margin-bottom:20px}
+.priceBox .label{font-size:11px;letter-spacing:.1em;color:#999;margin-bottom:8px}
+.priceBox .amount{font:400 34px Georgia}
+.priceBox .fobRow{display:flex;justify-content:space-between;border-top:1px solid #333;margin-top:18px;padding-top:14px;font-size:12px;color:#999}
+
+.inqBox{border:1px solid var(--line);padding:26px}
+.inqBox h3{font:400 19px Georgia;margin:0 0 18px}
+.inqBox label{font-size:11px;font-weight:700;letter-spacing:.06em;color:#777;display:block;margin-bottom:6px}
+.inqBox input,.inqBox select,.inqBox textarea{width:100%;border:1px solid var(--line);padding:11px;font-size:13px;margin-bottom:14px;font-family:inherit}
+.inqBox button.submit{width:100%;background:var(--wine);color:#fff;border:1px solid var(--wine);padding:14px;font-size:13px;font-weight:700}
+.inqBox button.wa{width:100%;background:#fff;border:1px solid #25d366;color:#1a9e4b;padding:12px;font-size:13px;margin-top:10px}
+.inqSuccess{margin-top:12px;padding:12px;border:1px solid #a5d6a7;background:#f1f8f1;color:#2e7d32;font-size:12px;text-align:center}
+
+.simGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px;max-width:1200px;margin-left:auto;margin-right:auto}
+
+/* ADMIN */
+.adminGate{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#191a19}
+.adminGateBox{background:#fff;padding:40px 36px;width:320px;text-align:center}
+.adminGateBox input{width:100%;border:1px solid var(--line);padding:12px;text-align:center;margin-bottom:12px;font-size:14px}
+.adminGateBox button{width:100%;background:var(--wine);color:#fff;border:0;padding:12px;font-size:13px;font-weight:700}
+.adminTabs{display:flex;gap:8px;margin-bottom:22px}
+.adminTabs button{font-size:13px;font-weight:700;padding:9px 18px;border:1px solid var(--line);background:#fff;cursor:pointer}
+.adminTabs button.active{background:var(--wine);color:#fff;border-color:var(--wine)}
+.adminToolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.adminToolbar h2{font:400 22px Georgia;margin-right:auto}
+.adminBtn{font-size:12px;font-weight:700;padding:9px 16px;border:1px solid var(--line);background:#fff;cursor:pointer}
+.adminBtn.primary{background:var(--wine);color:#fff;border-color:var(--wine)}
+.adminTable{width:100%;border-collapse:collapse;background:#fff}
+.adminTable th{text-align:left;font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--wine);text-transform:uppercase;padding:12px 14px;background:var(--cream);border-bottom:1px solid var(--line)}
+.adminTable td{padding:12px 14px;border-bottom:1px solid var(--line);font-size:13px}
+.adminModal{position:fixed;inset:0;background:rgba(20,20,20,.5);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.adminModalBox{background:#fff;width:100%;max-width:600px;max-height:88vh;overflow-y:auto;padding:30px}
+.adminFormGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.adminFormGrid .full{grid-column:1/-1}
+.adminFormGrid label{font-size:10px;font-weight:700;color:#777;display:block;margin-bottom:5px}
+.adminFormGrid input,.adminFormGrid select,.adminFormGrid textarea{width:100%;border:1px solid var(--line);padding:9px;font-size:13px;font-family:inherit}
+
+@media(max-width:900px){
+  .detailLayout{grid-template-columns:1fr}
+  .simGrid{grid-template-columns:1fr 1fr}
+  .toolbar{position:static}
+  .adminFormGrid{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .simGrid{grid-template-columns:1fr}
+}
